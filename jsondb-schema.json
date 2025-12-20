@@ -1,0 +1,172 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/example/jsondb/schema.json",
+  "title": "JSONDB Database Format",
+  "description": "Schema for the .jsondb database file format used by Database Editor",
+  "type": "object",
+  "required": ["meta", "tables"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "description": "Database metadata",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the database"
+        },
+        "columnVisibility": {
+          "type": "object",
+          "description": "Column visibility settings per table",
+          "additionalProperties": {
+            "type": "object",
+            "description": "Field visibility settings for a specific table (key is table ID)",
+            "additionalProperties": {
+              "type": "boolean",
+              "description": "Whether the field (key is field ID) is visible in the table view"
+            }
+          }
+        }
+      }
+    },
+    "tables": {
+      "type": "array",
+      "description": "Array of tables in the database",
+      "items": {
+        "$ref": "#/definitions/table"
+      }
+    }
+  },
+  "definitions": {
+    "table": {
+      "type": "object",
+      "description": "A database table",
+      "required": ["id", "name", "fields", "records"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the table",
+          "pattern": "^id_[a-z0-9]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of the table"
+        },
+        "fields": {
+          "type": "array",
+          "description": "Array of field definitions",
+          "items": {
+            "$ref": "#/definitions/field"
+          }
+        },
+        "records": {
+          "type": "array",
+          "description": "Array of records in the table",
+          "items": {
+            "$ref": "#/definitions/record"
+          }
+        }
+      }
+    },
+    "field": {
+      "type": "object",
+      "description": "A field definition",
+      "required": ["id", "name", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the field",
+          "pattern": "^id_[a-z0-9]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of the field"
+        },
+        "type": {
+          "type": "string",
+          "description": "Data type of the field",
+          "enum": ["text", "textarea", "number", "date", "boolean", "select", "composite", "parent", "children"]
+        },
+        "options": {
+          "type": "string",
+          "description": "Comma-separated list of options for 'select' type fields"
+        },
+        "compositeTemplate": {
+          "type": "string",
+          "description": "Template string for 'composite' type fields. Use {FieldName} placeholders."
+        },
+        "primary": {
+          "type": "boolean",
+          "description": "Whether this field is the primary/display field for records",
+          "default": false
+        },
+        "filter": {
+          "type": "boolean",
+          "description": "Whether filtering is enabled for this field",
+          "default": false
+        },
+        "targetTableId": {
+          "type": "string",
+          "description": "ID of the target table for 'parent' and 'children' type fields",
+          "pattern": "^id_[a-z0-9]+$"
+        },
+        "parentFieldId": {
+          "type": "string",
+          "description": "ID of the parent field in the target table for 'children' type fields",
+          "pattern": "^id_[a-z0-9]+$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "type": { "const": "select" } }
+          },
+          "then": {
+            "required": ["options"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "composite" } }
+          },
+          "then": {
+            "required": ["compositeTemplate"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "enum": ["parent", "children"] } }
+          },
+          "then": {
+            "required": ["targetTableId"]
+          }
+        }
+      ]
+    },
+    "record": {
+      "type": "object",
+      "description": "A data record",
+      "required": ["id", "values"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the record",
+          "pattern": "^id_[a-z0-9]+$"
+        },
+        "values": {
+          "type": "object",
+          "description": "Field values for the record. Keys are field IDs.",
+          "additionalProperties": {
+            "description": "Value of a field. Type depends on the field type.",
+            "oneOf": [
+              { "type": "string" },
+              { "type": "number" },
+              { "type": "boolean" },
+              { "type": "null" }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

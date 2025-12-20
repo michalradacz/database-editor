@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor databáze</title>
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --primary-light: #2d5a8a;
+            --primary-dark: #0f1f33;
+            --accent: #e67e22;
+            --accent-light: #f39c4d;
+            --success: #27ae60;
+            --danger: #c0392b;
+            --warning: #f1c40f;
+            --bg: #f8f9fa;
+            --bg-card: #ffffff;
+            --text: #2c3e50;
+            --text-muted: #7f8c8d;
+            --border: #dce1e6;
+            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+            --radius: 8px;
+            --radius-lg: 12px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+        .skip-link { position: absolute; top: -40px; left: 0; background: var(--primary); color: white; padding: 8px 16px; z-index: 1000; text-decoration: none; }
+        .skip-link:focus { top: 0; }
+        header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 1rem 2rem; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+        .header-title { font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+        .header-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .btn { font-family: inherit; font-size: 0.9rem; padding: 0.5rem 1rem; border: 2px solid transparent; border-radius: var(--radius); cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.2s ease; text-decoration: none; }
+        .btn-primary { background: var(--accent); color: white; border-color: var(--accent); }
+        .btn-primary:hover, .btn-primary:focus { background: var(--accent-light); }
+        .btn-secondary { background: white; color: var(--primary); border-color: var(--border); }
+        .btn-secondary:hover, .btn-secondary:focus { background: var(--bg); border-color: var(--primary); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { background: #2ecc71; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: #e74c3c; }
+        .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.85rem; }
+        .btn-icon { padding: 0.4rem; min-width: 32px; justify-content: center; }
+        button:focus, .btn:focus { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+        /* Table Tabs */
+        .table-tabs { display: flex; gap: 0; flex-wrap: wrap; align-items: flex-end; }
+        .table-tab { padding: 0.6rem 1.2rem; background: rgba(255,255,255,0.1); border: none; border-radius: var(--radius) var(--radius) 0 0; cursor: pointer; color: rgba(255,255,255,0.8); font-weight: 500; transition: all 0.2s; }
+        .table-tab:hover { background: rgba(255,255,255,0.2); color: white; }
+        .table-tab.active { background: var(--bg); color: var(--primary); }
+        .table-tab.management-tab { background: rgba(230,126,34,0.3); margin-left: auto; }
+        .table-tab.management-tab.active { background: var(--accent); color: white; }
+
+        main { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+        .card { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow); margin-bottom: 1.5rem; overflow: hidden; }
+        .card-header { background: var(--bg); padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .card-header h2 { font-size: 1.1rem; font-weight: 600; color: var(--primary); }
+        .card-body { padding: 1.5rem; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.3rem; font-weight: 500; }
+        input[type="text"], input[type="number"], input[type="date"], input[type="search"], textarea, select {
+            width: 100%; padding: 0.6rem 0.8rem; border: 2px solid var(--border); border-radius: var(--radius); font-family: inherit; font-size: 1rem; transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(30,58,95,0.1); }
+        textarea { min-height: 100px; resize: vertical; }
+        .checkbox-group { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+        input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary); }
+        .checkbox-group label { margin-bottom: 0; cursor: pointer; }
+        .table-wrapper { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        th, td { padding: 0.8rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--bg); font-weight: 600; color: var(--primary); white-space: nowrap; cursor: pointer; user-select: none; }
+        th:hover { background: #e8ecef; }
+        th.sorted-asc::after { content: " ▲"; font-size: 0.7rem; }
+        th.sorted-desc::after { content: " ▼"; font-size: 0.7rem; }
+        th.no-sort { cursor: default; }
+        th.no-sort:hover { background: var(--bg); }
+        tr:hover { background: rgba(30,58,95,0.02); }
+        .actions-cell { white-space: nowrap; display: flex; gap: 0.3rem; }
+
+        .modal-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+        .modal-backdrop[hidden] { display: none; }
+        .modal { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); width: 100%; max-width: 700px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; }
+        .modal-header { background: var(--primary); color: white; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h2 { font-size: 1.2rem; font-weight: 600; }
+        .modal-close { background: transparent; border: none; color: white; font-size: 1.5rem; cursor: pointer; padding: 0.25rem; line-height: 1; }
+        .modal-body { padding: 1.5rem; overflow-y: auto; flex: 1; }
+        .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 0.5rem; background: var(--bg); }
+
+        .filters-section { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; padding: 1rem; background: var(--bg); border-radius: var(--radius); }
+        .filter-item { min-width: 150px; flex: 1; max-width: 250px; }
+        .filter-item label { font-size: 0.85rem; color: var(--text-muted); }
+        .filter-item select { padding: 0.4rem 0.6rem; }
+        .search-box { position: relative; flex: 2; min-width: 200px; }
+        .search-box input { padding-left: 2.5rem; }
+        .search-box::before { content: "🔍"; position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); font-size: 0.9rem; }
+
+        details { margin-top: 1rem; }
+        summary { cursor: pointer; padding: 0.8rem 1rem; background: var(--bg); border-radius: var(--radius); font-weight: 500; color: var(--primary); list-style: none; display: flex; align-items: center; gap: 0.5rem; }
+        summary::-webkit-details-marker { display: none; }
+        summary::before { content: "▶"; font-size: 0.7rem; transition: transform 0.2s; }
+        details[open] summary::before { transform: rotate(90deg); }
+        .column-toggles { padding: 1rem; display: flex; flex-wrap: wrap; gap: 1rem; background: white; border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); }
+
+        .field-list { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+        .field-item { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1rem; border-bottom: 1px solid var(--border); background: white; }
+        .field-item:last-child { border-bottom: none; }
+        .field-item-info { flex: 1; }
+        .field-item-name { font-weight: 600; color: var(--primary); }
+        .field-item-meta { font-size: 0.85rem; color: var(--text-muted); }
+        .field-item-actions { display: flex; gap: 0.3rem; }
+        .move-buttons { display: flex; flex-direction: column; gap: 2px; }
+        .move-buttons button { padding: 0.2rem 0.4rem; font-size: 0.75rem; }
+
+        .badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+        .badge-primary { background: var(--primary-light); color: white; }
+        .badge-filter { background: var(--accent); color: white; }
+
+        .record-link { color: var(--primary); text-decoration: underline; cursor: pointer; background: none; border: none; font: inherit; padding: 0; display: inline; text-align: left; }
+        .record-link:hover, .record-link:focus { color: var(--accent); outline: none; }
+
+        .empty-state { text-align: center; padding: 3rem 1.5rem; color: var(--text-muted); }
+        .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+        .language-selector select { width: auto; padding: 0.4rem 0.6rem; background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3); }
+        .language-selector select option { color: var(--text); }
+
+        .record-count { font-size: 0.9rem; color: var(--text-muted); padding: 0.5rem 0; }
+        .record-count strong { color: var(--primary); }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Sub tabs for management */
+        .sub-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; }
+        .sub-tab { padding: 0.8rem 1.5rem; background: transparent; border: none; border-bottom: 3px solid transparent; margin-bottom: -2px; cursor: pointer; font-weight: 500; color: var(--text-muted); transition: all 0.2s; }
+        .sub-tab:hover { color: var(--primary); }
+        .sub-tab.active { color: var(--primary); border-bottom-color: var(--accent); }
+        .sub-content { display: none; }
+        .sub-content.active { display: block; }
+
+        .view-field { margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+        .view-field:last-child { border-bottom: none; margin-bottom: 0; }
+        .view-field-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.3rem; }
+        .view-field-value { font-size: 1rem; color: var(--text); }
+        .view-field-value.empty { font-style: italic; color: var(--text-muted); }
+        .children-list { list-style: none; padding: 0; }
+        .children-list li { padding: 0.3rem 0; }
+
+        /* Markdown styles */
+        .markdown-content { line-height: 1.7; }
+        .markdown-content h1, .markdown-content h2, .markdown-content h3 { margin: 1rem 0 0.5rem; color: var(--primary); }
+        .markdown-content h1 { font-size: 1.5rem; }
+        .markdown-content h2 { font-size: 1.3rem; }
+        .markdown-content h3 { font-size: 1.1rem; }
+        .markdown-content p { margin-bottom: 0.8rem; }
+        .markdown-content ul, .markdown-content ol { margin: 0.5rem 0 0.5rem 1.5rem; }
+        .markdown-content li { margin-bottom: 0.3rem; }
+        .markdown-content code { background: var(--bg); padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Consolas', monospace; font-size: 0.9em; }
+        .markdown-content pre { background: var(--bg); padding: 1rem; border-radius: var(--radius); overflow-x: auto; margin: 0.5rem 0; }
+        .markdown-content pre code { background: none; padding: 0; }
+        .markdown-content blockquote { border-left: 4px solid var(--accent); padding-left: 1rem; margin: 0.5rem 0; color: var(--text-muted); }
+        .markdown-content a { color: var(--primary); }
+        .markdown-content strong { font-weight: 600; }
+        .markdown-content em { font-style: italic; }
+        .markdown-content hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+
+        /* Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+        .stat-card { background: var(--bg); padding: 1.5rem; border-radius: var(--radius); text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
+        .stat-label { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* Generator */
+        .field-buttons { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.5rem; }
+        .field-btn { padding: 0.3rem 0.6rem; font-size: 0.8rem; background: var(--primary-light); color: white; border: none; border-radius: var(--radius); cursor: pointer; }
+        .field-btn:hover { background: var(--primary); }
+        .generator-output { background: var(--bg); padding: 1rem; border-radius: var(--radius); font-family: monospace; white-space: pre-wrap; max-height: 400px; overflow-y: auto; margin-top: 1rem; }
+
+        /* Radio group */
+        .radio-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .radio-group label { display: flex; align-items: center; gap: 0.3rem; cursor: pointer; }
+        .radio-group input { width: 18px; height: 18px; }
+
+        /* Export/Import tabs */
+        .format-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .format-tab { padding: 0.5rem 1rem; background: var(--bg); border: 2px solid var(--border); border-radius: var(--radius); cursor: pointer; }
+        .format-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .inline-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+        @media (max-width: 768px) {
+            header { padding: 1rem; }
+            main { padding: 1rem; }
+            .card-body { padding: 1rem; }
+            .modal { max-height: 95vh; }
+            .table-tabs { flex-wrap: nowrap; overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link" data-i18n="skipToContent">Přeskočit na hlavní obsah</a>
+
+    <header>
+        <div class="header-top">
+            <div class="header-title">
+                <span data-i18n="appName">Editor databáze</span>
+            </div>
+            <div class="header-actions">
+                <button type="button" class="btn btn-secondary" id="btnNew"><span aria-hidden="true">📄</span> <span data-i18n="newDb">Nová</span></button>
+                <button type="button" class="btn btn-secondary" id="btnLoad"><span aria-hidden="true">📂</span> <span data-i18n="load">Načíst</span></button>
+                <button type="button" class="btn btn-primary" id="btnSave"><span aria-hidden="true">💾</span> <span data-i18n="save">Uložit</span></button>
+                <button type="button" class="btn btn-secondary" id="btnCopyJson"><span aria-hidden="true">📋</span> <span data-i18n="copyJson">Kopírovat JSON</span></button>
+                <button type="button" class="btn btn-secondary" id="btnPasteJson"><span aria-hidden="true">📥</span> <span data-i18n="pasteJson">Vložit JSON</span></button>
+                <div class="language-selector">
+                    <select id="langSelect" aria-label="Jazyk">
+                        <option value="cs">🇨🇿 Čeština</option>
+                        <option value="en">🇬🇧 English</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="table-tabs" id="tableTabs"></div>
+        <input type="file" id="fileInput" accept=".jsondb" hidden>
+    </header>
+
+    <main id="main-content">
+        <div id="tableContents"></div>
+
+        <!-- Management Section -->
+        <div class="tab-content" id="management-content">
+            <div class="sub-tabs">
+                <button type="button" class="sub-tab active" data-subtab="sub-database" data-i18n="database">Databáze</button>
+                <button type="button" class="sub-tab" data-subtab="sub-tables" data-i18n="tables">Tabulky</button>
+                <button type="button" class="sub-tab" data-subtab="sub-tools" data-i18n="tools">Nástroje</button>
+            </div>
+
+            <!-- Database Sub-tab -->
+            <div class="sub-content active" id="sub-database">
+                <div class="card">
+                    <div class="card-header"><h2 data-i18n="databaseSettings">Nastavení databáze</h2></div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="dbNameInput" data-i18n="dbName">Název databáze</label>
+                            <input type="text" id="dbNameInput" placeholder="Název databáze">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tables Sub-tab -->
+            <div class="sub-content" id="sub-tables">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 data-i18n="tablesList">Seznam tabulek</h2>
+                        <button type="button" class="btn btn-success" id="btnAddTable"><span aria-hidden="true">➕</span> <span data-i18n="addTable">Přidat tabulku</span></button>
+                    </div>
+                    <div class="card-body">
+                        <div class="field-list" id="tablesList"></div>
+                        <div id="emptyTables" class="empty-state" hidden>
+                            <div class="empty-state-icon">📁</div>
+                            <p data-i18n="noTables">Zatím nemáte žádné tabulky.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" id="fieldsCard" hidden>
+                    <div class="card-header">
+                        <h2><span data-i18n="fieldsFor">Pole pro tabulku:</span> <span id="fieldsTableName"></span></h2>
+                        <button type="button" class="btn btn-success" id="btnAddField"><span aria-hidden="true">➕</span> <span data-i18n="addField">Přidat pole</span></button>
+                    </div>
+                    <div class="card-body">
+                        <div class="field-list" id="fieldList"></div>
+                        <div id="emptyFields" class="empty-state" hidden>
+                            <div class="empty-state-icon">📝</div>
+                            <p data-i18n="noFields">Zatím nemáte definována žádná pole.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tools Sub-tab -->
+            <div class="sub-content" id="sub-tools">
+                <div class="card">
+                    <div class="card-header"><h2 data-i18n="statistics">Statistiky</h2></div>
+                    <div class="card-body">
+                        <div class="stats-grid" id="statsGrid"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h2 data-i18n="textGenerator">Generování textu</h2></div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="generatorTable" data-i18n="selectTable">Vyberte tabulku</label>
+                            <select id="generatorTable"></select>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="insertField">Vložit pole:</label>
+                            <div class="field-buttons" id="generatorFieldButtons"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="generatorTemplate" data-i18n="template">Šablona (použijte {název_pole})</label>
+                            <textarea id="generatorTemplate" rows="4" placeholder="Příklad: {Jméno} má {Věk} let."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="recordsToGenerate">Záznamy:</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="genRecords" value="all" checked> <span data-i18n="allRecords">Všechny</span></label>
+                                <label><input type="radio" name="genRecords" value="filtered"> <span data-i18n="filteredRecords">Filtrované</span></label>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="btnGenerate"><span aria-hidden="true">⚡</span> <span data-i18n="generate">Generovat</span></button>
+                        <div class="generator-output" id="generatorOutput" hidden></div>
+                        <div class="inline-actions" style="margin-top: 0.5rem;">
+                            <button type="button" class="btn btn-sm btn-secondary" id="btnCopyGenerated" hidden><span aria-hidden="true">📋</span> <span data-i18n="copy">Kopírovat</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Table Modal -->
+    <div class="modal-backdrop" id="tableModal" hidden>
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 id="tableModalTitle" data-i18n="addTable">Přidat tabulku</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="tableName" data-i18n="tableName">Název tabulky</label>
+                    <input type="text" id="tableName" required>
+                </div>
+                <input type="hidden" id="tableId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
+                <button type="button" class="btn btn-primary" id="btnSaveTable" data-i18n="save">Uložit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Field Modal -->
+    <div class="modal-backdrop" id="fieldModal" hidden>
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="fieldModalTitle" data-i18n="addField">Přidat pole</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="fieldName" data-i18n="fieldName">Název pole</label>
+                    <input type="text" id="fieldName" required>
+                </div>
+                <div class="form-group">
+                    <label for="fieldType" data-i18n="fieldType">Typ pole</label>
+                    <select id="fieldType">
+                        <option value="text">Text</option>
+                        <option value="textarea">Víceřádkový text / Markdown</option>
+                        <option value="number">Číslo</option>
+                        <option value="date">Datum</option>
+                        <option value="boolean">Ano/Ne</option>
+                        <option value="select">Výběr ze seznamu</option>
+                        <option value="composite">Složený</option>
+                        <option value="parent">Nadřazený záznam</option>
+                        <option value="children">Podřízené záznamy</option>
+                    </select>
+                </div>
+                <div class="form-group" id="fieldOptionsGroup" hidden>
+                    <label for="fieldOptions" data-i18n="selectOptions">Hodnoty (oddělené čárkou)</label>
+                    <input type="text" id="fieldOptions">
+                </div>
+                <div class="form-group" id="compositeTemplateGroup" hidden>
+                    <label data-i18n="compositeFields">Vložit pole:</label>
+                    <div class="field-buttons" id="compositeFieldButtons"></div>
+                    <label for="compositeTemplate" data-i18n="compositeTemplate">Šablona složeného pole</label>
+                    <textarea id="compositeTemplate" rows="2" placeholder="{Pole1} - {Pole2}"></textarea>
+                </div>
+                <div class="form-group" id="targetTableGroup" hidden>
+                    <label for="targetTable" data-i18n="targetTable">Cílová tabulka</label>
+                    <select id="targetTable"></select>
+                </div>
+                <div class="form-group" id="parentFieldGroup" hidden>
+                    <label for="parentField" data-i18n="parentFieldSelect">Pole odkazující zpět</label>
+                    <select id="parentField"></select>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="fieldPrimary">
+                    <label for="fieldPrimary" data-i18n="fieldPrimary">Primární (název záznamu)</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="fieldFilter">
+                    <label for="fieldFilter" data-i18n="fieldFilter">Povolit filtrování</label>
+                </div>
+                <input type="hidden" id="fieldId">
+                <input type="hidden" id="fieldTableId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
+                <button type="button" class="btn btn-primary" id="btnSaveField" data-i18n="save">Uložit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Record Modal -->
+    <div class="modal-backdrop" id="recordModal" hidden>
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="recordModalTitle" data-i18n="addRecord">Přidat záznam</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body"><form id="recordForm"></form></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
+                <button type="button" class="btn btn-primary" id="btnSaveRecord" data-i18n="save">Uložit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Record Modal -->
+    <div class="modal-backdrop" id="viewRecordModal" hidden>
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="viewRecordModalTitle">Záznam</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body" id="viewRecordContent"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="close">Zavřít</button>
+                <button type="button" class="btn btn-primary" id="btnEditFromView" data-i18n="edit">Upravit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal-backdrop" id="confirmModal" hidden>
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 id="confirmModalTitle" data-i18n="confirm">Potvrzení</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body"><p id="confirmMessage"></p></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmYes" data-i18n="delete">Smazat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal-backdrop" id="exportModal" hidden>
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="exportModalTitle" data-i18n="export">Export</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label data-i18n="format">Formát:</label>
+                    <div class="format-tabs">
+                        <button type="button" class="format-tab active" data-format="csv">CSV (čárka)</button>
+                        <button type="button" class="format-tab" data-format="tsv">TSV (tabulátor)</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="exportOutput" data-i18n="exportData">Data k exportu:</label>
+                    <textarea id="exportOutput" rows="10" readonly style="font-family: monospace;"></textarea>
+                </div>
+                <div class="inline-actions">
+                    <button type="button" class="btn btn-primary" id="btnExportCopy"><span aria-hidden="true">📋</span> <span data-i18n="copy">Kopírovat</span></button>
+                    <button type="button" class="btn btn-success" id="btnExportFile"><span aria-hidden="true">💾</span> <span data-i18n="saveFile">Uložit soubor</span></button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="close">Zavřít</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="modal-backdrop" id="importModal" hidden>
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="importModalTitle" data-i18n="import">Import</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label data-i18n="format">Formát:</label>
+                    <div class="format-tabs" id="importFormatTabs">
+                        <button type="button" class="format-tab active" data-format="csv">CSV (čárka)</button>
+                        <button type="button" class="format-tab" data-format="tsv">TSV (tabulátor)</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="importFile" data-i18n="loadFile">Načíst soubor:</label>
+                    <input type="file" id="importFile" accept=".csv,.tsv,.txt">
+                </div>
+                <div class="form-group">
+                    <label for="importInput" data-i18n="orPasteData">Nebo vložte data:</label>
+                    <textarea id="importInput" rows="8" style="font-family: monospace;" placeholder="Vložte CSV/TSV data..."></textarea>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="importHasHeader" checked>
+                    <label for="importHasHeader" data-i18n="hasHeader">První řádek obsahuje názvy sloupců</label>
+                </div>
+                <div id="importPreview"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
+                <button type="button" class="btn btn-primary" id="btnDoImport" data-i18n="import">Importovat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Paste JSON Modal (fallback for mobile) -->
+    <div class="modal-backdrop" id="pasteJsonModal" hidden>
+        <div class="modal">
+            <div class="modal-header">
+                <h2 data-i18n="pasteJson">Vložit JSON</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="pasteJsonInput" data-i18n="pasteJsonHere">Vložte JSON databáze:</label>
+                    <textarea id="pasteJsonInput" rows="12" style="font-family: monospace; font-size: 0.85rem;" placeholder='{"meta":{"name":"..."},"tables":[...]}'></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
+                <button type="button" class="btn btn-primary" id="btnDoPasteJson" data-i18n="load">Načíst</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            cs: {
+                skipToContent: "Přeskočit na obsah", appName: "Editor databáze", dbName: "Název databáze", newDb: "Nová", load: "Načíst", save: "Uložit",
+                copyJson: "Kopírovat JSON", pasteJson: "Vložit JSON", pasteJsonHere: "Vložte JSON databáze:", jsonCopied: "JSON zkopírován do schránky.", jsonPasted: "JSON načten.",
+                export: "Export", import: "Import", database: "Databáze", tables: "Tabulky", tools: "Nástroje",
+                databaseSettings: "Nastavení databáze", tablesList: "Seznam tabulek", addTable: "Přidat tabulku",
+                noTables: "Zatím nemáte žádné tabulky.", fieldsFor: "Pole pro tabulku:", addField: "Přidat pole",
+                noFields: "Zatím nemáte definována žádná pole.", statistics: "Statistiky", textGenerator: "Generování textu",
+                selectTable: "Vyberte tabulku", insertField: "Vložit pole:", template: "Šablona (použijte {název_pole})",
+                recordsToGenerate: "Záznamy:", allRecords: "Všechny", filteredRecords: "Filtrované", generate: "Generovat",
+                copy: "Kopírovat", tableName: "Název tabulky", cancel: "Zrušit", fieldName: "Název pole", fieldType: "Typ pole",
+                selectOptions: "Hodnoty (oddělené čárkou)", targetTable: "Cílová tabulka", parentFieldSelect: "Pole odkazující zpět",
+                fieldPrimary: "Primární (název záznamu)", fieldFilter: "Povolit filtrování", addRecord: "Přidat záznam",
+                close: "Zavřít", edit: "Upravit", confirm: "Potvrzení", delete: "Smazat", format: "Formát:",
+                exportData: "Data k exportu:", saveFile: "Uložit soubor", loadFile: "Načíst soubor:",
+                orPasteData: "Nebo vložte data:", hasHeader: "První řádek obsahuje názvy sloupců",
+                searchPlaceholder: "Hledat...", columnVisibility: "Zobrazení sloupců", actions: "Akce",
+                noRecords: "Zatím nemáte žádné záznamy.", allValues: "Všechny hodnoty", noValue: "(bez hodnoty)",
+                yes: "Ano", no: "Ne", noParent: "Žádný", noChildren: "Žádné podřízené záznamy",
+                confirmDeleteRecord: "Smazat tento záznam?", confirmDeleteField: "Smazat toto pole?",
+                confirmDeleteTable: "Smazat tuto tabulku?", confirmNewDb: "Vytvořit novou databázi?",
+                jsonCopied: "Zkopírováno.", jsonInvalid: "Neplatný JSON.", importSuccess: "Importováno: {count} nových, {updated} aktualizovaných.",
+                totalTables: "Tabulek celkem", totalRecords: "Záznamů celkem", recordsInTable: "Záznamů v {name}",
+                management: "Správa", rowsPreview: "Náhled ({count} řádků)", selectField: "-- Vyberte --",
+                recordsShowing: "Zobrazeno: {filtered} / {total}", typeText: "Text", typeTextarea: "Víceřádkový text / Markdown",
+                typeNumber: "Číslo", typeDate: "Datum", typeBoolean: "Ano/Ne", typeSelect: "Výběr ze seznamu",
+                typeParent: "Nadřazený záznam", typeChildren: "Podřízené záznamy", typeComposite: "Složený", editTable: "Upravit", editField: "Upravit pole",
+                compositeFields: "Vložit pole:", compositeTemplate: "Šablona složeného pole", createNew: "Vytvořit nový", addChild: "Přidat podřízený"
+            },
+            en: {
+                skipToContent: "Skip to content", appName: "Database Editor", dbName: "Database name", newDb: "New", load: "Load", save: "Save",
+                copyJson: "Copy JSON", pasteJson: "Paste JSON", pasteJsonHere: "Paste database JSON:", jsonCopied: "JSON copied to clipboard.", jsonPasted: "JSON loaded.",
+                export: "Export", import: "Import", database: "Database", tables: "Tables", tools: "Tools",
+                databaseSettings: "Database Settings", tablesList: "Tables List", addTable: "Add Table",
+                noTables: "No tables yet.", fieldsFor: "Fields for table:", addField: "Add Field",
+                noFields: "No fields defined yet.", statistics: "Statistics", textGenerator: "Text Generator",
+                selectTable: "Select table", insertField: "Insert field:", template: "Template (use {field_name})",
+                recordsToGenerate: "Records:", allRecords: "All", filteredRecords: "Filtered", generate: "Generate",
+                copy: "Copy", tableName: "Table Name", cancel: "Cancel", fieldName: "Field Name", fieldType: "Field Type",
+                selectOptions: "Values (comma-separated)", targetTable: "Target Table", parentFieldSelect: "Back-reference field",
+                fieldPrimary: "Primary (record name)", fieldFilter: "Enable filtering", addRecord: "Add Record",
+                close: "Close", edit: "Edit", confirm: "Confirmation", delete: "Delete", format: "Format:",
+                exportData: "Export data:", saveFile: "Save File", loadFile: "Load file:",
+                orPasteData: "Or paste data:", hasHeader: "First row contains column names",
+                searchPlaceholder: "Search...", columnVisibility: "Column Visibility", actions: "Actions",
+                noRecords: "No records yet.", allValues: "All values", noValue: "(no value)",
+                yes: "Yes", no: "No", noParent: "None", noChildren: "No child records",
+                confirmDeleteRecord: "Delete this record?", confirmDeleteField: "Delete this field?",
+                confirmDeleteTable: "Delete this table?", confirmNewDb: "Create new database?",
+                jsonCopied: "Copied.", jsonInvalid: "Invalid JSON.", importSuccess: "Imported: {count} new, {updated} updated.",
+                totalTables: "Total tables", totalRecords: "Total records", recordsInTable: "Records in {name}",
+                management: "Správa", rowsPreview: "Preview ({count} rows)", selectField: "-- Select --",
+                recordsShowing: "Showing: {filtered} / {total}", typeText: "Text", typeTextarea: "Multi-line text / Markdown",
+                typeNumber: "Number", typeDate: "Date", typeBoolean: "Yes/No", typeSelect: "Select from list",
+                typeParent: "Parent record", typeChildren: "Child records", typeComposite: "Composite", editTable: "Edit", editField: "Edit field",
+                compositeFields: "Insert field:", compositeTemplate: "Composite field template", createNew: "Create new", addChild: "Add child"
+            }
+        };
+
+        let currentLang = localStorage.getItem('db-editor-lang') || 'cs';
+        let database = { meta: { name: 'Nová databáze', columnVisibility: {} }, tables: [] };
+        let activeTableId = null;
+        let activeTab = 'management';
+        let tableFilters = {};
+        let tableSearches = {};
+        let tableSorts = {};
+        let editingFieldTableId = null;
+        let currentRecordId = null;
+        let currentRecordTableId = null;
+        let confirmCallback = null;
+        let exportFormat = 'csv';
+        let importFormat = 'csv';
+
+        const generateId = () => 'id_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+        const t = (key, r = {}) => { let s = translations[currentLang]?.[key] || key; for (const [k, v] of Object.entries(r)) s = s.replace(`{${k}}`, v); return s; };
+        const escapeHtml = s => s == null ? '' : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        const getTableById = id => database.tables.find(tb => tb.id === id);
+        const getRecordById = (tId, rId) => getTableById(tId)?.records.find(r => r.id === rId);
+        function getPrimaryFieldValue(table, record) { 
+            const pf = table.fields.find(f => f.primary); 
+            if (!pf) return `#${record.id.substr(0, 6)}`;
+            if (pf.type === 'composite') return evaluateCompositeField(table, pf, record) || `#${record.id.substr(0, 6)}`;
+            return record.values[pf.id] ? record.values[pf.id] : `#${record.id.substr(0, 6)}`; 
+        }
+        const getChildRecords = (tableId, recordId) => { const ch = []; database.tables.forEach(tb => { tb.fields.filter(f => f.type === 'parent' && f.targetTableId === tableId).forEach(field => { tb.records.forEach(rec => { if (rec.values[field.id] === recordId) ch.push({ table: tb, record: rec, field }); }); }); }); return ch; };
+
+        function updateDocumentTitle() {
+            const dbName = database.meta.name;
+            const table = getTableById(activeTableId);
+            const tableName = table?.name || '';
+            let title = t('appName');
+            if (dbName && dbName.trim()) {
+                title = (currentLang === 'cs' ? 'Databáze: ' : 'Database: ') + dbName;
+                if (tableName && activeTab !== 'management') {
+                    title += ' | ' + tableName;
+                }
+            }
+            document.title = title;
+        }
+
+        function autoSave() {
+            try {
+                localStorage.setItem('db-editor-autosave', JSON.stringify(database));
+                localStorage.setItem('db-editor-autosave-tab', activeTab);
+            } catch (e) {
+                console.warn('Auto-save failed:', e);
+            }
+        }
+
+        function loadAutoSave() {
+            try {
+                const saved = localStorage.getItem('db-editor-autosave');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    database = { meta: { name: data.meta?.name || '', columnVisibility: data.meta?.columnVisibility || {} }, tables: data.tables || [] };
+                    const savedTab = localStorage.getItem('db-editor-autosave-tab');
+                    if (savedTab && (savedTab === 'management' || getTableById(savedTab))) {
+                        activeTab = savedTab;
+                        activeTableId = savedTab !== 'management' ? savedTab : (database.tables[0]?.id || null);
+                    } else {
+                        activeTab = database.tables.length > 0 ? database.tables[0].id : 'management';
+                        activeTableId = database.tables[0]?.id || null;
+                    }
+                    return true;
+                }
+            } catch (e) {
+                console.warn('Auto-load failed:', e);
+            }
+            return false;
+        }
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(el => el.textContent = t(el.getAttribute('data-i18n')));
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => el.placeholder = t(el.getAttribute('data-i18n-placeholder')));
+            document.documentElement.lang = currentLang;
+        }
+
+        function openModal(id) { document.getElementById(id).hidden = false; document.body.style.overflow = 'hidden'; }
+        function closeModal(id) { document.getElementById(id).hidden = true; document.body.style.overflow = ''; }
+        function confirmAction(msg, cb) { document.getElementById('confirmMessage').textContent = msg; confirmCallback = cb; openModal('confirmModal'); }
+
+        // Simple Markdown parser
+        function parseMarkdown(text) {
+            if (!text) return '';
+            let html = escapeHtml(text);
+            // Code blocks
+            html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+            // Inline code
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            // Headers
+            html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+            html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+            html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+            // Bold and italic
+            html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+            html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+            html = html.replace(/___(.+?)___/g, '<strong><em>$1</em></strong>');
+            html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
+            html = html.replace(/_(.+?)_/g, '<em>$1</em>');
+            // Blockquotes
+            html = html.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
+            // Links
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+            // Horizontal rule
+            html = html.replace(/^---$/gm, '<hr>');
+            // Unordered lists
+            html = html.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
+            html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+            // Ordered lists
+            html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+            // Paragraphs
+            html = html.replace(/\n\n/g, '</p><p>');
+            html = html.replace(/\n/g, '<br>');
+            html = '<p>' + html + '</p>';
+            html = html.replace(/<p><\/p>/g, '');
+            html = html.replace(/<p>(<h[123]>)/g, '$1');
+            html = html.replace(/(<\/h[123]>)<\/p>/g, '$1');
+            html = html.replace(/<p>(<ul>)/g, '$1');
+            html = html.replace(/(<\/ul>)<\/p>/g, '$1');
+            html = html.replace(/<p>(<blockquote>)/g, '$1');
+            html = html.replace(/(<\/blockquote>)<\/p>/g, '$1');
+            html = html.replace(/<p>(<pre>)/g, '$1');
+            html = html.replace(/(<\/pre>)<\/p>/g, '$1');
+            html = html.replace(/<p>(<hr>)<\/p>/g, '$1');
+            return html;
+        }
+
+        function renderTableTabs() {
+            const container = document.getElementById('tableTabs');
+            let html = database.tables.map(tb => 
+                `<button type="button" class="table-tab ${activeTab === tb.id ? 'active' : ''}" data-table-id="${tb.id}">${escapeHtml(tb.name)}</button>`
+            ).join('');
+            html += `<button type="button" class="table-tab management-tab ${activeTab === 'management' ? 'active' : ''}" data-table-id="management">⚙️ ${t('management')}</button>`;
+            container.innerHTML = html;
+        }
+
+        function renderTableContent(tableId) {
+            const container = document.getElementById('tableContents');
+            const table = getTableById(tableId);
+            if (!table) { container.innerHTML = ''; return; }
+
+            const filters = tableFilters[tableId] || {};
+            const searchQuery = tableSearches[tableId] || '';
+            const sort = tableSorts[tableId] || { field: null, dir: 'asc' };
+            const cv = database.meta.columnVisibility[tableId] || {};
+            const visibleFields = table.fields.filter(f => {
+                if (cv[f.id] === false) return false;
+                if (f.type === 'children' && cv[f.id] !== true) return false; // children musí být explicitně povoleno
+                return true;
+            });
+
+            // Build filters HTML
+            let filtersHtml = `<div class="search-box"><input type="search" class="table-search" data-table="${tableId}" placeholder="${t('searchPlaceholder')}" value="${escapeHtml(searchQuery)}"></div>`;
+            table.fields.filter(f => f.filter && f.type !== 'children').forEach(f => {
+                const vals = new Set(); let hasEmpty = false;
+                table.records.forEach(r => { const v = r.values[f.id]; if (v == null || v === '') hasEmpty = true; else vals.add(String(v)); });
+                const sorted = Array.from(vals).sort();
+                const cv = filters[f.id] || '';
+                filtersHtml += `<div class="filter-item"><label>${escapeHtml(f.name)}</label><select class="table-filter" data-table="${tableId}" data-field="${f.id}"><option value="">${t('allValues')}</option>${hasEmpty ? `<option value="__null__" ${cv === '__null__' ? 'selected' : ''}>${t('noValue')}</option>` : ''}${sorted.map(v => `<option value="${escapeHtml(v)}" ${cv === v ? 'selected' : ''}>${f.type === 'boolean' ? (v === 'true' ? t('yes') : t('no')) : escapeHtml(v)}</option>`).join('')}</select></div>`;
+            });
+
+            // Filter records
+            let filtered = table.records.filter(r => {
+                for (const [fid, fv] of Object.entries(filters)) {
+                    if (!fv) continue;
+                    const v = r.values[fid];
+                    if (fv === '__null__') { if (v != null && v !== '') return false; }
+                    else { if (String(v) !== fv) return false; }
+                }
+                if (searchQuery) {
+                    const sq = searchQuery.toLowerCase();
+                    if (!table.fields.some(f => { const v = r.values[f.id]; return v != null && String(v).toLowerCase().includes(sq); })) return false;
+                }
+                return true;
+            });
+
+            // Sort
+            if (sort.field) {
+                const sf = table.fields.find(f => f.id === sort.field);
+                filtered.sort((a, b) => {
+                    let va, vb;
+                    if (sf?.type === 'composite') {
+                        va = evaluateCompositeField(table, sf, a);
+                        vb = evaluateCompositeField(table, sf, b);
+                    } else {
+                        va = a.values[sort.field] ?? '';
+                        vb = b.values[sort.field] ?? '';
+                    }
+                    if (sf?.type === 'number') { va = parseFloat(va) || 0; vb = parseFloat(vb) || 0; }
+                    else if (sf?.type === 'date') { va = new Date(va).getTime() || 0; vb = new Date(vb).getTime() || 0; }
+                    else { va = String(va).toLowerCase(); vb = String(vb).toLowerCase(); }
+                    if (va < vb) return sort.dir === 'asc' ? -1 : 1;
+                    if (va > vb) return sort.dir === 'asc' ? 1 : -1;
+                    return 0;
+                });
+            }
+
+            // Column toggles
+            let togglesHtml = table.fields.map(f => {
+                const isVisible = f.type === 'children' ? cv[f.id] === true : cv[f.id] !== false;
+                return `<div class="checkbox-group"><input type="checkbox" class="col-toggle" data-table="${tableId}" data-field="${f.id}" ${isVisible ? 'checked' : ''}><label>${escapeHtml(f.name)}</label></div>`;
+            }).join('');
+
+            // Table HTML
+            let tableHtml = '';
+            if (table.fields.length === 0) {
+                tableHtml = `<div class="empty-state"><div class="empty-state-icon">📝</div><p>${t('noFields')}</p></div>`;
+            } else if (filtered.length === 0) {
+                tableHtml = `<div class="empty-state"><div class="empty-state-icon">📋</div><p>${t('noRecords')}</p></div>`;
+            } else {
+                const headerCells = visibleFields.map(f => {
+                    const isSorted = sort.field === f.id;
+                    const cls = isSorted ? (sort.dir === 'asc' ? 'sorted-asc' : 'sorted-desc') : '';
+                    return `<th class="${cls}" data-table="${tableId}" data-field="${f.id}">${escapeHtml(f.name)}</th>`;
+                }).join('') + `<th class="no-sort">${t('actions')}</th>`;
+
+                const bodyRows = filtered.map(r => {
+                    const cells = visibleFields.map(f => `<td>${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
+                    return `<tr>${cells}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}">✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}">🗑️</button></td></tr>`;
+                }).join('');
+
+                tableHtml = `<div class="table-wrapper"><table><thead><tr>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table></div>`;
+            }
+
+            container.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2>${escapeHtml(table.name)}</h2>
+                        <div class="inline-actions">
+                            <button type="button" class="btn btn-sm btn-secondary export-table-btn" data-table="${tableId}"><span aria-hidden="true">📤</span> ${t('export')}</button>
+                            <button type="button" class="btn btn-sm btn-secondary import-table-btn" data-table="${tableId}"><span aria-hidden="true">📥</span> ${t('import')}</button>
+                            <button type="button" class="btn btn-success add-record-btn" data-table="${tableId}"><span aria-hidden="true">➕</span> ${t('addRecord')}</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="filters-section">${filtersHtml}</div>
+                        <div class="record-count">${t('recordsShowing', { filtered: filtered.length, total: table.records.length })}</div>
+                        ${tableHtml}
+                        <details><summary>${t('columnVisibility')}</summary><div class="column-toggles">${togglesHtml}</div></details>
+                    </div>
+                </div>
+            `;
+
+            // Store filtered records for generator
+            table._filteredRecords = filtered;
+        }
+
+        function formatFieldValue(table, field, value, record) {
+            // For composite and children, value is computed, not stored
+            if (field.type !== 'composite' && field.type !== 'children' && (value == null || value === '')) {
+                return '<span class="view-field-value empty">-</span>';
+            }
+            switch (field.type) {
+                case 'boolean': return value ? t('yes') : t('no');
+                case 'date': try { return new Date(value).toLocaleDateString(currentLang); } catch { return escapeHtml(value); }
+                case 'textarea': return `<span title="${escapeHtml(value)}">${escapeHtml(value.length > 50 ? value.substr(0, 50) + '...' : value)}</span>`;
+                case 'parent':
+                    const tt = getTableById(field.targetTableId);
+                    const pr = tt ? getRecordById(field.targetTableId, value) : null;
+                    if (pr && tt) return `<a href="#" class="record-link" data-action="view" data-table="${field.targetTableId}" data-record="${value}">${escapeHtml(getPrimaryFieldValue(tt, pr))}</a>`;
+                    return `<span class="view-field-value empty">${t('noParent')}</span>`;
+                case 'children':
+                    const ch = getChildRecords(table.id, record.id).filter(c => {
+                        if (field.targetTableId && c.table.id !== field.targetTableId) return false;
+                        if (field.parentFieldId && c.field.id !== field.parentFieldId) return false;
+                        return true;
+                    });
+                    if (ch.length === 0) return `<span class="view-field-value empty">${t('noChildren')}</span>`;
+                    return ch.map(c => `<a href="#" class="record-link" data-action="view" data-table="${c.table.id}" data-record="${c.record.id}">${escapeHtml(getPrimaryFieldValue(c.table, c.record))}</a>`).join(', ');
+                case 'composite':
+                    const compVal = evaluateCompositeField(table, field, record);
+                    if (field.primary) return `<a href="#" class="record-link" data-action="view" data-table="${table.id}" data-record="${record.id}">${escapeHtml(compVal)}</a>`;
+                    return escapeHtml(compVal);
+                default:
+                    if (field.primary) return `<a href="#" class="record-link" data-action="view" data-table="${table.id}" data-record="${record.id}">${escapeHtml(String(value))}</a>`;
+                    return escapeHtml(String(value));
+            }
+        }
+
+        function evaluateCompositeField(table, field, record) {
+            if (!field.compositeTemplate) return '';
+            let result = field.compositeTemplate;
+            table.fields.forEach(f => {
+                if (f.id === field.id) return; // skip self
+                let val = record.values[f.id] ?? '';
+                if (f.type === 'boolean') val = val ? t('yes') : t('no');
+                else if (f.type === 'date' && val) try { val = new Date(val).toLocaleDateString(currentLang); } catch {}
+                else if (f.type === 'parent' && val) {
+                    const tt = getTableById(f.targetTableId);
+                    const pr = tt ? getRecordById(f.targetTableId, val) : null;
+                    val = pr && tt ? getPrimaryFieldValue(tt, pr) : val;
+                }
+                result = result.replace(new RegExp(`\\{${f.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\}`, 'g'), val);
+            });
+            return result;
+        }
+
+        function renderManagement() {
+            document.getElementById('management-content').classList.add('active');
+            document.getElementById('tableContents').innerHTML = '';
+            renderTablesList();
+            renderStats();
+            renderGeneratorTable();
+            document.getElementById('dbNameInput').value = database.meta.name;
+        }
+
+        function renderTablesList() {
+            const container = document.getElementById('tablesList');
+            const empty = document.getElementById('emptyTables');
+            if (database.tables.length === 0) { container.innerHTML = ''; empty.hidden = false; document.getElementById('fieldsCard').hidden = true; return; }
+            empty.hidden = true;
+            container.innerHTML = database.tables.map((tb, i) => `
+                <div class="field-item">
+                    <div class="move-buttons">
+                        <button type="button" class="btn btn-sm btn-secondary btn-icon move-table-btn" data-table="${tb.id}" data-dir="-1" ${i === 0 ? 'disabled' : ''}>▲</button>
+                        <button type="button" class="btn btn-sm btn-secondary btn-icon move-table-btn" data-table="${tb.id}" data-dir="1" ${i === database.tables.length - 1 ? 'disabled' : ''}>▼</button>
+                    </div>
+                    <div class="field-item-info">
+                        <div class="field-item-name">${escapeHtml(tb.name)}</div>
+                        <div class="field-item-meta">${tb.fields.length} polí, ${tb.records.length} záznamů</div>
+                    </div>
+                    <div class="field-item-actions">
+                        <button type="button" class="btn btn-sm btn-secondary show-fields-btn" data-table="${tb.id}">📋 Pole</button>
+                        <button type="button" class="btn btn-sm btn-secondary edit-table-btn" data-table="${tb.id}">✏️</button>
+                        <button type="button" class="btn btn-sm btn-danger delete-table-btn" data-table="${tb.id}">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showFieldsForTable(tableId) {
+            editingFieldTableId = tableId;
+            const table = getTableById(tableId);
+            if (!table) return;
+            document.getElementById('fieldsCard').hidden = false;
+            document.getElementById('fieldsTableName').textContent = table.name;
+            renderFieldList();
+        }
+
+        function renderFieldList() {
+            const table = getTableById(editingFieldTableId);
+            const container = document.getElementById('fieldList');
+            const empty = document.getElementById('emptyFields');
+            if (!table || table.fields.length === 0) { container.innerHTML = ''; empty.hidden = false; return; }
+            empty.hidden = true;
+            const typeNames = { text: t('typeText'), textarea: t('typeTextarea'), number: t('typeNumber'), date: t('typeDate'), boolean: t('typeBoolean'), select: t('typeSelect'), composite: t('typeComposite'), parent: t('typeParent'), children: t('typeChildren') };
+            container.innerHTML = table.fields.map((f, i) => {
+                const badges = [];
+                if (f.primary) badges.push('<span class="badge badge-primary">Primární</span>');
+                if (f.filter) badges.push('<span class="badge badge-filter">Filtr</span>');
+                let targetInfo = '';
+                if ((f.type === 'parent' || f.type === 'children') && f.targetTableId) {
+                    const tt = getTableById(f.targetTableId);
+                    targetInfo = ` → ${tt?.name || '?'}`;
+                }
+                return `
+                    <div class="field-item">
+                        <div class="move-buttons">
+                            <button type="button" class="btn btn-sm btn-secondary btn-icon move-field-btn" data-field="${f.id}" data-dir="-1" ${i === 0 ? 'disabled' : ''}>▲</button>
+                            <button type="button" class="btn btn-sm btn-secondary btn-icon move-field-btn" data-field="${f.id}" data-dir="1" ${i === table.fields.length - 1 ? 'disabled' : ''}>▼</button>
+                        </div>
+                        <div class="field-item-info">
+                            <div class="field-item-name">${escapeHtml(f.name)}</div>
+                            <div class="field-item-meta">${typeNames[f.type] || f.type}${targetInfo} ${f.type === 'select' ? `(${escapeHtml(f.options || '')})` : ''} ${badges.join(' ')}</div>
+                        </div>
+                        <div class="field-item-actions">
+                            <button type="button" class="btn btn-sm btn-secondary edit-field-btn" data-field="${f.id}">✏️</button>
+                            <button type="button" class="btn btn-sm btn-danger delete-field-btn" data-field="${f.id}">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderStats() {
+            const totalRecords = database.tables.reduce((sum, tb) => sum + tb.records.length, 0);
+            let html = `<div class="stat-card"><div class="stat-value">${database.tables.length}</div><div class="stat-label">${t('totalTables')}</div></div>`;
+            html += `<div class="stat-card"><div class="stat-value">${totalRecords}</div><div class="stat-label">${t('totalRecords')}</div></div>`;
+            database.tables.forEach(tb => {
+                html += `<div class="stat-card"><div class="stat-value">${tb.records.length}</div><div class="stat-label">${t('recordsInTable', { name: tb.name })}</div></div>`;
+            });
+            document.getElementById('statsGrid').innerHTML = html;
+        }
+
+        function renderGeneratorTable() {
+            const sel = document.getElementById('generatorTable');
+            sel.innerHTML = database.tables.map(tb => `<option value="${tb.id}">${escapeHtml(tb.name)}</option>`).join('');
+            updateGeneratorFields();
+        }
+
+        function updateGeneratorFields() {
+            const tableId = document.getElementById('generatorTable').value;
+            const table = getTableById(tableId);
+            const container = document.getElementById('generatorFieldButtons');
+            if (!table) { container.innerHTML = ''; return; }
+            container.innerHTML = table.fields.filter(f => f.type !== 'children').map(f => `<button type="button" class="field-btn" data-field="{${f.name}}">{${escapeHtml(f.name)}}</button>`).join('');
+        }
+
+        function generateText() {
+            const tableId = document.getElementById('generatorTable').value;
+            const table = getTableById(tableId);
+            const template = document.getElementById('generatorTemplate').value;
+            const useFiltered = document.querySelector('input[name="genRecords"]:checked').value === 'filtered';
+            if (!table || !template) return;
+
+            const records = useFiltered && table._filteredRecords ? table._filteredRecords : table.records;
+            const output = records.map(r => {
+                let line = template;
+                table.fields.forEach(f => {
+                    let val = r.values[f.id] ?? '';
+                    if (f.type === 'boolean') val = val ? t('yes') : t('no');
+                    else if (f.type === 'date' && val) try { val = new Date(val).toLocaleDateString(currentLang); } catch {}
+                    else if (f.type === 'parent' && val) {
+                        const tt = getTableById(f.targetTableId);
+                        const pr = tt ? getRecordById(f.targetTableId, val) : null;
+                        val = pr && tt ? getPrimaryFieldValue(tt, pr) : val;
+                    }
+                    line = line.replace(new RegExp(`\\{${f.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\}`, 'g'), val);
+                });
+                return line;
+            }).join('\n');
+
+            document.getElementById('generatorOutput').textContent = output;
+            document.getElementById('generatorOutput').hidden = false;
+            document.getElementById('btnCopyGenerated').hidden = false;
+        }
+
+        function switchTab(tabId) {
+            activeTab = tabId;
+            document.querySelectorAll('.table-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.table-tab[data-table-id="${tabId}"]`)?.classList.add('active');
+            document.getElementById('management-content').classList.remove('active');
+            if (tabId === 'management') {
+                renderManagement();
+            } else {
+                activeTableId = tabId;
+                renderTableContent(tabId);
+            }
+        }
+
+        // Table Modal
+        function openTableModal(tableId = null) {
+            document.getElementById('tableName').value = '';
+            document.getElementById('tableId').value = '';
+            if (tableId) {
+                const tb = getTableById(tableId);
+                if (tb) { document.getElementById('tableModalTitle').textContent = t('editTable'); document.getElementById('tableId').value = tb.id; document.getElementById('tableName').value = tb.name; }
+            } else { document.getElementById('tableModalTitle').textContent = t('addTable'); }
+            openModal('tableModal');
+        }
+
+        function saveTable() {
+            const id = document.getElementById('tableId').value;
+            const name = document.getElementById('tableName').value.trim();
+            if (!name) return;
+            if (id) { const tb = getTableById(id); if (tb) tb.name = name; }
+            else { database.tables.push({ id: generateId(), name, fields: [], records: [] }); }
+            closeModal('tableModal');
+            renderAll();
+        }
+
+        // Field Modal
+        function openFieldModal(fieldId = null) {
+            const table = getTableById(editingFieldTableId);
+            if (!table) return;
+            document.getElementById('fieldName').value = '';
+            document.getElementById('fieldType').value = 'text';
+            document.getElementById('fieldOptions').value = '';
+            document.getElementById('compositeTemplate').value = '';
+            document.getElementById('fieldPrimary').checked = false;
+            document.getElementById('fieldFilter').checked = false;
+            document.getElementById('fieldId').value = '';
+            document.getElementById('fieldTableId').value = editingFieldTableId;
+            document.getElementById('fieldOptionsGroup').hidden = true;
+            document.getElementById('compositeTemplateGroup').hidden = true;
+            document.getElementById('targetTableGroup').hidden = true;
+            document.getElementById('parentFieldGroup').hidden = true;
+            populateTargetTableSelect();
+            if (fieldId) {
+                const f = table.fields.find(x => x.id === fieldId);
+                if (f) {
+                    document.getElementById('fieldModalTitle').textContent = t('editField');
+                    document.getElementById('fieldId').value = f.id;
+                    document.getElementById('fieldName').value = f.name;
+                    document.getElementById('fieldType').value = f.type;
+                    document.getElementById('fieldOptions').value = f.options || '';
+                    document.getElementById('compositeTemplate').value = f.compositeTemplate || '';
+                    document.getElementById('fieldPrimary').checked = f.primary;
+                    document.getElementById('fieldFilter').checked = f.filter;
+                    if (f.type === 'select') document.getElementById('fieldOptionsGroup').hidden = false;
+                    if (f.type === 'composite') {
+                        document.getElementById('compositeTemplateGroup').hidden = false;
+                        populateCompositeFieldButtons();
+                    }
+                    if (f.type === 'parent' || f.type === 'children') {
+                        document.getElementById('targetTableGroup').hidden = false;
+                        populateTargetTableSelect(f.targetTableId);
+                        if (f.type === 'children') {
+                            document.getElementById('parentFieldGroup').hidden = false;
+                            populateParentFieldSelect(f.targetTableId, f.parentFieldId);
+                        }
+                    }
+                }
+            } else { document.getElementById('fieldModalTitle').textContent = t('addField'); }
+            openModal('fieldModal');
+        }
+
+        function populateTargetTableSelect(selId = '') {
+            document.getElementById('targetTable').innerHTML = `<option value="">${t('selectField')}</option>` + database.tables.map(tb => `<option value="${tb.id}" ${tb.id === selId ? 'selected' : ''}>${escapeHtml(tb.name)}</option>`).join('');
+        }
+
+        function populateParentFieldSelect(targetTableId, selId = '') {
+            const sel = document.getElementById('parentField');
+            const tt = getTableById(targetTableId);
+            if (!tt) { sel.innerHTML = `<option value="">${t('selectField')}</option>`; return; }
+            const pfs = tt.fields.filter(f => f.type === 'parent' && f.targetTableId === editingFieldTableId);
+            sel.innerHTML = `<option value="">${t('selectField')}</option>` + pfs.map(f => `<option value="${f.id}" ${f.id === selId ? 'selected' : ''}>${escapeHtml(f.name)}</option>`).join('');
+        }
+
+        function populateCompositeFieldButtons() {
+            const table = getTableById(editingFieldTableId);
+            const container = document.getElementById('compositeFieldButtons');
+            if (!table) { container.innerHTML = ''; return; }
+            const currentFieldId = document.getElementById('fieldId').value;
+            container.innerHTML = table.fields.filter(f => f.id !== currentFieldId && f.type !== 'children' && f.type !== 'composite').map(f => `<button type="button" class="field-btn" data-field="{${f.name}}">{${escapeHtml(f.name)}}</button>`).join('');
+        }
+
+        function saveField() {
+            const tableId = document.getElementById('fieldTableId').value;
+            const table = getTableById(tableId);
+            if (!table) return;
+            const id = document.getElementById('fieldId').value;
+            const name = document.getElementById('fieldName').value.trim();
+            const type = document.getElementById('fieldType').value;
+            const options = document.getElementById('fieldOptions').value.trim();
+            const compositeTemplate = document.getElementById('compositeTemplate').value;
+            const primary = document.getElementById('fieldPrimary').checked;
+            const filter = document.getElementById('fieldFilter').checked;
+            const targetTableId = document.getElementById('targetTable').value;
+            const parentFieldId = document.getElementById('parentField').value;
+            if (!name) return;
+            if (primary) table.fields.forEach(f => f.primary = false);
+            if (id) {
+                const f = table.fields.find(x => x.id === id);
+                if (f) { f.name = name; f.type = type; f.options = options; f.compositeTemplate = compositeTemplate; f.primary = primary; f.filter = filter; f.targetTableId = targetTableId; f.parentFieldId = parentFieldId; }
+            } else {
+                table.fields.push({ id: generateId(), name, type, options, compositeTemplate, primary, filter, targetTableId, parentFieldId });
+            }
+            closeModal('fieldModal');
+            renderFieldList();
+            renderTableTabs();
+        }
+
+        // Record Modal
+        function openRecordModal(tableId, recordId = null) {
+            const table = getTableById(tableId);
+            if (!table) return;
+            currentRecordTableId = tableId;
+            currentRecordId = recordId;
+            document.getElementById('recordModalTitle').textContent = recordId ? t('edit') : t('addRecord');
+            const record = recordId ? getRecordById(tableId, recordId) : null;
+            document.getElementById('recordForm').innerHTML = table.fields.filter(f => f.type !== 'children').map(f => buildFormField(table, f, record?.values[f.id] ?? '', record)).join('');
+            openModal('recordModal');
+        }
+
+        function buildFormField(table, field, value, record) {
+            const id = `record_${field.id}`;
+            let input = '';
+            switch (field.type) {
+                case 'text': input = `<input type="text" id="${id}" value="${escapeHtml(value)}">`; break;
+                case 'textarea': input = `<textarea id="${id}" rows="5">${escapeHtml(value)}</textarea>`; break;
+                case 'number': input = `<input type="number" id="${id}" value="${escapeHtml(value)}" step="any">`; break;
+                case 'date': input = `<input type="date" id="${id}" value="${escapeHtml(value)}">`; break;
+                case 'boolean': return `<div class="form-group"><div class="checkbox-group"><input type="checkbox" id="${id}" ${value ? 'checked' : ''}><label for="${id}">${escapeHtml(field.name)}</label></div></div>`;
+                case 'select':
+                    const opts = (field.options || '').split(',').map(o => o.trim()).filter(o => o);
+                    input = `<select id="${id}"><option value="">-- ${t('selectField')} --</option>${opts.map(o => `<option value="${escapeHtml(o)}" ${value === o ? 'selected' : ''}>${escapeHtml(o)}</option>`).join('')}</select>`;
+                    break;
+                case 'composite':
+                    const compVal = record ? evaluateCompositeField(table, field, record) : '';
+                    input = `<input type="text" id="${id}" value="${escapeHtml(compVal)}" readonly disabled style="background: var(--bg); cursor: not-allowed;">`;
+                    break;
+                case 'parent':
+                    const tt = getTableById(field.targetTableId);
+                    const ros = tt ? tt.records.filter(r => r.id !== currentRecordId).map(r => ({ id: r.id, name: getPrimaryFieldValue(tt, r) })) : [];
+                    input = `<div style="display: flex; gap: 0.5rem;"><select id="${id}" style="flex: 1;"><option value="">${t('noParent')}</option>${ros.map(o => `<option value="${o.id}" ${value === o.id ? 'selected' : ''}>${escapeHtml(o.name)}</option>`).join('')}</select><button type="button" class="btn btn-sm btn-success create-parent-btn" data-field="${field.id}" data-target-table="${field.targetTableId}" title="${t('createNew')}">➕</button></div>`;
+                    break;
+            }
+            return `<div class="form-group"><label for="${id}">${escapeHtml(field.name)}</label>${input}</div>`;
+        }
+
+        // Variables for nested record creation
+        let pendingParentCreation = null;
+
+        function saveFormState() {
+            const table = getTableById(currentRecordTableId);
+            if (!table) return null;
+            const values = {};
+            table.fields.filter(f => f.type !== 'children' && f.type !== 'composite').forEach(f => {
+                const el = document.getElementById(`record_${f.id}`);
+                if (!el) return;
+                if (f.type === 'boolean') values[f.id] = el.checked;
+                else if (f.type === 'number') values[f.id] = el.value ? parseFloat(el.value) : null;
+                else values[f.id] = el.value;
+            });
+            return { tableId: currentRecordTableId, recordId: currentRecordId, values };
+        }
+
+        function restoreFormState(state, newParentId, parentFieldId) {
+            if (!state) return;
+            currentRecordTableId = state.tableId;
+            currentRecordId = state.recordId;
+            const table = getTableById(state.tableId);
+            if (!table) return;
+            // Merge saved values with new parent ID
+            if (newParentId && parentFieldId) {
+                state.values[parentFieldId] = newParentId;
+            }
+            const record = state.recordId ? getRecordById(state.tableId, state.recordId) : { values: state.values };
+            document.getElementById('recordModalTitle').textContent = state.recordId ? t('edit') : t('addRecord');
+            document.getElementById('recordForm').innerHTML = table.fields.filter(f => f.type !== 'children').map(f => {
+                const val = state.values[f.id] !== undefined ? state.values[f.id] : (record?.values[f.id] ?? '');
+                return buildFormField(table, f, val, record);
+            }).join('');
+            openModal('recordModal');
+        }
+
+        function createParentRecord(targetTableId, parentFieldId) {
+            // Save current form state
+            pendingParentCreation = {
+                formState: saveFormState(),
+                parentFieldId: parentFieldId
+            };
+            // Open new record modal for target table
+            closeModal('recordModal');
+            openRecordModal(targetTableId, null);
+        }
+
+        function createChildRecord(targetTableId, parentFieldId, parentRecordId) {
+            // Remember to return to view modal after saving
+            pendingChildCreation = {
+                returnToTableId: currentRecordTableId,
+                returnToRecordId: currentRecordId
+            };
+            // Close view modal and open new record modal with pre-filled parent
+            closeModal('viewRecordModal');
+            openRecordModalWithParent(targetTableId, parentFieldId, parentRecordId);
+        }
+
+        function openRecordModalWithParent(tableId, parentFieldId, parentRecordId) {
+            const table = getTableById(tableId);
+            if (!table) return;
+            currentRecordTableId = tableId;
+            currentRecordId = null;
+            document.getElementById('recordModalTitle').textContent = t('addRecord');
+            // Create a temporary record object with pre-filled parent
+            const prefilledValues = {};
+            prefilledValues[parentFieldId] = parentRecordId;
+            document.getElementById('recordForm').innerHTML = table.fields.filter(f => f.type !== 'children').map(f => {
+                const val = prefilledValues[f.id] ?? '';
+                return buildFormField(table, f, val, null);
+            }).join('');
+            openModal('recordModal');
+        }
+
+        function saveRecord() {
+            const table = getTableById(currentRecordTableId);
+            if (!table) return;
+            const values = {};
+            table.fields.filter(f => f.type !== 'children' && f.type !== 'composite').forEach(f => {
+                const el = document.getElementById(`record_${f.id}`);
+                if (!el) return;
+                if (f.type === 'boolean') values[f.id] = el.checked;
+                else if (f.type === 'number') values[f.id] = el.value ? parseFloat(el.value) : null;
+                else values[f.id] = el.value;
+            });
+            let newRecordId = null;
+            if (currentRecordId) { 
+                const r = getRecordById(currentRecordTableId, currentRecordId); 
+                if (r) r.values = values; 
+            } else {
+                newRecordId = generateId();
+                table.records.push({ id: newRecordId, values });
+            }
+            closeModal('recordModal');
+            
+            // Check if we were creating a parent record
+            if (pendingParentCreation) {
+                const pending = pendingParentCreation;
+                pendingParentCreation = null;
+                restoreFormState(pending.formState, newRecordId, pending.parentFieldId);
+                return;
+            }
+            
+            currentRecordId = null;
+            if (activeTab !== 'management') renderTableContent(currentRecordTableId);
+            else renderStats();
+            currentRecordTableId = null;
+        }
+
+        function viewRecord(tableId, recordId) {
+            const table = getTableById(tableId);
+            const record = getRecordById(tableId, recordId);
+            if (!table || !record) return;
+            currentRecordTableId = tableId;
+            currentRecordId = recordId;
+            document.getElementById('viewRecordModalTitle').textContent = getPrimaryFieldValue(table, record);
+            document.getElementById('viewRecordContent').innerHTML = table.fields.map(f => {
+                const v = record.values[f.id];
+                let dv = '';
+                switch (f.type) {
+                    case 'boolean': dv = v ? t('yes') : t('no'); break;
+                    case 'date': dv = v ? new Date(v).toLocaleDateString(currentLang) : ''; break;
+                    case 'textarea': dv = v ? `<div class="markdown-content">${parseMarkdown(v)}</div>` : ''; break;
+                    case 'composite': dv = evaluateCompositeField(table, f, record); break;
+                    case 'parent':
+                        const tt = getTableById(f.targetTableId);
+                        const pr = v && tt ? getRecordById(f.targetTableId, v) : null;
+                        if (pr && tt) dv = `<a href="#" class="record-link" data-action="viewInModal" data-table="${f.targetTableId}" data-record="${v}">${escapeHtml(getPrimaryFieldValue(tt, pr))}</a>`;
+                        else dv = `<span class="empty">${t('noParent')}</span>`;
+                        break;
+                    case 'children':
+                        const ch = getChildRecords(tableId, recordId).filter(c => { if (f.targetTableId && c.table.id !== f.targetTableId) return false; if (f.parentFieldId && c.field.id !== f.parentFieldId) return false; return true; });
+                        let childList = ch.length > 0 
+                            ? `<ul class="children-list">${ch.map(c => `<li><a href="#" class="record-link" data-action="viewInModal" data-table="${c.table.id}" data-record="${c.record.id}">${escapeHtml(getPrimaryFieldValue(c.table, c.record))}</a></li>`).join('')}</ul>` 
+                            : `<span class="empty">${t('noChildren')}</span>`;
+                        // Add button to create new child if targetTableId and parentFieldId are set
+                        if (f.targetTableId && f.parentFieldId) {
+                            childList += `<button type="button" class="btn btn-sm btn-success create-child-btn" data-target-table="${f.targetTableId}" data-parent-field="${f.parentFieldId}" data-parent-record="${recordId}" style="margin-top: 0.5rem;"><span aria-hidden="true">➕</span> ${t('addChild')}</button>`;
+                        }
+                        dv = childList;
+                        break;
+                    default: dv = v != null && v !== '' ? escapeHtml(String(v)) : '';
+                }
+                return `<div class="view-field"><div class="view-field-label">${escapeHtml(f.name)}</div><div class="view-field-value ${!dv ? 'empty' : ''}">${dv || '-'}</div></div>`;
+            }).join('');
+            openModal('viewRecordModal');
+        }
+
+        // Export/Import
+        function openExportModal(tableId) {
+            if (!tableId) { alert('Nejdříve vyberte tabulku.'); return; }
+            activeTableId = tableId;
+            exportFormat = 'csv';
+            document.querySelectorAll('#exportModal .format-tab').forEach(t => t.classList.toggle('active', t.dataset.format === 'csv'));
+            updateExportOutput();
+            openModal('exportModal');
+        }
+
+        function updateExportOutput() {
+            const table = getTableById(activeTableId);
+            if (!table) return;
+            const delim = exportFormat === 'csv' ? ',' : '\t';
+            const fields = table.fields.filter(f => f.type !== 'children' && f.type !== 'parent');
+            const escD = (s, d) => { s = String(s); return s.includes(d) || s.includes('"') || s.includes('\n') ? '"' + s.replace(/"/g, '""') + '"' : s; };
+            let csv = fields.map(f => escD(f.name, delim)).join(delim) + '\n';
+            table.records.forEach(r => { csv += fields.map(f => { let v = r.values[f.id] ?? ''; if (f.type === 'boolean') v = v ? t('yes') : t('no'); return escD(v, delim); }).join(delim) + '\n'; });
+            document.getElementById('exportOutput').value = csv;
+        }
+
+        function openImportModal(tableId) {
+            if (!tableId) { alert('Nejdříve vyberte tabulku.'); return; }
+            activeTableId = tableId;
+            importFormat = 'csv';
+            document.querySelectorAll('#importModal .format-tab').forEach(t => t.classList.toggle('active', t.dataset.format === 'csv'));
+            document.getElementById('importFile').value = '';
+            document.getElementById('importInput').value = '';
+            document.getElementById('importPreview').innerHTML = '';
+            openModal('importModal');
+        }
+
+        function parseDelimited(text, delim) {
+            const lines = []; let cur = '', inQ = false;
+            for (let i = 0; i < text.length; i++) { const c = text[i]; if (c === '"') { if (inQ && text[i + 1] === '"') { cur += '"'; i++; } else inQ = !inQ; } else if ((c === '\n' || c === '\r') && !inQ) { if (cur || lines.length > 0) lines.push(cur); cur = ''; if (c === '\r' && text[i + 1] === '\n') i++; } else cur += c; }
+            if (cur) lines.push(cur);
+            return lines.map(line => { const cells = []; let cell = '', iq = false; for (let i = 0; i < line.length; i++) { const ch = line[i]; if (ch === '"') { if (iq && line[i + 1] === '"') { cell += '"'; i++; } else iq = !iq; } else if (ch === delim && !iq) { cells.push(cell); cell = ''; } else cell += ch; } cells.push(cell); return cells; });
+        }
+
+        function doImport() {
+            const table = getTableById(activeTableId);
+            if (!table) return;
+            const text = document.getElementById('importInput').value;
+            if (!text.trim()) return;
+            const delim = importFormat === 'csv' ? ',' : '\t';
+            const hasHeader = document.getElementById('importHasHeader').checked;
+            const rows = parseDelimited(text, delim);
+            const dataRows = hasHeader ? rows.slice(1) : rows;
+            const fields = table.fields.filter(f => f.type !== 'children' && f.type !== 'parent');
+            const primaryField = fields.find(f => f.primary);
+            const primaryFieldIndex = primaryField ? fields.indexOf(primaryField) : -1;
+            let countNew = 0, countUpdated = 0;
+            
+            dataRows.forEach(row => {
+                if (row.every(c => !c.trim())) return;
+                const values = {};
+                row.forEach((c, i) => {
+                    if (i < fields.length) {
+                        const f = fields[i];
+                        if (f.type === 'number') values[f.id] = c ? parseFloat(c.replace(',', '.')) : null;
+                        else if (f.type === 'boolean') values[f.id] = c.toLowerCase() === t('yes').toLowerCase() || c === '1' || c.toLowerCase() === 'true';
+                        else values[f.id] = c;
+                    }
+                });
+                
+                // Upsert: najdi existující záznam podle primárního pole
+                let existingRecord = null;
+                if (primaryField && values[primaryField.id]) {
+                    existingRecord = table.records.find(r => r.values[primaryField.id] === values[primaryField.id]);
+                }
+                
+                if (existingRecord) {
+                    // Aktualizuj existující záznam
+                    Object.assign(existingRecord.values, values);
+                    countUpdated++;
+                } else {
+                    // Vytvoř nový záznam
+                    table.records.push({ id: generateId(), values });
+                    countNew++;
+                }
+            });
+            closeModal('importModal');
+            alert(t('importSuccess', { count: countNew, updated: countUpdated }));
+            renderTableContent(activeTableId);
+        }
+
+        // File operations
+        function createNewDatabase() {
+            confirmAction(t('confirmNewDb'), () => {
+                database = { meta: { name: '', columnVisibility: {} }, tables: [] };
+                activeTab = 'management';
+                activeTableId = null;
+                tableFilters = {};
+                tableSearches = {};
+                tableSorts = {};
+                renderAll();
+            });
+        }
+
+        function loadDatabase() { document.getElementById('fileInput').click(); }
+
+        function handleFileLoad(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => { try { loadDatabaseFromJson(JSON.parse(ev.target.result)); } catch { alert(t('jsonInvalid')); } };
+            reader.readAsText(file);
+            e.target.value = '';
+        }
+
+        function loadDatabaseFromJson(data) {
+            database = { meta: { name: data.meta?.name || '', columnVisibility: data.meta?.columnVisibility || {} }, tables: data.tables || [] };
+            activeTab = database.tables.length > 0 ? database.tables[0].id : 'management';
+            activeTableId = database.tables[0]?.id || null;
+            tableFilters = {};
+            tableSearches = {};
+            tableSorts = {};
+            renderAll();
+        }
+
+        function saveDatabase() {
+            database.meta.name = document.getElementById('dbNameInput')?.value || database.meta.name;
+            updateDocumentTitle();
+            const blob = new Blob([JSON.stringify(database, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = (database.meta.name || 'database') + '.jsondb';
+            a.click();
+        }
+
+        async function copyJsonToClipboard() {
+            database.meta.name = document.getElementById('dbNameInput')?.value || database.meta.name;
+            try {
+                await navigator.clipboard.writeText(JSON.stringify(database, null, 2));
+                alert(t('jsonCopied'));
+            } catch {
+                const ta = document.createElement('textarea');
+                ta.value = JSON.stringify(database, null, 2);
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                alert(t('jsonCopied'));
+            }
+        }
+
+        async function pasteJsonFromClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                const data = JSON.parse(text);
+                loadDatabaseFromJson(data);
+                alert(t('jsonPasted'));
+            } catch (e) {
+                // Clipboard API failed - open modal as fallback
+                document.getElementById('pasteJsonInput').value = '';
+                openModal('pasteJsonModal');
+            }
+        }
+
+        function doPasteJson() {
+            const text = document.getElementById('pasteJsonInput').value.trim();
+            if (!text) return;
+            try {
+                const data = JSON.parse(text);
+                loadDatabaseFromJson(data);
+                closeModal('pasteJsonModal');
+                alert(t('jsonPasted'));
+            } catch (e) {
+                alert(t('jsonInvalid') + '\n' + e.message);
+            }
+        }
+
+        function renderAll() {
+            renderTableTabs();
+            if (activeTab === 'management') renderManagement();
+            else renderTableContent(activeTab);
+            applyTranslations();
+            updateDocumentTitle();
+            autoSave();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            const langSelect = document.getElementById('langSelect');
+            langSelect.value = currentLang;
+            langSelect.addEventListener('change', e => { currentLang = e.target.value; localStorage.setItem('db-editor-lang', currentLang); renderAll(); });
+
+            document.getElementById('tableTabs').addEventListener('click', e => {
+                const tab = e.target.closest('.table-tab');
+                if (tab) switchTab(tab.dataset.tableId);
+            });
+
+            document.querySelectorAll('.sub-tab').forEach(tab => tab.addEventListener('click', () => {
+                document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.sub-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.subtab).classList.add('active');
+            }));
+
+            document.getElementById('dbNameInput').addEventListener('input', e => {
+                database.meta.name = e.target.value;
+                updateDocumentTitle();
+            });
+
+            document.getElementById('btnNew').addEventListener('click', createNewDatabase);
+            document.getElementById('btnLoad').addEventListener('click', loadDatabase);
+            document.getElementById('fileInput').addEventListener('change', handleFileLoad);
+            document.getElementById('btnSave').addEventListener('click', saveDatabase);
+            document.getElementById('btnCopyJson').addEventListener('click', copyJsonToClipboard);
+            document.getElementById('btnPasteJson').addEventListener('click', pasteJsonFromClipboard);
+
+            document.getElementById('btnAddTable').addEventListener('click', () => openTableModal());
+            document.getElementById('btnSaveTable').addEventListener('click', saveTable);
+            document.getElementById('btnAddField').addEventListener('click', () => openFieldModal());
+            document.getElementById('btnSaveField').addEventListener('click', saveField);
+            document.getElementById('btnSaveRecord').addEventListener('click', saveRecord);
+            document.getElementById('btnEditFromView').addEventListener('click', () => { closeModal('viewRecordModal'); openRecordModal(currentRecordTableId, currentRecordId); });
+            document.getElementById('btnConfirmYes').addEventListener('click', () => { closeModal('confirmModal'); if (confirmCallback) { confirmCallback(); confirmCallback = null; } });
+
+            document.getElementById('fieldType').addEventListener('change', e => {
+                const t = e.target.value;
+                document.getElementById('fieldOptionsGroup').hidden = t !== 'select';
+                document.getElementById('compositeTemplateGroup').hidden = t !== 'composite';
+                document.getElementById('targetTableGroup').hidden = t !== 'parent' && t !== 'children';
+                document.getElementById('parentFieldGroup').hidden = t !== 'children';
+                if (t === 'parent' || t === 'children') populateTargetTableSelect();
+                if (t === 'composite') populateCompositeFieldButtons();
+            });
+            document.getElementById('targetTable').addEventListener('change', e => { if (document.getElementById('fieldType').value === 'children') populateParentFieldSelect(e.target.value); });
+
+            // Composite field buttons
+            document.getElementById('compositeFieldButtons').addEventListener('click', e => {
+                if (e.target.classList.contains('field-btn')) {
+                    const ta = document.getElementById('compositeTemplate');
+                    const start = ta.selectionStart, end = ta.selectionEnd;
+                    const text = ta.value;
+                    ta.value = text.substring(0, start) + e.target.dataset.field + text.substring(end);
+                    ta.focus();
+                    ta.setSelectionRange(start + e.target.dataset.field.length, start + e.target.dataset.field.length);
+                }
+            });
+
+            document.getElementById('generatorTable').addEventListener('change', updateGeneratorFields);
+            document.getElementById('generatorFieldButtons').addEventListener('click', e => {
+                if (e.target.classList.contains('field-btn')) {
+                    const ta = document.getElementById('generatorTemplate');
+                    const start = ta.selectionStart, end = ta.selectionEnd;
+                    const text = ta.value;
+                    ta.value = text.substring(0, start) + e.target.dataset.field + text.substring(end);
+                    ta.focus();
+                    ta.setSelectionRange(start + e.target.dataset.field.length, start + e.target.dataset.field.length);
+                }
+            });
+            document.getElementById('btnGenerate').addEventListener('click', generateText);
+            document.getElementById('btnCopyGenerated').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('generatorOutput').textContent); alert(t('jsonCopied')); });
+
+            // Export modal
+            document.querySelectorAll('#exportModal .format-tab').forEach(tab => tab.addEventListener('click', () => {
+                exportFormat = tab.dataset.format;
+                document.querySelectorAll('#exportModal .format-tab').forEach(t => t.classList.toggle('active', t === tab));
+                updateExportOutput();
+            }));
+            document.getElementById('btnExportCopy').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('exportOutput').value); alert(t('jsonCopied')); });
+            document.getElementById('btnExportFile').addEventListener('click', () => {
+                const table = getTableById(activeTableId);
+                const blob = new Blob([document.getElementById('exportOutput').value], { type: 'text/csv' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `${table?.name || 'export'}.${exportFormat}`;
+                a.click();
+            });
+
+            // Import modal
+            document.querySelectorAll('#importModal .format-tab').forEach(tab => tab.addEventListener('click', () => {
+                importFormat = tab.dataset.format;
+                document.querySelectorAll('#importModal .format-tab').forEach(t => t.classList.toggle('active', t === tab));
+            }));
+            document.getElementById('importFile').addEventListener('change', e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = ev => { document.getElementById('importInput').value = ev.target.result; };
+                reader.readAsText(file);
+            });
+            document.getElementById('btnDoImport').addEventListener('click', doImport);
+            document.getElementById('btnDoPasteJson').addEventListener('click', doPasteJson);
+
+            // Delegation for dynamic elements
+            document.addEventListener('click', e => {
+                const target = e.target.closest('button');
+                if (!target) return;
+
+                if (target.classList.contains('edit-table-btn')) openTableModal(target.dataset.table);
+                if (target.classList.contains('delete-table-btn')) confirmAction(t('confirmDeleteTable'), () => { database.tables = database.tables.filter(tb => tb.id !== target.dataset.table); if (activeTab === target.dataset.table) activeTab = 'management'; renderAll(); });
+                if (target.classList.contains('move-table-btn')) {
+                    const i = database.tables.findIndex(tb => tb.id === target.dataset.table);
+                    const ni = i + parseInt(target.dataset.dir);
+                    if (ni >= 0 && ni < database.tables.length) { [database.tables[i], database.tables[ni]] = [database.tables[ni], database.tables[i]]; renderAll(); }
+                }
+                if (target.classList.contains('show-fields-btn')) showFieldsForTable(target.dataset.table);
+                if (target.classList.contains('edit-field-btn')) openFieldModal(target.dataset.field);
+                if (target.classList.contains('delete-field-btn')) confirmAction(t('confirmDeleteField'), () => { const table = getTableById(editingFieldTableId); if (table) { table.fields = table.fields.filter(f => f.id !== target.dataset.field); table.records.forEach(r => delete r.values[target.dataset.field]); } renderFieldList(); });
+                if (target.classList.contains('move-field-btn')) {
+                    const table = getTableById(editingFieldTableId);
+                    if (table) {
+                        const i = table.fields.findIndex(f => f.id === target.dataset.field);
+                        const ni = i + parseInt(target.dataset.dir);
+                        if (ni >= 0 && ni < table.fields.length) { [table.fields[i], table.fields[ni]] = [table.fields[ni], table.fields[i]]; renderFieldList(); }
+                    }
+                }
+                if (target.classList.contains('add-record-btn')) openRecordModal(target.dataset.table);
+                if (target.classList.contains('export-table-btn')) openExportModal(target.dataset.table);
+                if (target.classList.contains('import-table-btn')) openImportModal(target.dataset.table);
+                if (target.classList.contains('edit-record-btn')) openRecordModal(target.dataset.table, target.dataset.record);
+                if (target.classList.contains('delete-record-btn')) confirmAction(t('confirmDeleteRecord'), () => { const table = getTableById(target.dataset.table); if (table) table.records = table.records.filter(r => r.id !== target.dataset.record); renderTableContent(target.dataset.table); });
+                if (target.classList.contains('create-parent-btn')) createParentRecord(target.dataset.targetTable, target.dataset.field);
+                if (target.classList.contains('create-child-btn')) createChildRecord(target.dataset.targetTable, target.dataset.parentField, target.dataset.parentRecord);
+            });
+
+            // Event delegation for record links (a tags)
+            document.addEventListener('click', e => {
+                const link = e.target.closest('a.record-link');
+                if (!link) return;
+                e.preventDefault();
+                const action = link.dataset.action;
+                const tableId = link.dataset.table;
+                const recordId = link.dataset.record;
+                if (action === 'view') {
+                    viewRecord(tableId, recordId);
+                } else if (action === 'viewInModal') {
+                    closeModal('viewRecordModal');
+                    viewRecord(tableId, recordId);
+                }
+            });
+
+            document.addEventListener('change', e => {
+                if (e.target.classList.contains('table-filter')) {
+                    const tableId = e.target.dataset.table;
+                    if (!tableFilters[tableId]) tableFilters[tableId] = {};
+                    tableFilters[tableId][e.target.dataset.field] = e.target.value;
+                    renderTableContent(tableId);
+                }
+                if (e.target.classList.contains('col-toggle')) {
+                    const tableId = e.target.dataset.table;
+                    if (!database.meta.columnVisibility[tableId]) database.meta.columnVisibility[tableId] = {};
+                    database.meta.columnVisibility[tableId][e.target.dataset.field] = e.target.checked;
+                    renderTableContent(tableId);
+                }
+            });
+
+            document.addEventListener('input', e => {
+                if (e.target.classList.contains('table-search')) {
+                    tableSearches[e.target.dataset.table] = e.target.value;
+                    renderTableContent(e.target.dataset.table);
+                }
+            });
+
+            document.getElementById('tableContents').addEventListener('click', e => {
+                const th = e.target.closest('th:not(.no-sort)');
+                if (th && th.dataset.table && th.dataset.field) {
+                    const tableId = th.dataset.table;
+                    if (!tableSorts[tableId]) tableSorts[tableId] = { field: null, dir: 'asc' };
+                    if (tableSorts[tableId].field === th.dataset.field) tableSorts[tableId].dir = tableSorts[tableId].dir === 'asc' ? 'desc' : 'asc';
+                    else { tableSorts[tableId].field = th.dataset.field; tableSorts[tableId].dir = 'asc'; }
+                    renderTableContent(tableId);
+                }
+            });
+
+            document.querySelectorAll('[data-modal-close]').forEach(btn => btn.addEventListener('click', () => { const m = btn.closest('.modal-backdrop'); if (m) closeModal(m.id); }));
+            document.querySelectorAll('.modal-backdrop').forEach(bd => bd.addEventListener('click', e => { if (e.target === bd) closeModal(bd.id); }));
+
+            loadAutoSave();
+            renderAll();
+        });
+    </script>
+</body>
+</html>
