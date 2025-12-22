@@ -181,6 +181,7 @@ Use the ▲ and ▼ arrows to move tables in the list. The order determines the 
 5. Optionally check:
    - **Primary (record name)** - this field's value will represent the record
    - **Enable filtering** - shows a filter for this field in table view
+   - **Grouping**: Allow grouping table of records by this field, can be folded and unfolded
 6. Click **Save**
 
 ### Field Types
@@ -224,6 +225,11 @@ Dropdown menu with predefined values.
 **Settings:**
 - In the **Values (comma-separated)** field, enter the options
 - Example: `Low,Medium,High,Critical`
+
+#### URL
+
+Clickable link for URL address.
+
 
 #### Composite
 

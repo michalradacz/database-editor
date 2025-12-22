@@ -181,6 +181,7 @@ Použijte šipky ▲ a ▼ pro přesunutí tabulky v seznamu. Pořadí určuje p
 5. Volitelně zaškrtněte:
    - **Primární (název záznamu)** - hodnota tohoto pole bude reprezentovat záznam
    - **Povolit filtrování** - zobrazí filtr pro toto pole v zobrazení tabulky
+   - **Seskupovat****: V tavulce se výsledky seskupují podle pole, lze sbalit a rozbalit
 6. Klikněte **Uložit**
 
 ### Typy polí
@@ -224,6 +225,10 @@ Rozbalovací nabídka s předdefinovanými hodnotami.
 **Nastavení:**
 - V poli **Hodnoty (oddělené čárkou)** zadejte možnosti
 - Příklad: `Nízká,Střední,Vysoká,Kritická`
+
+#### URL
+
+Odkaz ve formě URL adresy, po zadání je klikatelný odkaz.
 
 #### Složený
 

@@ -143,9 +143,11 @@
 
         .view-field { margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
         .view-field:last-child { border-bottom: none; margin-bottom: 0; }
-        .view-field-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.3rem; }
+        .view-field-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem; }
+        .view-field-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
         .view-field-value { font-size: 1rem; color: var(--text); }
         .view-field-value.empty { font-style: italic; color: var(--text-muted); }
+        .copy-field-btn { padding: 0.15rem 0.4rem; font-size: 0.75rem; }
         .children-list { list-style: none; padding: 0; }
         .children-list li { padding: 0.3rem 0; }
 
@@ -191,6 +193,35 @@
 
         .inline-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
+        /* Group styles */
+        .group-header th { 
+            background: var(--bg); 
+            padding: 0; 
+            text-align: left;
+            border-top: 2px solid var(--border);
+        }
+        .group-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            text-align: left;
+        }
+        .group-toggle:hover { background: rgba(0,0,0,0.05); }
+        .group-toggle:focus { outline: 2px solid var(--primary); outline-offset: -2px; }
+        .group-icon { font-size: 0.75rem; width: 1rem; }
+        
+        /* URL link styles */
+        .url-link { color: var(--primary); text-decoration: underline; }
+        .url-link:hover { color: var(--secondary); }
+
         @media (max-width: 768px) {
             header { padding: 1rem; }
             main { padding: 1rem; }
@@ -209,6 +240,7 @@
                 <span data-i18n="appName">Editor databáze</span>
             </div>
             <div class="header-actions">
+                <button type="button" class="btn btn-success" id="btnSaveWiki" style="display:none;"><span aria-hidden="true">📤</span> <span data-i18n="saveToWiki">Uložit na wiki</span></button>
                 <button type="button" class="btn btn-secondary" id="btnNew"><span aria-hidden="true">📄</span> <span data-i18n="newDb">Nová</span></button>
                 <button type="button" class="btn btn-secondary" id="btnLoad"><span aria-hidden="true">📂</span> <span data-i18n="load">Načíst</span></button>
                 <button type="button" class="btn btn-primary" id="btnSave"><span aria-hidden="true">💾</span> <span data-i18n="save">Uložit</span></button>
@@ -363,6 +395,7 @@
                         <option value="textarea">Víceřádkový text / Markdown</option>
                         <option value="number">Číslo</option>
                         <option value="date">Datum</option>
+                        <option value="url">URL odkaz</option>
                         <option value="boolean">Ano/Ne</option>
                         <option value="select">Výběr ze seznamu</option>
                         <option value="composite">Složený</option>
@@ -395,6 +428,10 @@
                 <div class="checkbox-group">
                     <input type="checkbox" id="fieldFilter">
                     <label for="fieldFilter" data-i18n="fieldFilter">Povolit filtrování</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="fieldGroup">
+                    <label for="fieldGroup" data-i18n="fieldGroup">Seskupovat záznamy</label>
                 </div>
                 <input type="hidden" id="fieldId">
                 <input type="hidden" id="fieldTableId">
@@ -542,6 +579,7 @@
             cs: {
                 skipToContent: "Přeskočit na obsah", appName: "Editor databáze", dbName: "Název databáze", newDb: "Nová", load: "Načíst", save: "Uložit",
                 copyJson: "Kopírovat JSON", pasteJson: "Vložit JSON", pasteJsonHere: "Vložte JSON databáze:", jsonCopied: "JSON zkopírován do schránky.", jsonPasted: "JSON načten.",
+                saveToWiki: "Uložit na wiki", wikiSaved: "Uloženo na wiki.", wikiSaveError: "Chyba při ukládání:", wikiSaving: "Ukládám...",
                 export: "Export", import: "Import", database: "Databáze", tables: "Tabulky", tools: "Nástroje",
                 databaseSettings: "Nastavení databáze", tablesList: "Seznam tabulek", addTable: "Přidat tabulku",
                 noTables: "Zatím nemáte žádné tabulky.", fieldsFor: "Pole pro tabulku:", addField: "Přidat pole",
@@ -564,12 +602,13 @@
                 management: "Správa", rowsPreview: "Náhled ({count} řádků)", selectField: "-- Vyberte --",
                 recordsShowing: "Zobrazeno: {filtered} / {total}", typeText: "Text", typeTextarea: "Víceřádkový text / Markdown",
                 typeNumber: "Číslo", typeDate: "Datum", typeBoolean: "Ano/Ne", typeSelect: "Výběr ze seznamu",
-                typeParent: "Nadřazený záznam", typeChildren: "Podřízené záznamy", typeComposite: "Složený", editTable: "Upravit", editField: "Upravit pole",
-                compositeFields: "Vložit pole:", compositeTemplate: "Šablona složeného pole", createNew: "Vytvořit nový", addChild: "Přidat podřízený"
+                typeParent: "Nadřazený záznam", typeChildren: "Podřízené záznamy", typeComposite: "Složený", typeUrl: "URL odkaz", editTable: "Upravit", editField: "Upravit pole",
+                compositeFields: "Vložit pole:", compositeTemplate: "Šablona složeného pole", createNew: "Vytvořit nový", fieldGroup: "Seskupovat záznamy", groupCollapsed: "sbaleno", groupExpanded: "rozbaleno", addChild: "Přidat podřízený", copyField: "Kopírovat", copiedToClipboard: "Zkopírováno do schránky"
             },
             en: {
                 skipToContent: "Skip to content", appName: "Database Editor", dbName: "Database name", newDb: "New", load: "Load", save: "Save",
                 copyJson: "Copy JSON", pasteJson: "Paste JSON", pasteJsonHere: "Paste database JSON:", jsonCopied: "JSON copied to clipboard.", jsonPasted: "JSON loaded.",
+                saveToWiki: "Save to Wiki", wikiSaved: "Saved to wiki.", wikiSaveError: "Error saving:", wikiSaving: "Saving...",
                 export: "Export", import: "Import", database: "Database", tables: "Tables", tools: "Tools",
                 databaseSettings: "Database Settings", tablesList: "Tables List", addTable: "Add Table",
                 noTables: "No tables yet.", fieldsFor: "Fields for table:", addField: "Add Field",
@@ -592,13 +631,13 @@
                 management: "Správa", rowsPreview: "Preview ({count} rows)", selectField: "-- Select --",
                 recordsShowing: "Showing: {filtered} / {total}", typeText: "Text", typeTextarea: "Multi-line text / Markdown",
                 typeNumber: "Number", typeDate: "Date", typeBoolean: "Yes/No", typeSelect: "Select from list",
-                typeParent: "Parent record", typeChildren: "Child records", typeComposite: "Composite", editTable: "Edit", editField: "Edit field",
-                compositeFields: "Insert field:", compositeTemplate: "Composite field template", createNew: "Create new", addChild: "Add child"
+                typeParent: "Parent record", typeChildren: "Child records", typeComposite: "Composite", typeUrl: "URL link", editTable: "Edit", editField: "Edit field",
+                compositeFields: "Insert field:", compositeTemplate: "Composite field template", createNew: "Create new", fieldGroup: "Group records", groupCollapsed: "collapsed", groupExpanded: "expanded", addChild: "Add child", copyField: "Copy", copiedToClipboard: "Copied to clipboard"
             }
         };
 
         let currentLang = localStorage.getItem('db-editor-lang') || 'cs';
-        let database = { meta: { name: 'Nová databáze', columnVisibility: {} }, tables: [] };
+        let database = { meta: { name: 'Nová databáze', columnVisibility: {}, groupStates: {} }, tables: [] };
         let activeTableId = null;
         let activeTab = 'management';
         let tableFilters = {};
@@ -652,7 +691,14 @@
                 const saved = localStorage.getItem('db-editor-autosave');
                 if (saved) {
                     const data = JSON.parse(saved);
-                    database = { meta: { name: data.meta?.name || '', columnVisibility: data.meta?.columnVisibility || {} }, tables: data.tables || [] };
+                    database = { 
+                        meta: { 
+                            name: data.meta?.name || '', 
+                            columnVisibility: data.meta?.columnVisibility || {},
+                            groupStates: data.meta?.groupStates || {}
+                        }, 
+                        tables: data.tables || [] 
+                    };
                     const savedTab = localStorage.getItem('db-editor-autosave-tab');
                     if (savedTab && (savedTab === 'management' || getTableById(savedTab))) {
                         activeTab = savedTab;
@@ -804,11 +850,79 @@
 
             // Table HTML
             let tableHtml = '';
+            const groupField = table.fields.find(f => f.group);
+            const groupStates = database.meta.groupStates?.[tableId] || {};
+            
             if (table.fields.length === 0) {
                 tableHtml = `<div class="empty-state"><div class="empty-state-icon">📝</div><p>${t('noFields')}</p></div>`;
             } else if (filtered.length === 0) {
                 tableHtml = `<div class="empty-state"><div class="empty-state-icon">📋</div><p>${t('noRecords')}</p></div>`;
+            } else if (groupField) {
+                // Grouped view
+                const headerCells = visibleFields.map(f => {
+                    const isSorted = sort.field === f.id;
+                    const cls = isSorted ? (sort.dir === 'asc' ? 'sorted-asc' : 'sorted-desc') : '';
+                    return `<th class="${cls}" data-table="${tableId}" data-field="${f.id}">${escapeHtml(f.name)}</th>`;
+                }).join('') + `<th class="no-sort">${t('actions')}</th>`;
+
+                // Group records by groupField value
+                const groups = new Map();
+                filtered.forEach(r => {
+                    let groupKey = r.values[groupField.id] ?? '';
+                    let groupDisplay = groupKey;
+                    
+                    if (groupField.type === 'parent' && groupKey) {
+                        const tt = getTableById(groupField.targetTableId);
+                        const pr = tt ? getRecordById(groupField.targetTableId, groupKey) : null;
+                        groupDisplay = pr && tt ? getPrimaryFieldValue(tt, pr) : groupKey;
+                    } else if (groupField.type === 'boolean') {
+                        groupDisplay = groupKey ? t('yes') : t('no');
+                        groupKey = String(groupKey);
+                    } else if (groupKey === '' || groupKey === null || groupKey === undefined) {
+                        groupKey = '__empty__';
+                        groupDisplay = t('noValue');
+                    }
+                    
+                    if (!groups.has(groupKey)) groups.set(groupKey, { display: groupDisplay, records: [] });
+                    groups.get(groupKey).records.push(r);
+                });
+
+                // Sort groups by display name
+                const sortedGroups = Array.from(groups.entries()).sort((a, b) => {
+                    if (a[0] === '__empty__') return 1;
+                    if (b[0] === '__empty__') return -1;
+                    return String(a[1].display).localeCompare(String(b[1].display), currentLang);
+                });
+
+                let groupedHtml = '';
+                const colCount = visibleFields.length + 1;
+                
+                sortedGroups.forEach(([groupKey, group]) => {
+                    const isCollapsed = groupStates[groupKey] === true;
+                    const groupId = `group_${tableId}_${groupKey.replace(/[^a-zA-Z0-9]/g, '_')}`;
+                    
+                    groupedHtml += `<tbody class="record-group">`;
+                    groupedHtml += `<tr class="group-header">
+                        <th colspan="${colCount}" scope="colgroup">
+                            <button type="button" class="group-toggle" data-table="${tableId}" data-group="${escapeHtml(groupKey)}" aria-expanded="${!isCollapsed}" aria-controls="${groupId}">
+                                <span class="group-icon" aria-hidden="true">${isCollapsed ? '▶' : '▼'}</span>
+                                ${escapeHtml(group.display)} (${group.records.length})
+                            </button>
+                        </th>
+                    </tr>`;
+                    
+                    if (!isCollapsed) {
+                        group.records.forEach(r => {
+                            const cells = visibleFields.map(f => `<td>${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
+                            groupedHtml += `<tr id="${groupId}">${cells}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}">✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}">🗑️</button></td></tr>`;
+                        });
+                    }
+                    groupedHtml += `</tbody>`;
+                });
+
+                tableHtml = `<div class="table-wrapper"><table><thead><tr>${headerCells}</tr></thead>${groupedHtml}</table></div>`;
             } else {
+                // Normal view without grouping
                 const headerCells = visibleFields.map(f => {
                     const isSorted = sort.field === f.id;
                     const cls = isSorted ? (sort.dir === 'asc' ? 'sorted-asc' : 'sorted-desc') : '';
@@ -817,7 +931,7 @@
 
                 const bodyRows = filtered.map(r => {
                     const cells = visibleFields.map(f => `<td>${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
-                    return `<tr>${cells}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}">✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}">🗑️</button></td></tr>`;
+                    return `<tr>${cells}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}">✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}">🗑️</button></td></tr>`;
                 }).join('');
 
                 tableHtml = `<div class="table-wrapper"><table><thead><tr>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table></div>`;
@@ -855,6 +969,9 @@
                 case 'boolean': return value ? t('yes') : t('no');
                 case 'date': try { return new Date(value).toLocaleDateString(currentLang); } catch { return escapeHtml(value); }
                 case 'textarea': return `<span title="${escapeHtml(value)}">${escapeHtml(value.length > 50 ? value.substr(0, 50) + '...' : value)}</span>`;
+                case 'url': 
+                    const urlText = value.length > 40 ? value.substr(0, 40) + '...' : value;
+                    return `<a href="${escapeHtml(value)}" target="_blank" rel="noopener noreferrer" class="url-link">${escapeHtml(urlText)}</a>`;
                 case 'parent':
                     const tt = getTableById(field.targetTableId);
                     const pr = tt ? getRecordById(field.targetTableId, value) : null;
@@ -944,7 +1061,7 @@
             const empty = document.getElementById('emptyFields');
             if (!table || table.fields.length === 0) { container.innerHTML = ''; empty.hidden = false; return; }
             empty.hidden = true;
-            const typeNames = { text: t('typeText'), textarea: t('typeTextarea'), number: t('typeNumber'), date: t('typeDate'), boolean: t('typeBoolean'), select: t('typeSelect'), composite: t('typeComposite'), parent: t('typeParent'), children: t('typeChildren') };
+            const typeNames = { text: t('typeText'), textarea: t('typeTextarea'), number: t('typeNumber'), date: t('typeDate'), url: t('typeUrl'), boolean: t('typeBoolean'), select: t('typeSelect'), composite: t('typeComposite'), parent: t('typeParent'), children: t('typeChildren') };
             container.innerHTML = table.fields.map((f, i) => {
                 const badges = [];
                 if (f.primary) badges.push('<span class="badge badge-primary">Primární</span>');
@@ -1070,6 +1187,7 @@
             document.getElementById('compositeTemplate').value = '';
             document.getElementById('fieldPrimary').checked = false;
             document.getElementById('fieldFilter').checked = false;
+            document.getElementById('fieldGroup').checked = false;
             document.getElementById('fieldId').value = '';
             document.getElementById('fieldTableId').value = editingFieldTableId;
             document.getElementById('fieldOptionsGroup').hidden = true;
@@ -1088,6 +1206,7 @@
                     document.getElementById('compositeTemplate').value = f.compositeTemplate || '';
                     document.getElementById('fieldPrimary').checked = f.primary;
                     document.getElementById('fieldFilter').checked = f.filter;
+                    document.getElementById('fieldGroup').checked = f.group;
                     if (f.type === 'select') document.getElementById('fieldOptionsGroup').hidden = false;
                     if (f.type === 'composite') {
                         document.getElementById('compositeTemplateGroup').hidden = false;
@@ -1137,15 +1256,17 @@
             const compositeTemplate = document.getElementById('compositeTemplate').value;
             const primary = document.getElementById('fieldPrimary').checked;
             const filter = document.getElementById('fieldFilter').checked;
+            const group = document.getElementById('fieldGroup').checked;
             const targetTableId = document.getElementById('targetTable').value;
             const parentFieldId = document.getElementById('parentField').value;
             if (!name) return;
             if (primary) table.fields.forEach(f => f.primary = false);
+            if (group) table.fields.forEach(f => f.group = false); // jen jedno pole může být pro seskupování
             if (id) {
                 const f = table.fields.find(x => x.id === id);
-                if (f) { f.name = name; f.type = type; f.options = options; f.compositeTemplate = compositeTemplate; f.primary = primary; f.filter = filter; f.targetTableId = targetTableId; f.parentFieldId = parentFieldId; }
+                if (f) { f.name = name; f.type = type; f.options = options; f.compositeTemplate = compositeTemplate; f.primary = primary; f.filter = filter; f.group = group; f.targetTableId = targetTableId; f.parentFieldId = parentFieldId; }
             } else {
-                table.fields.push({ id: generateId(), name, type, options, compositeTemplate, primary, filter, targetTableId, parentFieldId });
+                table.fields.push({ id: generateId(), name, type, options, compositeTemplate, primary, filter, group, targetTableId, parentFieldId });
             }
             closeModal('fieldModal');
             renderFieldList();
@@ -1172,6 +1293,7 @@
                 case 'textarea': input = `<textarea id="${id}" rows="5">${escapeHtml(value)}</textarea>`; break;
                 case 'number': input = `<input type="number" id="${id}" value="${escapeHtml(value)}" step="any">`; break;
                 case 'date': input = `<input type="date" id="${id}" value="${escapeHtml(value)}">`; break;
+                case 'url': input = `<input type="url" id="${id}" value="${escapeHtml(value)}" placeholder="https://">`; break;
                 case 'boolean': return `<div class="form-group"><div class="checkbox-group"><input type="checkbox" id="${id}" ${value ? 'checked' : ''}><label for="${id}">${escapeHtml(field.name)}</label></div></div>`;
                 case 'select':
                     const opts = (field.options || '').split(',').map(o => o.trim()).filter(o => o);
@@ -1309,31 +1431,89 @@
             document.getElementById('viewRecordContent').innerHTML = table.fields.map(f => {
                 const v = record.values[f.id];
                 let dv = '';
+                let rawValue = ''; // Pro kopírování
+                let isEmpty = false;
+                
                 switch (f.type) {
-                    case 'boolean': dv = v ? t('yes') : t('no'); break;
-                    case 'date': dv = v ? new Date(v).toLocaleDateString(currentLang) : ''; break;
-                    case 'textarea': dv = v ? `<div class="markdown-content">${parseMarkdown(v)}</div>` : ''; break;
-                    case 'composite': dv = evaluateCompositeField(table, f, record); break;
+                    case 'boolean': 
+                        dv = v ? t('yes') : t('no'); 
+                        rawValue = dv;
+                        break;
+                    case 'date': 
+                        if (v) {
+                            dv = new Date(v).toLocaleDateString(currentLang);
+                            rawValue = dv;
+                        } else {
+                            isEmpty = true;
+                        }
+                        break;
+                    case 'textarea': 
+                        if (v) {
+                            dv = `<div class="markdown-content">${parseMarkdown(v)}</div>`;
+                            rawValue = v;
+                        } else {
+                            isEmpty = true;
+                        }
+                        break;
+                    case 'url': 
+                        if (v) {
+                            dv = `<a href="${escapeHtml(v)}" target="_blank" rel="noopener noreferrer" class="url-link">${escapeHtml(v)}</a>`;
+                            rawValue = v;
+                        } else {
+                            isEmpty = true;
+                        }
+                        break;
+                    case 'composite': 
+                        const compVal = evaluateCompositeField(table, f, record);
+                        if (compVal) {
+                            dv = escapeHtml(compVal).replace(/\n/g, '<br>');
+                            rawValue = compVal;
+                        } else {
+                            isEmpty = true;
+                        }
+                        break;
                     case 'parent':
                         const tt = getTableById(f.targetTableId);
                         const pr = v && tt ? getRecordById(f.targetTableId, v) : null;
-                        if (pr && tt) dv = `<a href="#" class="record-link" data-action="viewInModal" data-table="${f.targetTableId}" data-record="${v}">${escapeHtml(getPrimaryFieldValue(tt, pr))}</a>`;
-                        else dv = `<span class="empty">${t('noParent')}</span>`;
+                        if (pr && tt) {
+                            const parentName = getPrimaryFieldValue(tt, pr);
+                            dv = `<a href="#" class="record-link" data-action="viewInModal" data-table="${f.targetTableId}" data-record="${v}">${escapeHtml(parentName)}</a>`;
+                            rawValue = parentName;
+                        } else {
+                            isEmpty = true;
+                        }
                         break;
                     case 'children':
                         const ch = getChildRecords(tableId, recordId).filter(c => { if (f.targetTableId && c.table.id !== f.targetTableId) return false; if (f.parentFieldId && c.field.id !== f.parentFieldId) return false; return true; });
-                        let childList = ch.length > 0 
-                            ? `<ul class="children-list">${ch.map(c => `<li><a href="#" class="record-link" data-action="viewInModal" data-table="${c.table.id}" data-record="${c.record.id}">${escapeHtml(getPrimaryFieldValue(c.table, c.record))}</a></li>`).join('')}</ul>` 
-                            : `<span class="empty">${t('noChildren')}</span>`;
+                        if (ch.length > 0) {
+                            dv = `<ul class="children-list">${ch.map(c => `<li><a href="#" class="record-link" data-action="viewInModal" data-table="${c.table.id}" data-record="${c.record.id}">${escapeHtml(getPrimaryFieldValue(c.table, c.record))}</a></li>`).join('')}</ul>`;
+                            rawValue = ch.map(c => getPrimaryFieldValue(c.table, c.record)).join('\n');
+                        } else {
+                            isEmpty = true;
+                        }
                         // Add button to create new child if targetTableId and parentFieldId are set
                         if (f.targetTableId && f.parentFieldId) {
-                            childList += `<button type="button" class="btn btn-sm btn-success create-child-btn" data-target-table="${f.targetTableId}" data-parent-field="${f.parentFieldId}" data-parent-record="${recordId}" style="margin-top: 0.5rem;"><span aria-hidden="true">➕</span> ${t('addChild')}</button>`;
+                            if (isEmpty) dv = '';
+                            dv += `<button type="button" class="btn btn-sm btn-success create-child-btn" data-target-table="${f.targetTableId}" data-parent-field="${f.parentFieldId}" data-parent-record="${recordId}" style="margin-top: 0.5rem;"><span aria-hidden="true">➕</span> ${t('addChild')}</button>`;
+                            isEmpty = false; // Vždy zobrazit kvůli tlačítku
                         }
-                        dv = childList;
                         break;
-                    default: dv = v != null && v !== '' ? escapeHtml(String(v)) : '';
+                    default: 
+                        if (v != null && v !== '') {
+                            dv = escapeHtml(String(v));
+                            rawValue = String(v);
+                        } else {
+                            isEmpty = true;
+                        }
                 }
-                return `<div class="view-field"><div class="view-field-label">${escapeHtml(f.name)}</div><div class="view-field-value ${!dv ? 'empty' : ''}">${dv || '-'}</div></div>`;
+                
+                // Skrýt prázdná pole (kromě children s tlačítkem)
+                if (isEmpty) return '';
+                
+                // Tlačítko pro kopírování (ne pro children)
+                const copyBtn = f.type !== 'children' && rawValue ? `<button type="button" class="btn btn-sm btn-secondary copy-field-btn" data-value="${escapeHtml(rawValue)}" title="${t('copyField')}">📋</button>` : '';
+                
+                return `<div class="view-field"><div class="view-field-header"><span class="view-field-label">${escapeHtml(f.name)}</span>${copyBtn}</div><div class="view-field-value">${dv}</div></div>`;
             }).join('');
             openModal('viewRecordModal');
         }
@@ -1427,7 +1607,7 @@
         // File operations
         function createNewDatabase() {
             confirmAction(t('confirmNewDb'), () => {
-                database = { meta: { name: '', columnVisibility: {} }, tables: [] };
+                database = { meta: { name: '', columnVisibility: {}, groupStates: {} }, tables: [] };
                 activeTab = 'management';
                 activeTableId = null;
                 tableFilters = {};
@@ -1449,7 +1629,14 @@
         }
 
         function loadDatabaseFromJson(data) {
-            database = { meta: { name: data.meta?.name || '', columnVisibility: data.meta?.columnVisibility || {} }, tables: data.tables || [] };
+            database = { 
+                meta: { 
+                    name: data.meta?.name || '', 
+                    columnVisibility: data.meta?.columnVisibility || {},
+                    groupStates: data.meta?.groupStates || {}
+                }, 
+                tables: data.tables || [] 
+            };
             activeTab = database.tables.length > 0 ? database.tables[0].id : 'management';
             activeTableId = database.tables[0]?.id || null;
             tableFilters = {};
@@ -1655,6 +1842,25 @@
                 if (target.classList.contains('delete-record-btn')) confirmAction(t('confirmDeleteRecord'), () => { const table = getTableById(target.dataset.table); if (table) table.records = table.records.filter(r => r.id !== target.dataset.record); renderTableContent(target.dataset.table); });
                 if (target.classList.contains('create-parent-btn')) createParentRecord(target.dataset.targetTable, target.dataset.field);
                 if (target.classList.contains('create-child-btn')) createChildRecord(target.dataset.targetTable, target.dataset.parentField, target.dataset.parentRecord);
+                if (target.classList.contains('copy-field-btn')) {
+                    const value = target.dataset.value;
+                    navigator.clipboard.writeText(value).then(() => {
+                        const origText = target.textContent;
+                        target.textContent = '✓';
+                        setTimeout(() => { target.textContent = origText; }, 1500);
+                    }).catch(() => {
+                        // Fallback pro starší prohlížeče
+                        const ta = document.createElement('textarea');
+                        ta.value = value;
+                        document.body.appendChild(ta);
+                        ta.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(ta);
+                        const origText = target.textContent;
+                        target.textContent = '✓';
+                        setTimeout(() => { target.textContent = origText; }, 1500);
+                    });
+                }
             });
 
             // Event delegation for record links (a tags)
@@ -1671,6 +1877,18 @@
                     closeModal('viewRecordModal');
                     viewRecord(tableId, recordId);
                 }
+            });
+
+            // Event delegation for group toggle
+            document.addEventListener('click', e => {
+                const toggle = e.target.closest('.group-toggle');
+                if (!toggle) return;
+                const tableId = toggle.dataset.table;
+                const groupKey = toggle.dataset.group;
+                if (!database.meta.groupStates) database.meta.groupStates = {};
+                if (!database.meta.groupStates[tableId]) database.meta.groupStates[tableId] = {};
+                database.meta.groupStates[tableId][groupKey] = !database.meta.groupStates[tableId][groupKey];
+                renderTableContent(tableId);
             });
 
             document.addEventListener('change', e => {
@@ -1708,6 +1926,162 @@
 
             document.querySelectorAll('[data-modal-close]').forEach(btn => btn.addEventListener('click', () => { const m = btn.closest('.modal-backdrop'); if (m) closeModal(m.id); }));
             document.querySelectorAll('.modal-backdrop').forEach(bd => bd.addEventListener('click', e => { if (e.target === bd) closeModal(bd.id); }));
+
+            // ========== WIKI INTEGRATION ==========
+            
+            // Base64 helpers with UTF-8 support
+            function base64Encode(str) {
+                return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+                    return String.fromCharCode('0x' + p1);
+                }));
+            }
+            
+            function base64Decode(str) {
+                return decodeURIComponent(atob(str).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+            }
+            
+            // Find highest ID in database and update counter
+            function updateIdCounter(data) {
+                let maxTimestamp = 0;
+                
+                function extractTimestamp(id) {
+                    if (!id || typeof id !== 'string') return 0;
+                    // ID format: id_[timestamp in base36][random]
+                    const match = id.match(/^id_([a-z0-9]+)/i);
+                    if (match) {
+                        try {
+                            const ts = parseInt(match[1].substring(0, 8), 36);
+                            return isNaN(ts) ? 0 : ts;
+                        } catch (e) {
+                            return 0;
+                        }
+                    }
+                    return 0;
+                }
+                
+                // Check all tables
+                if (data.tables) {
+                    data.tables.forEach(table => {
+                        maxTimestamp = Math.max(maxTimestamp, extractTimestamp(table.id));
+                        
+                        // Check fields
+                        if (table.fields) {
+                            table.fields.forEach(field => {
+                                maxTimestamp = Math.max(maxTimestamp, extractTimestamp(field.id));
+                            });
+                        }
+                        
+                        // Check records
+                        if (table.records) {
+                            table.records.forEach(record => {
+                                maxTimestamp = Math.max(maxTimestamp, extractTimestamp(record.id));
+                            });
+                        }
+                    });
+                }
+                
+                // Ensure next generated ID will be higher
+                // The generateId function uses Date.now(), so we don't need to do anything
+                // as long as current time is higher than max timestamp
+                // But if data was from the future (unlikely), we'd have issues
+                // For safety, we could override generateId, but it's not necessary
+                // as Date.now() will always be current
+            }
+            
+            // Wiki config storage
+            let wikiConfig = null;
+            
+            // Signal that editor is ready for receiving data
+            window.jsondbEditorReady = true;
+            
+            // Listen for data from parent window
+            window.addEventListener('message', function(event) {
+                if (!event.data) return;
+                
+                if (event.data.type === 'loadData') {
+                    // Store wiki config
+                    wikiConfig = {
+                        pageId: event.data.pageId,
+                        instance: event.data.instance,
+                        original: event.data.original
+                    };
+                    
+                    // Show wiki save button, hide file operations
+                    document.getElementById('btnSaveWiki').style.display = '';
+                    
+                    // Decode and load data
+                    try {
+                        const jsonStr = base64Decode(event.data.data);
+                        const data = JSON.parse(jsonStr);
+                        
+                        // Update ID counter to prevent conflicts
+                        updateIdCounter(data);
+                        
+                        // Load the database
+                        loadDatabaseFromJson(data);
+                        
+                        // Update window title
+                        document.title = data.meta?.name || 'Database Editor';
+                    } catch (e) {
+                        alert('Error loading data: ' + e.message);
+                        console.error('Load error:', e);
+                    }
+                }
+                
+                if (event.data.type === 'saveSuccess') {
+                    alert(t('wikiSaved'));
+                    window.close();
+                }
+                
+                if (event.data.type === 'saveError') {
+                    alert(t('wikiSaveError') + ' ' + (event.data.error || 'Unknown error'));
+                    
+                    // Re-enable button
+                    const btn = document.getElementById('btnSaveWiki');
+                    btn.disabled = false;
+                    btn.innerHTML = '<span aria-hidden="true">📤</span> ' + t('saveToWiki');
+                }
+            });
+            
+            // Save to wiki button handler
+            document.getElementById('btnSaveWiki').addEventListener('click', function() {
+                if (!wikiConfig) {
+                    alert('Wiki connection not available');
+                    return;
+                }
+                
+                if (!window.opener) {
+                    alert('Parent window not available. Please reopen the editor from the wiki page.');
+                    return;
+                }
+                
+                const btn = this;
+                btn.disabled = true;
+                btn.innerHTML = '<span aria-hidden="true">⏳</span> ' + t('wikiSaving');
+                
+                try {
+                    const jsonStr = JSON.stringify(database, null, 2);
+                    const newData = base64Encode(jsonStr);
+                    
+                    // Send to parent window
+                    window.opener.postMessage({
+                        type: 'saveData',
+                        pageId: wikiConfig.pageId,
+                        instance: wikiConfig.instance,
+                        data: newData,
+                        original: wikiConfig.original
+                    }, '*');
+                    
+                } catch (e) {
+                    alert(t('wikiSaveError') + ' ' + e.message);
+                    btn.disabled = false;
+                    btn.innerHTML = '<span aria-hidden="true">📤</span> ' + t('saveToWiki');
+                }
+            });
+            
+            // ========== END WIKI INTEGRATION ==========
 
             loadAutoSave();
             renderAll();
