@@ -27,6 +27,15 @@ The application uses a custom `.jsondb` format - a human-readable JSON file cont
 
 ---
 
+I## Changelog
+
+* v1.3.1 small but important improvement, bulk operations for records selected by user
+* v 1.3: New big function - View data structure (displays textual and graphical view for whole data semantic structure for current record)
+* v 1.2: Tags and Collections for better data organization across whole database
+* v 1.1: New URL field type and grouping in table of record
+* v 1.0: First public version on Github)
+
+
 ## Getting Started
 
 ### First Launch

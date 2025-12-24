@@ -27,6 +27,14 @@ Aplikace používá vlastní formát `.jsondb` - lidsky čitelný JSON soubor ob
 
 ---
 
+## Historie změn (changelog)
+
+* v1.3.1 malé, ale důležité vylepšení, hromadné operace pro záznamy vybrané uživatelem
+* v 1.3: Nová velká funkce - Zobrazit datovou strukturu (zobrazí textový a grafický pohled na celou datovou sémantickou strukturu pro aktuální záznam)
+* v 1.2: Tagy a kolekce pro lepší organizaci dat v celé databázi
+* v 1.1: Nový typ pole URL a seskupení v tabulce záznamů
+* v 1.0: První veřejná verze na Github)
+
 ## Začínáme
 
 ### První spuštění

@@ -52,6 +52,9 @@
         .table-tab.active { background: var(--bg); color: var(--primary); }
         .table-tab.management-tab { background: rgba(230,126,34,0.3); margin-left: auto; }
         .table-tab.management-tab.active { background: var(--accent); color: white; }
+        .table-tab.classification-tab { background: rgba(155,89,182,0.3); margin-left: auto; }
+        .table-tab.classification-tab.active { background: #9b59b6; color: white; }
+        .table-tab.management-tab { margin-left: 0; }
 
         main { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
         .card { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow); margin-bottom: 1.5rem; overflow: hidden; }
@@ -126,6 +129,8 @@
 
         .language-selector select { width: auto; padding: 0.4rem 0.6rem; background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3); }
         .language-selector select option { color: var(--text); }
+        .quick-create-selector select { width: auto; padding: 0.4rem 0.6rem; background: rgba(39,174,96,0.3); color: white; border-color: rgba(255,255,255,0.3); cursor: pointer; }
+        .quick-create-selector select option { color: var(--text); }
 
         .record-count { font-size: 0.9rem; color: var(--text-muted); padding: 0.5rem 0; }
         .record-count strong { color: var(--primary); }
@@ -148,6 +153,74 @@
         .view-field-value { font-size: 1rem; color: var(--text); }
         .view-field-value.empty { font-style: italic; color: var(--text-muted); }
         .copy-field-btn { padding: 0.15rem 0.4rem; font-size: 0.75rem; }
+
+        /* Collections and Tags */
+        .tag-badge, .collection-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.15rem 0.5rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            margin: 0.1rem;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .tag-badge:hover, .collection-badge:hover { opacity: 0.85; }
+        .tag-badge { background: #e74c3c; }
+        .collection-badge { background: #4a90d9; }
+        .badges-cell { display: flex; flex-wrap: wrap; gap: 0.2rem; }
+        .checkbox-list { display: flex; flex-direction: column; gap: 0.5rem; max-height: 200px; overflow-y: auto; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; }
+        .checkbox-list label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+        .checkbox-list .color-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        .record-badges { margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+        .record-badges-section { margin-bottom: 0.5rem; }
+        .record-badges-section strong { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .related-section { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .related-group { margin-bottom: 1rem; }
+        .related-group-title { font-weight: 600; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .related-list { list-style: none; padding: 0; margin: 0 0 0 1rem; }
+        .related-list li { padding: 0.25rem 0; }
+        .related-table-name { font-size: 0.8rem; color: var(--text-muted); }
+        .collection-view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .filters-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; }
+        .date-input-group { display: flex; gap: 0.5rem; }
+        .date-input-group .date-picker { flex: 1; min-width: 140px; }
+        .date-input-group .date-text { width: 110px; font-family: monospace; text-align: center; }
+        
+        /* Collections and Tags grid */
+        .collections-grid, .tags-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+        .collection-card, .tag-card { border: 1px solid var(--border); border-radius: 8px; padding: 1rem; background: var(--card-bg); cursor: pointer; transition: box-shadow 0.2s, transform 0.1s; }
+        .collection-card:hover, .tag-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(-2px); }
+        .collection-card-header, .tag-card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+        .collection-card-color { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; }
+        .collection-card-name, .tag-card-name { font-weight: 600; font-size: 1.1rem; flex: 1; }
+        .collection-card-count, .tag-card-count { font-size: 0.85rem; color: var(--text-muted); }
+        .collection-card-desc { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; max-height: 3em; overflow: hidden; text-overflow: ellipsis; }
+        
+        /* Record badges section */
+        .record-classification { margin-bottom: 1rem; padding: 0.75rem; background: rgba(0,0,0,0.03); border-radius: 8px; }
+        .record-classification-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+        .record-classification-row:last-child { margin-bottom: 0; }
+        .record-classification-label { font-weight: 600; font-size: 0.85rem; color: var(--text-muted); min-width: 70px; }
+        .record-classification-items { display: flex; flex-wrap: wrap; gap: 0.25rem; flex: 1; }
+        .add-classification-btn { padding: 0.15rem 0.5rem; font-size: 0.75rem; border-radius: 1rem; }
+        
+        /* Collection/Tag detail view */
+        .collection-detail-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+        .collection-detail-color { width: 48px; height: 48px; border-radius: 50%; }
+        .collection-detail-info { flex: 1; }
+        .collection-detail-name { font-size: 1.5rem; font-weight: 600; margin: 0; }
+        .collection-detail-count { color: var(--text-muted); }
+        .collection-detail-desc { margin: 1rem 0; padding: 1rem; background: rgba(0,0,0,0.03); border-radius: 8px; }
+        .collection-members-list { list-style: none; padding: 0; margin: 0; }
+        .collection-members-list li { padding: 0.5rem 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .collection-members-list li:last-child { border-bottom: none; }
+        .member-table-name { font-size: 0.8rem; color: var(--text-muted); margin-left: 0.5rem; }
+        .remove-badge-btn { background: transparent; border: none; color: white; cursor: pointer; padding: 0 0.25rem; margin-left: 0.25rem; font-size: 0.7rem; opacity: 0.7; }
+        .remove-badge-btn:hover { opacity: 1; }
+        .collection-badge, .tag-badge { display: inline-flex; align-items: center; }
         .children-list { list-style: none; padding: 0; }
         .children-list li { padding: 0.3rem 0; }
 
@@ -222,6 +295,66 @@
         .url-link { color: var(--primary); text-decoration: underline; }
         .url-link:hover { color: var(--secondary); }
 
+        /* Structure modal styles */
+        .structure-modal { max-width: 900px; width: 95vw; max-height: 90vh; display: flex; flex-direction: column; }
+        .structure-modal .modal-body { flex: 1; overflow: hidden; padding: 0; }
+        .structure-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg); }
+        .structure-tab { flex: 1; padding: 0.75rem; border: none; background: none; cursor: pointer; font-size: 0.95rem; border-bottom: 3px solid transparent; }
+        .structure-tab:hover { background: rgba(0,0,0,0.05); }
+        .structure-tab.active { border-bottom-color: var(--primary); font-weight: 600; }
+        .structure-body { height: 60vh; }
+        .structure-content { display: none; height: 100%; overflow: auto; padding: 1rem; }
+        .structure-content.active { display: block; }
+        
+        /* Tree styles */
+        .tree-root { list-style: none; padding: 0; margin: 0; }
+        .tree-item { margin: 0.25rem 0; }
+        .tree-toggle { background: none; border: none; cursor: pointer; padding: 0.25rem; margin-right: 0.25rem; font-size: 0.8rem; width: 1.5rem; color: var(--text-muted); }
+        .tree-toggle:hover { color: var(--primary); }
+        .tree-toggle.empty { visibility: hidden; }
+        .tree-link { color: var(--primary); text-decoration: none; }
+        .tree-link:hover { text-decoration: underline; }
+        .tree-count { color: var(--text-muted); font-size: 0.85rem; margin-left: 0.25rem; }
+        .tree-table { color: var(--text-muted); font-size: 0.85rem; margin-left: 0.25rem; }
+        .tree-children { list-style: none; padding-left: 1.5rem; margin: 0; border-left: 1px dashed var(--border); margin-left: 0.75rem; }
+        .tree-children.collapsed { display: none; }
+        .tree-load-more { color: var(--primary); cursor: pointer; font-style: italic; padding: 0.25rem 0; }
+        .tree-load-more:hover { text-decoration: underline; }
+        .tree-empty { color: var(--text-muted); font-style: italic; }
+        
+        /* Graph styles */
+        #structureGraphContainer { width: 100%; height: 100%; overflow: auto; }
+        .graph-svg { display: block; }
+        .graph-node { cursor: pointer; }
+        .graph-node rect { fill: var(--card-bg); stroke: var(--border); stroke-width: 1.5px; rx: 4; }
+        .graph-node:hover rect { stroke: var(--primary); stroke-width: 2px; }
+        .graph-node text { font-size: 12px; fill: var(--text); }
+        .graph-link { fill: none; stroke: var(--border); stroke-width: 1.5px; }
+        
+        /* Bulk selection styles */
+        .bulk-checkbox { width: 18px; height: 18px; cursor: pointer; }
+        .bulk-actions-bar { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: var(--primary); color: white; border-radius: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+        .bulk-actions-bar .bulk-count { font-weight: 600; margin-right: 0.5rem; }
+        .bulk-actions-bar .btn { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3); color: white; }
+        .bulk-actions-bar .btn:hover { background: rgba(255,255,255,0.3); }
+        .bulk-actions-bar .btn-danger { background: rgba(231,76,60,0.8); }
+        .bulk-actions-bar .btn-danger:hover { background: rgba(231,76,60,1); }
+        .bulk-deselect { background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem; padding: 0.25rem; margin-left: auto; }
+        .bulk-deselect:hover { opacity: 0.8; }
+        th.checkbox-col, td.checkbox-col { width: 40px; text-align: center; }
+        
+        /* Bulk edit rows */
+        .bulk-edit-row { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem; margin-bottom: 0.5rem; }
+        .bulk-edit-row-header { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; }
+        .bulk-edit-row-header select { flex: 1; }
+        .bulk-edit-row-header .bulk-edit-remove-row { padding: 0.25rem 0.5rem; }
+        .bulk-edit-value-container { margin-top: 0.5rem; }
+        .bulk-edit-value-container input, .bulk-edit-value-container select, .bulk-edit-value-container textarea { width: 100%; }
+        
+        /* View record sections */
+        .view-record-section { margin-bottom: 1.5rem; }
+        .view-record-section-title { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem; }
+
         @media (max-width: 768px) {
             header { padding: 1rem; }
             main { padding: 1rem; }
@@ -246,6 +379,11 @@
                 <button type="button" class="btn btn-primary" id="btnSave"><span aria-hidden="true">💾</span> <span data-i18n="save">Uložit</span></button>
                 <button type="button" class="btn btn-secondary" id="btnCopyJson"><span aria-hidden="true">📋</span> <span data-i18n="copyJson">Kopírovat JSON</span></button>
                 <button type="button" class="btn btn-secondary" id="btnPasteJson"><span aria-hidden="true">📥</span> <span data-i18n="pasteJson">Vložit JSON</span></button>
+                <div class="quick-create-selector">
+                    <select id="quickCreateSelect" aria-label="Rychlé vytvoření záznamu">
+                        <option value="" data-i18n="quickCreate">➕ Nový záznam...</option>
+                    </select>
+                </div>
                 <div class="language-selector">
                     <select id="langSelect" aria-label="Jazyk">
                         <option value="cs">🇨🇿 Čeština</option>
@@ -260,6 +398,48 @@
 
     <main id="main-content">
         <div id="tableContents"></div>
+
+        <!-- Classification Section (Zatřídění) -->
+        <div class="tab-content" id="classification-content">
+            <div class="sub-tabs">
+                <button type="button" class="sub-tab active" data-subtab="class-collections" data-i18n="collections">Kolekce</button>
+                <button type="button" class="sub-tab" data-subtab="class-tags" data-i18n="tags">Tagy</button>
+            </div>
+
+            <!-- Collections Sub-tab -->
+            <div class="sub-content active" id="class-collections">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 data-i18n="collections">Kolekce</h2>
+                        <button type="button" class="btn btn-success" id="btnAddCollection"><span aria-hidden="true">➕</span> <span data-i18n="addCollection">Přidat kolekci</span></button>
+                    </div>
+                    <div class="card-body">
+                        <div class="collections-grid" id="collectionsList"></div>
+                        <div id="emptyCollections" class="empty-state" hidden>
+                            <div class="empty-state-icon">📁</div>
+                            <p data-i18n="noCollections">Zatím nemáte žádné kolekce.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tags Sub-tab -->
+            <div class="sub-content" id="class-tags">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 data-i18n="tags">Tagy</h2>
+                        <button type="button" class="btn btn-success" id="btnAddTag"><span aria-hidden="true">➕</span> <span data-i18n="addTag">Přidat tag</span></button>
+                    </div>
+                    <div class="card-body">
+                        <div class="tags-grid" id="tagsList"></div>
+                        <div id="emptyTags" class="empty-state" hidden>
+                            <div class="empty-state-icon">🏷️</div>
+                            <p data-i18n="noTags">Zatím nemáte žádné tagy.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Management Section -->
         <div class="tab-content" id="management-content">
@@ -468,7 +648,227 @@
             <div class="modal-body" id="viewRecordContent"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-modal-close data-i18n="close">Zavřít</button>
+                <button type="button" class="btn btn-secondary" id="btnStructureFromView"><span aria-hidden="true">🌳</span> <span data-i18n="structure">Struktura</span></button>
                 <button type="button" class="btn btn-primary" id="btnEditFromView" data-i18n="edit">Upravit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collection Modal -->
+    <div class="modal-backdrop" id="collectionModal" hidden>
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 id="collectionModalTitle" data-i18n="addCollection">Přidat kolekci</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="collectionName" data-i18n="collectionName">Název kolekce</label>
+                    <input type="text" id="collectionName">
+                </div>
+                <div class="form-group">
+                    <label for="collectionColor" data-i18n="color">Barva</label>
+                    <input type="color" id="collectionColor" value="#4a90d9" style="width: 60px; height: 36px;">
+                </div>
+                <div class="form-group">
+                    <label for="collectionDescription" data-i18n="collectionDescription">Popis kolekce</label>
+                    <textarea id="collectionDescription" rows="5" placeholder="Markdown podporován..."></textarea>
+                </div>
+                <input type="hidden" id="collectionId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
+                <button type="button" class="btn btn-primary" id="btnSaveCollection" data-i18n="save">Uložit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tag Modal -->
+    <div class="modal-backdrop" id="tagModal" hidden>
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 id="tagModalTitle" data-i18n="addTag">Přidat tag</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="tagName" data-i18n="tagName">Název tagu</label>
+                    <input type="text" id="tagName">
+                </div>
+                <div class="form-group">
+                    <label for="tagColor" data-i18n="color">Barva</label>
+                    <input type="color" id="tagColor" value="#e74c3c" style="width: 60px; height: 36px;">
+                </div>
+                <input type="hidden" id="tagId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
+                <button type="button" class="btn btn-primary" id="btnSaveTag" data-i18n="save">Uložit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Collection Modal -->
+    <div class="modal-backdrop" id="viewCollectionModal" hidden>
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 id="viewCollectionModalTitle">Kolekce</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body" id="viewCollectionContent"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="close">Zavřít</button>
+                <button type="button" class="btn btn-danger" id="btnDeleteCollectionFromView" data-i18n="delete">Smazat</button>
+                <button type="button" class="btn btn-primary" id="btnEditCollectionFromView" data-i18n="edit">Upravit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Tag Modal -->
+    <div class="modal-backdrop" id="viewTagModal" hidden>
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 id="viewTagModalTitle">Tag</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body" id="viewTagContent"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="close">Zavřít</button>
+                <button type="button" class="btn btn-danger" id="btnDeleteTagFromView" data-i18n="delete">Smazat</button>
+                <button type="button" class="btn btn-primary" id="btnEditTagFromView" data-i18n="edit">Upravit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add To Collection Modal -->
+    <div class="modal-backdrop" id="addToCollectionModal" hidden>
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 data-i18n="addToCollection">Přidat do kolekce</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label data-i18n="selectCollection">Vyberte kolekci</label>
+                    <select id="addToCollectionSelect" style="width: 100%;"></select>
+                </div>
+                <div class="inline-actions" style="margin-top: 0.5rem;">
+                    <button type="button" class="btn btn-sm btn-success" id="btnQuickCreateCollection"><span aria-hidden="true">➕</span> <span data-i18n="createNewCollection">Vytvořit novou kolekci</span></button>
+                </div>
+                <input type="hidden" id="addToCollectionRecordId">
+                <input type="hidden" id="addToCollectionTableId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmAddToCollection" data-i18n="addToCollection">Přidat do kolekce</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Tag Modal -->
+    <div class="modal-backdrop" id="addTagToRecordModal" hidden>
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 data-i18n="assignTags">Přiřadit tagy</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label data-i18n="selectTag">Vyberte tag</label>
+                    <select id="addTagSelect" style="width: 100%;"></select>
+                </div>
+                <div class="inline-actions" style="margin-top: 0.5rem;">
+                    <button type="button" class="btn btn-sm btn-success" id="btnQuickCreateTag"><span aria-hidden="true">➕</span> <span data-i18n="createNewTag">Vytvořit nový tag</span></button>
+                </div>
+                <input type="hidden" id="addTagRecordId">
+                <input type="hidden" id="addTagTableId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmAddTag" data-i18n="assignTags">Přiřadit tag</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Edit Modal -->
+    <div class="modal-backdrop" id="bulkEditModal" hidden>
+        <div class="modal" style="max-width: 550px;">
+            <div class="modal-header">
+                <h2 data-i18n="bulkEditFields">Hromadná úprava polí</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="bulkEditFieldsContainer"></div>
+                <button type="button" class="btn btn-secondary btn-sm" id="btnAddBulkField" style="margin-top: 0.5rem;">➕ <span data-i18n="addAnotherField">Přidat další pole</span></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
+                <button type="button" class="btn btn-primary" id="btnApplyBulkEdit" data-i18n="apply">Použít</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Add to Collection Modal -->
+    <div class="modal-backdrop" id="bulkAddToCollectionModal" hidden>
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 data-i18n="addToCollection">Přidat do kolekce</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label data-i18n="selectCollection">Vyberte kolekci</label>
+                    <select id="bulkCollectionSelect"></select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
+                <button type="button" class="btn btn-primary" id="btnApplyBulkCollection" data-i18n="add">Přidat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Add Tag Modal -->
+    <div class="modal-backdrop" id="bulkAddTagModal" hidden>
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 data-i18n="addTag">Přidat tag</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label data-i18n="selectTag">Vyberte tag</label>
+                    <select id="bulkTagSelect"></select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
+                <button type="button" class="btn btn-primary" id="btnApplyBulkTag" data-i18n="add">Přidat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Structure Modal -->
+    <div class="modal-backdrop" id="structureModal" hidden>
+        <div class="modal structure-modal">
+            <div class="modal-header">
+                <h2 id="structureModalTitle">🌳 Struktura</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="structure-tabs">
+                <button type="button" class="structure-tab active" data-structure-tab="text">📝 <span data-i18n="textView">Textový pohled</span></button>
+                <button type="button" class="structure-tab" data-structure-tab="graph">🔀 <span data-i18n="graphView">Grafický pohled</span></button>
+            </div>
+            <div class="modal-body structure-body">
+                <div class="structure-content active" id="structure-text">
+                    <div id="structureTreeContainer"></div>
+                </div>
+                <div class="structure-content" id="structure-graph">
+                    <div id="structureGraphContainer"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="close">Zavřít</button>
             </div>
         </div>
     </div>
@@ -603,7 +1003,8 @@
                 recordsShowing: "Zobrazeno: {filtered} / {total}", typeText: "Text", typeTextarea: "Víceřádkový text / Markdown",
                 typeNumber: "Číslo", typeDate: "Datum", typeBoolean: "Ano/Ne", typeSelect: "Výběr ze seznamu",
                 typeParent: "Nadřazený záznam", typeChildren: "Podřízené záznamy", typeComposite: "Složený", typeUrl: "URL odkaz", editTable: "Upravit", editField: "Upravit pole",
-                compositeFields: "Vložit pole:", compositeTemplate: "Šablona složeného pole", createNew: "Vytvořit nový", fieldGroup: "Seskupovat záznamy", groupCollapsed: "sbaleno", groupExpanded: "rozbaleno", addChild: "Přidat podřízený", copyField: "Kopírovat", copiedToClipboard: "Zkopírováno do schránky"
+                compositeFields: "Vložit pole:", compositeTemplate: "Šablona složeného pole", createNew: "Vytvořit nový", fieldGroup: "Seskupovat záznamy", groupCollapsed: "sbaleno", groupExpanded: "rozbaleno", addChild: "Přidat podřízený", copyField: "Kopírovat", copiedToClipboard: "Zkopírováno do schránky",
+                collections: "Kolekce", tags: "Tagy", addCollection: "Přidat kolekci", addTag: "Přidat tag", collectionName: "Název kolekce", tagName: "Název tagu", color: "Barva", noCollections: "Zatím nemáte žádné kolekce.", noTags: "Zatím nemáte žádné tagy.", collectionMembers: "záznamů", confirmDeleteCollection: "Smazat tuto kolekci?", confirmDeleteTag: "Smazat tento tag?", addToCollection: "Přidat do kolekce", removeFromCollection: "Odebrat z kolekce", assignTags: "Přiřadit tagy", relatedRecords: "Související záznamy", inCollection: "V kolekci", withTag: "S tagem", allCollections: "Všechny kolekce", allTags: "Všechny tagy", viewCollection: "Zobrazit kolekci", collectionContents: "Obsah kolekce", backToTables: "Zpět na tabulky", recordsInCollection: "Záznamy v kolekci", noRecordsInCollection: "Kolekce neobsahuje žádné záznamy.", fromTable: "z tabulky", manageCollections: "Spravovat kolekce", manageTags: "Spravovat tagy", classification: "Zatřídění", description: "Popis", collectionDescription: "Popis kolekce", selectCollection: "Vyberte kolekci", selectTag: "Vyberte tag", createNewCollection: "Vytvořit novou kolekci", createNewTag: "Vytvořit nový tag", removeFromThisCollection: "Odebrat z této kolekce", removeThisTag: "Odebrat tento tag", collectionDetails: "Podrobnosti kolekce", tagDetails: "Podrobnosti tagu", editCollection: "Upravit kolekci", editTag: "Upravit tag", recordsWithTag: "Záznamy s tagem", quickCreate: "➕ Nový záznam...", structure: "Struktura", textView: "Textový pohled", graphView: "Grafický pohled", showStructure: "Zobrazit strukturu", noDescendants: "Tento záznam nemá žádné podřízené záznamy.", loadMore: "Načíst více...", loadAll: "Načíst všechny", descendants: "potomků", selectedRecords: "vybráno", bulkEditField: "Upravit pole", clearSelection: "Zrušit výběr", selectAll: "Vybrat vše", newValue: "Nová hodnota", apply: "Použít", confirmBulkDelete: "Opravdu smazat {count} záznamů?", addedToCollection: "Přidáno {count} záznamů do kolekce.", addedTag: "Tag přidán k {count} záznamům.", recordFields: "Pole záznamu", bulkEditFields: "Hromadná úprava polí", addAnotherField: "Přidat další pole"
             },
             en: {
                 skipToContent: "Skip to content", appName: "Database Editor", dbName: "Database name", newDb: "New", load: "Load", save: "Save",
@@ -632,17 +1033,23 @@
                 recordsShowing: "Showing: {filtered} / {total}", typeText: "Text", typeTextarea: "Multi-line text / Markdown",
                 typeNumber: "Number", typeDate: "Date", typeBoolean: "Yes/No", typeSelect: "Select from list",
                 typeParent: "Parent record", typeChildren: "Child records", typeComposite: "Composite", typeUrl: "URL link", editTable: "Edit", editField: "Edit field",
-                compositeFields: "Insert field:", compositeTemplate: "Composite field template", createNew: "Create new", fieldGroup: "Group records", groupCollapsed: "collapsed", groupExpanded: "expanded", addChild: "Add child", copyField: "Copy", copiedToClipboard: "Copied to clipboard"
+                compositeFields: "Insert field:", compositeTemplate: "Composite field template", createNew: "Create new", fieldGroup: "Group records", groupCollapsed: "collapsed", groupExpanded: "expanded", addChild: "Add child", copyField: "Copy", copiedToClipboard: "Copied to clipboard",
+                collections: "Collections", tags: "Tags", addCollection: "Add collection", addTag: "Add tag", collectionName: "Collection name", tagName: "Tag name", color: "Color", noCollections: "You have no collections yet.", noTags: "You have no tags yet.", collectionMembers: "records", confirmDeleteCollection: "Delete this collection?", confirmDeleteTag: "Delete this tag?", addToCollection: "Add to collection", removeFromCollection: "Remove from collection", assignTags: "Assign tags", relatedRecords: "Related records", inCollection: "In collection", withTag: "With tag", allCollections: "All collections", allTags: "All tags", viewCollection: "View collection", collectionContents: "Collection contents", backToTables: "Back to tables", recordsInCollection: "Records in collection", noRecordsInCollection: "Collection contains no records.", fromTable: "from table", manageCollections: "Manage collections", manageTags: "Manage tags", classification: "Classification", description: "Description", collectionDescription: "Collection description", selectCollection: "Select collection", selectTag: "Select tag", createNewCollection: "Create new collection", createNewTag: "Create new tag", removeFromThisCollection: "Remove from this collection", removeThisTag: "Remove this tag", collectionDetails: "Collection details", tagDetails: "Tag details", editCollection: "Edit collection", editTag: "Edit tag", recordsWithTag: "Records with tag", quickCreate: "➕ New record...", structure: "Structure", textView: "Text view", graphView: "Graph view", showStructure: "Show structure", noDescendants: "This record has no child records.", loadMore: "Load more...", loadAll: "Load all", descendants: "descendants", selectedRecords: "selected", bulkEditField: "Edit field", clearSelection: "Clear selection", selectAll: "Select all", newValue: "New value", apply: "Apply", confirmBulkDelete: "Delete {count} records?", addedToCollection: "Added {count} records to collection.", addedTag: "Tag added to {count} records.", recordFields: "Record fields", bulkEditFields: "Bulk edit fields", addAnotherField: "Add another field"
             }
         };
 
         let currentLang = localStorage.getItem('db-editor-lang') || 'cs';
-        let database = { meta: { name: 'Nová databáze', columnVisibility: {}, groupStates: {} }, tables: [] };
+        let database = { meta: { name: 'Nová databáze', columnVisibility: {}, groupStates: {}, collections: [], tags: [] }, tables: [] };
         let activeTableId = null;
         let activeTab = 'management';
+        let quickCreateMode = false;
+        let activeManagementTab = 'database';
         let tableFilters = {};
         let tableSearches = {};
         let tableSorts = {};
+        let collectionFilter = null;
+        let tagFilter = null;
+        let selectedRecords = {}; // { tableId: Set of recordIds }
         let editingFieldTableId = null;
         let currentRecordId = null;
         let currentRecordTableId = null;
@@ -695,7 +1102,9 @@
                         meta: { 
                             name: data.meta?.name || '', 
                             columnVisibility: data.meta?.columnVisibility || {},
-                            groupStates: data.meta?.groupStates || {}
+                            groupStates: data.meta?.groupStates || {},
+                            collections: data.meta?.collections || [],
+                            tags: data.meta?.tags || []
                         }, 
                         tables: data.tables || [] 
                     };
@@ -722,7 +1131,11 @@
         }
 
         function openModal(id) { document.getElementById(id).hidden = false; document.body.style.overflow = 'hidden'; }
-        function closeModal(id) { document.getElementById(id).hidden = true; document.body.style.overflow = ''; }
+        function closeModal(id) { 
+            document.getElementById(id).hidden = true; 
+            document.body.style.overflow = ''; 
+            if (id === 'recordModal') quickCreateMode = false;
+        }
         function confirmAction(msg, cb) { document.getElementById('confirmMessage').textContent = msg; confirmCallback = cb; openModal('confirmModal'); }
 
         // Simple Markdown parser
@@ -777,8 +1190,331 @@
             let html = database.tables.map(tb => 
                 `<button type="button" class="table-tab ${activeTab === tb.id ? 'active' : ''}" data-table-id="${tb.id}">${escapeHtml(tb.name)}</button>`
             ).join('');
+            html += `<button type="button" class="table-tab classification-tab ${activeTab === 'classification' ? 'active' : ''}" data-table-id="classification">🏷️ ${t('classification')}</button>`;
             html += `<button type="button" class="table-tab management-tab ${activeTab === 'management' ? 'active' : ''}" data-table-id="management">⚙️ ${t('management')}</button>`;
             container.innerHTML = html;
+        }
+        
+        // Bulk selection functions
+        function getSelectedRecords(tableId) {
+            return selectedRecords[tableId] || new Set();
+        }
+        
+        function getSelectedCount(tableId) {
+            return getSelectedRecords(tableId).size;
+        }
+        
+        function toggleSelectAll(tableId, checked) {
+            const table = getTableById(tableId);
+            if (!table) return;
+            if (!selectedRecords[tableId]) selectedRecords[tableId] = new Set();
+            
+            // Get currently filtered records
+            const filtered = table._filteredRecords || table.records;
+            if (checked) {
+                filtered.forEach(r => selectedRecords[tableId].add(r.id));
+            } else {
+                filtered.forEach(r => selectedRecords[tableId].delete(r.id));
+            }
+            renderTableContent(tableId);
+        }
+        
+        function toggleSelectRow(tableId, recordId, checked) {
+            if (!selectedRecords[tableId]) selectedRecords[tableId] = new Set();
+            if (checked) {
+                selectedRecords[tableId].add(recordId);
+            } else {
+                selectedRecords[tableId].delete(recordId);
+            }
+            renderTableContent(tableId);
+        }
+        
+        function clearSelection(tableId) {
+            if (selectedRecords[tableId]) {
+                selectedRecords[tableId].clear();
+            }
+            renderTableContent(tableId);
+        }
+        
+        function renderBulkActionsBar(tableId) {
+            const count = getSelectedCount(tableId);
+            if (count === 0) return '';
+            
+            return `<div class="bulk-actions-bar">
+                <span class="bulk-count">${count} ${t('selectedRecords')}</span>
+                <button type="button" class="btn btn-sm bulk-edit-field-btn" data-table="${tableId}">✏️ ${t('bulkEditField')}</button>
+                <button type="button" class="btn btn-sm bulk-add-collection-btn" data-table="${tableId}">📁 ${t('addToCollection')}</button>
+                <button type="button" class="btn btn-sm bulk-add-tag-btn" data-table="${tableId}">🏷️ ${t('addTag')}</button>
+                <button type="button" class="btn btn-sm btn-danger bulk-delete-btn" data-table="${tableId}">🗑️ ${t('delete')}</button>
+                <button type="button" class="bulk-deselect" data-table="${tableId}" title="${t('clearSelection')}">✕</button>
+            </div>`;
+        }
+        
+        // Bulk edit field
+        let bulkEditTableId = null;
+        
+        function openBulkEditModal(tableId) {
+            bulkEditTableId = tableId;
+            const table = getTableById(tableId);
+            if (!table) return;
+            
+            // Clear and add first row
+            document.getElementById('bulkEditFieldsContainer').innerHTML = '';
+            addBulkEditRow();
+            openModal('bulkEditModal');
+        }
+        
+        let bulkEditRowCounter = 0;
+        
+        function addBulkEditRow() {
+            const table = getTableById(bulkEditTableId);
+            if (!table) return;
+            
+            const editableFields = table.fields.filter(f => f.type !== 'children' && f.type !== 'composite');
+            const rowId = ++bulkEditRowCounter;
+            
+            let optionsHtml = `<option value="">${t('selectField')}</option>`;
+            editableFields.forEach(f => {
+                optionsHtml += `<option value="${f.id}">${escapeHtml(f.name)}</option>`;
+            });
+            
+            const rowHtml = `<div class="bulk-edit-row" data-row="${rowId}">
+                <div class="bulk-edit-row-header">
+                    <select class="bulk-edit-field-select" data-row="${rowId}">${optionsHtml}</select>
+                    <button type="button" class="btn btn-sm btn-danger bulk-edit-remove-row" data-row="${rowId}" title="${t('remove')}">✕</button>
+                </div>
+                <div class="bulk-edit-value-container" data-row="${rowId}"></div>
+            </div>`;
+            
+            document.getElementById('bulkEditFieldsContainer').insertAdjacentHTML('beforeend', rowHtml);
+        }
+        
+        function removeBulkEditRow(rowId) {
+            const row = document.querySelector(`.bulk-edit-row[data-row="${rowId}"]`);
+            if (row) row.remove();
+            
+            // Ensure at least one row
+            if (document.querySelectorAll('.bulk-edit-row').length === 0) {
+                addBulkEditRow();
+            }
+        }
+        
+        function updateBulkEditValueInput(rowId) {
+            const select = document.querySelector(`.bulk-edit-field-select[data-row="${rowId}"]`);
+            const container = document.querySelector(`.bulk-edit-value-container[data-row="${rowId}"]`);
+            if (!select || !container) return;
+            
+            const fieldId = select.value;
+            const table = getTableById(bulkEditTableId);
+            if (!table || !fieldId) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            const field = table.fields.find(f => f.id === fieldId);
+            if (!field) return;
+            
+            let inputHtml = '';
+            const inputId = `bulkEditValue_${rowId}`;
+            switch (field.type) {
+                case 'text':
+                    inputHtml = `<input type="text" id="${inputId}" class="bulk-edit-value" data-row="${rowId}">`;
+                    break;
+                case 'textarea':
+                    inputHtml = `<textarea id="${inputId}" class="bulk-edit-value" data-row="${rowId}" rows="2"></textarea>`;
+                    break;
+                case 'number':
+                    inputHtml = `<input type="number" id="${inputId}" class="bulk-edit-value" data-row="${rowId}" step="any">`;
+                    break;
+                case 'date':
+                    inputHtml = `<input type="date" id="${inputId}" class="bulk-edit-value" data-row="${rowId}">`;
+                    break;
+                case 'url':
+                    inputHtml = `<input type="url" id="${inputId}" class="bulk-edit-value" data-row="${rowId}" placeholder="https://">`;
+                    break;
+                case 'boolean':
+                    inputHtml = `<select id="${inputId}" class="bulk-edit-value" data-row="${rowId}"><option value="true">${t('yes')}</option><option value="false">${t('no')}</option></select>`;
+                    break;
+                case 'select':
+                    const opts = (field.options || '').split(',').map(o => o.trim()).filter(o => o);
+                    inputHtml = `<select id="${inputId}" class="bulk-edit-value" data-row="${rowId}"><option value="">-- ${t('selectField')} --</option>${opts.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join('')}</select>`;
+                    break;
+                case 'parent':
+                    const tt = getTableById(field.targetTableId);
+                    if (tt) {
+                        inputHtml = `<select id="${inputId}" class="bulk-edit-value" data-row="${rowId}"><option value="">${t('noParent')}</option>${tt.records.map(r => `<option value="${r.id}">${escapeHtml(getPrimaryFieldValue(tt, r))}</option>`).join('')}</select>`;
+                    }
+                    break;
+                default:
+                    inputHtml = `<input type="text" id="${inputId}" class="bulk-edit-value" data-row="${rowId}">`;
+            }
+            
+            container.innerHTML = inputHtml;
+        }
+        
+        function applyBulkEdit() {
+            const table = getTableById(bulkEditTableId);
+            if (!table) return;
+            
+            // Collect all field changes
+            const changes = [];
+            document.querySelectorAll('.bulk-edit-row').forEach(row => {
+                const rowId = row.dataset.row;
+                const select = row.querySelector('.bulk-edit-field-select');
+                const valueEl = row.querySelector('.bulk-edit-value');
+                
+                if (!select || !select.value) return;
+                
+                const fieldId = select.value;
+                const field = table.fields.find(f => f.id === fieldId);
+                if (!field) return;
+                
+                let value = valueEl ? valueEl.value : '';
+                if (field.type === 'boolean') {
+                    value = value === 'true';
+                } else if (field.type === 'number') {
+                    value = value ? parseFloat(value) : null;
+                }
+                
+                changes.push({ fieldId, value });
+            });
+            
+            if (changes.length === 0) {
+                closeModal('bulkEditModal');
+                return;
+            }
+            
+            // Apply changes to all selected records
+            const selected = getSelectedRecords(bulkEditTableId);
+            selected.forEach(recordId => {
+                const record = getRecordById(bulkEditTableId, recordId);
+                if (record) {
+                    changes.forEach(({ fieldId, value }) => {
+                        record.values[fieldId] = value;
+                    });
+                }
+            });
+            
+            closeModal('bulkEditModal');
+            clearSelection(bulkEditTableId);
+            autoSave();
+        }
+        
+        // Bulk add to collection
+        function openBulkAddToCollectionModal(tableId) {
+            bulkEditTableId = tableId;
+            if (!database.meta.collections || database.meta.collections.length === 0) {
+                alert(t('noCollections'));
+                return;
+            }
+            
+            let optionsHtml = `<option value="">${t('selectCollection')}</option>`;
+            database.meta.collections.forEach(col => {
+                optionsHtml += `<option value="${col.id}">${escapeHtml(col.name)}</option>`;
+            });
+            
+            document.getElementById('bulkCollectionSelect').innerHTML = optionsHtml;
+            openModal('bulkAddToCollectionModal');
+        }
+        
+        function applyBulkAddToCollection() {
+            const colId = document.getElementById('bulkCollectionSelect').value;
+            if (!colId) return;
+            
+            const col = database.meta.collections?.find(c => c.id === colId);
+            if (!col) return;
+            
+            if (!col.members) col.members = [];
+            
+            const selected = getSelectedRecords(bulkEditTableId);
+            let added = 0;
+            selected.forEach(recordId => {
+                // Skip if already in collection
+                if (!col.members.some(m => m.tableId === bulkEditTableId && m.recordId === recordId)) {
+                    col.members.push({ tableId: bulkEditTableId, recordId });
+                    added++;
+                }
+            });
+            
+            closeModal('bulkAddToCollectionModal');
+            clearSelection(bulkEditTableId);
+            autoSave();
+            alert(t('addedToCollection', { count: added }));
+        }
+        
+        // Bulk add tag
+        function openBulkAddTagModal(tableId) {
+            bulkEditTableId = tableId;
+            if (!database.meta.tags || database.meta.tags.length === 0) {
+                alert(t('noTags'));
+                return;
+            }
+            
+            let optionsHtml = `<option value="">${t('selectTag')}</option>`;
+            database.meta.tags.forEach(tag => {
+                optionsHtml += `<option value="${tag.id}">${escapeHtml(tag.name)}</option>`;
+            });
+            
+            document.getElementById('bulkTagSelect').innerHTML = optionsHtml;
+            openModal('bulkAddTagModal');
+        }
+        
+        function applyBulkAddTag() {
+            const tagId = document.getElementById('bulkTagSelect').value;
+            if (!tagId) return;
+            
+            const selected = getSelectedRecords(bulkEditTableId);
+            let added = 0;
+            selected.forEach(recordId => {
+                const record = getRecordById(bulkEditTableId, recordId);
+                if (record) {
+                    if (!record.tags) record.tags = [];
+                    if (!record.tags.includes(tagId)) {
+                        record.tags.push(tagId);
+                        added++;
+                    }
+                }
+            });
+            
+            closeModal('bulkAddTagModal');
+            clearSelection(bulkEditTableId);
+            autoSave();
+            alert(t('addedTag', { count: added }));
+        }
+        
+        // Bulk delete
+        function bulkDelete(tableId) {
+            const count = getSelectedCount(tableId);
+            if (count === 0) return;
+            
+            showConfirm(t('confirmBulkDelete', { count }), () => {
+                const table = getTableById(tableId);
+                if (!table) return;
+                
+                const selected = getSelectedRecords(tableId);
+                table.records = table.records.filter(r => !selected.has(r.id));
+                
+                // Remove from collections
+                if (database.meta.collections) {
+                    database.meta.collections.forEach(col => {
+                        if (col.members) {
+                            col.members = col.members.filter(m => !(m.tableId === tableId && selected.has(m.recordId)));
+                        }
+                    });
+                }
+                
+                clearSelection(tableId);
+                autoSave();
+            });
+        }
+
+        function updateQuickCreateOptions() {
+            const select = document.getElementById('quickCreateSelect');
+            let html = `<option value="">${t('quickCreate')}</option>`;
+            database.tables.forEach(tb => {
+                html += `<option value="${tb.id}">${escapeHtml(tb.name)}</option>`;
+            });
+            select.innerHTML = html;
         }
 
         function renderTableContent(tableId) {
@@ -805,6 +1541,18 @@
                 const cv = filters[f.id] || '';
                 filtersHtml += `<div class="filter-item"><label>${escapeHtml(f.name)}</label><select class="table-filter" data-table="${tableId}" data-field="${f.id}"><option value="">${t('allValues')}</option>${hasEmpty ? `<option value="__null__" ${cv === '__null__' ? 'selected' : ''}>${t('noValue')}</option>` : ''}${sorted.map(v => `<option value="${escapeHtml(v)}" ${cv === v ? 'selected' : ''}>${f.type === 'boolean' ? (v === 'true' ? t('yes') : t('no')) : escapeHtml(v)}</option>`).join('')}</select></div>`;
             });
+            
+            // Collection filter
+            if (database.meta.collections?.length > 0) {
+                const colFilterVal = collectionFilter || '';
+                filtersHtml += `<div class="filter-item"><label>${t('inCollection')}</label><select class="collection-filter" data-table="${tableId}"><option value="">${t('allCollections')}</option>${database.meta.collections.map(col => `<option value="${col.id}" ${colFilterVal === col.id ? 'selected' : ''}>${escapeHtml(col.name)}</option>`).join('')}</select></div>`;
+            }
+            
+            // Tag filter
+            if (database.meta.tags?.length > 0) {
+                const tagFilterVal = tagFilter || '';
+                filtersHtml += `<div class="filter-item"><label>${t('withTag')}</label><select class="tag-filter" data-table="${tableId}"><option value="">${t('allTags')}</option>${database.meta.tags.map(tag => `<option value="${tag.id}" ${tagFilterVal === tag.id ? 'selected' : ''}>${escapeHtml(tag.name)}</option>`).join('')}</select></div>`;
+            }
 
             // Filter records
             let filtered = table.records.filter(r => {
@@ -817,6 +1565,15 @@
                 if (searchQuery) {
                     const sq = searchQuery.toLowerCase();
                     if (!table.fields.some(f => { const v = r.values[f.id]; return v != null && String(v).toLowerCase().includes(sq); })) return false;
+                }
+                // Collection filter
+                if (collectionFilter) {
+                    const col = database.meta.collections?.find(c => c.id === collectionFilter);
+                    if (!col || !col.members?.some(m => m.tableId === tableId && m.recordId === r.id)) return false;
+                }
+                // Tag filter
+                if (tagFilter) {
+                    if (!r.tags || !r.tags.includes(tagFilter)) return false;
                 }
                 return true;
             });
@@ -842,16 +1599,35 @@
                 });
             }
 
-            // Column toggles
+            // Column toggles - include Collections and Tags
+            const showCollections = cv['__collections__'] !== false;
+            const showTags = cv['__tags__'] !== false;
+            
             let togglesHtml = table.fields.map(f => {
                 const isVisible = f.type === 'children' ? cv[f.id] === true : cv[f.id] !== false;
                 return `<div class="checkbox-group"><input type="checkbox" class="col-toggle" data-table="${tableId}" data-field="${f.id}" ${isVisible ? 'checked' : ''}><label>${escapeHtml(f.name)}</label></div>`;
             }).join('');
+            togglesHtml += `<div class="checkbox-group"><input type="checkbox" class="col-toggle" data-table="${tableId}" data-field="__collections__" ${showCollections ? 'checked' : ''}><label>${t('collections')}</label></div>`;
+            togglesHtml += `<div class="checkbox-group"><input type="checkbox" class="col-toggle" data-table="${tableId}" data-field="__tags__" ${showTags ? 'checked' : ''}><label>${t('tags')}</label></div>`;
 
             // Table HTML
             let tableHtml = '';
             const groupField = table.fields.find(f => f.group);
             const groupStates = database.meta.groupStates?.[tableId] || {};
+            
+            // Helper to render Collections and Tags cells
+            const renderCollectionsCell = (recordId) => {
+                if (!showCollections) return '';
+                const cols = getRecordCollections(tableId, recordId);
+                if (cols.length === 0) return '<td>-</td>';
+                return `<td class="badges-cell">${cols.map(c => `<a href="#" class="collection-badge" style="background:${c.color || '#4a90d9'}" data-action="viewCollection" data-collection="${c.id}">${escapeHtml(c.name)}</a>`).join('')}</td>`;
+            };
+            const renderTagsCell = (recordId) => {
+                if (!showTags) return '';
+                const tgs = getRecordTags(tableId, recordId);
+                if (tgs.length === 0) return '<td>-</td>';
+                return `<td class="badges-cell">${tgs.map(tg => `<a href="#" class="tag-badge" style="background:${tg.color || '#e74c3c'}" data-action="viewTag" data-tag="${tg.id}">${escapeHtml(tg.name)}</a>`).join('')}</td>`;
+            };
             
             if (table.fields.length === 0) {
                 tableHtml = `<div class="empty-state"><div class="empty-state-icon">📝</div><p>${t('noFields')}</p></div>`;
@@ -859,11 +1635,17 @@
                 tableHtml = `<div class="empty-state"><div class="empty-state-icon">📋</div><p>${t('noRecords')}</p></div>`;
             } else if (groupField) {
                 // Grouped view
-                const headerCells = visibleFields.map(f => {
+                const selected = selectedRecords[tableId] || new Set();
+                const allSelected = filtered.length > 0 && filtered.every(r => selected.has(r.id));
+                let headerCells = `<th class="checkbox-col no-sort"><input type="checkbox" class="bulk-checkbox bulk-select-all" data-table="${tableId}" ${allSelected ? 'checked' : ''} title="${t('selectAll')}"></th>`;
+                headerCells += visibleFields.map(f => {
                     const isSorted = sort.field === f.id;
                     const cls = isSorted ? (sort.dir === 'asc' ? 'sorted-asc' : 'sorted-desc') : '';
                     return `<th class="${cls}" data-table="${tableId}" data-field="${f.id}">${escapeHtml(f.name)}</th>`;
-                }).join('') + `<th class="no-sort">${t('actions')}</th>`;
+                }).join('');
+                if (showCollections) headerCells += `<th class="no-sort">${t('collections')}</th>`;
+                if (showTags) headerCells += `<th class="no-sort">${t('tags')}</th>`;
+                headerCells += `<th class="no-sort">${t('actions')}</th>`;
 
                 // Group records by groupField value
                 const groups = new Map();
@@ -895,7 +1677,7 @@
                 });
 
                 let groupedHtml = '';
-                const colCount = visibleFields.length + 1;
+                const colCount = visibleFields.length + (showCollections ? 1 : 0) + (showTags ? 1 : 0) + 2; // +2 for checkbox and actions
                 
                 sortedGroups.forEach(([groupKey, group]) => {
                     const isCollapsed = groupStates[groupKey] === true;
@@ -913,8 +1695,9 @@
                     
                     if (!isCollapsed) {
                         group.records.forEach(r => {
+                            const isSelected = selected.has(r.id);
                             const cells = visibleFields.map(f => `<td>${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
-                            groupedHtml += `<tr id="${groupId}">${cells}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}">✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}">🗑️</button></td></tr>`;
+                            groupedHtml += `<tr id="${groupId}"><td class="checkbox-col"><input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}">✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}">🗑️</button></td></tr>`;
                         });
                     }
                     groupedHtml += `</tbody>`;
@@ -923,15 +1706,22 @@
                 tableHtml = `<div class="table-wrapper"><table><thead><tr>${headerCells}</tr></thead>${groupedHtml}</table></div>`;
             } else {
                 // Normal view without grouping
-                const headerCells = visibleFields.map(f => {
+                const selected = selectedRecords[tableId] || new Set();
+                const allSelected = filtered.length > 0 && filtered.every(r => selected.has(r.id));
+                let headerCells = `<th class="checkbox-col no-sort"><input type="checkbox" class="bulk-checkbox bulk-select-all" data-table="${tableId}" ${allSelected ? 'checked' : ''} title="${t('selectAll')}"></th>`;
+                headerCells += visibleFields.map(f => {
                     const isSorted = sort.field === f.id;
                     const cls = isSorted ? (sort.dir === 'asc' ? 'sorted-asc' : 'sorted-desc') : '';
                     return `<th class="${cls}" data-table="${tableId}" data-field="${f.id}">${escapeHtml(f.name)}</th>`;
-                }).join('') + `<th class="no-sort">${t('actions')}</th>`;
+                }).join('');
+                if (showCollections) headerCells += `<th class="no-sort">${t('collections')}</th>`;
+                if (showTags) headerCells += `<th class="no-sort">${t('tags')}</th>`;
+                headerCells += `<th class="no-sort">${t('actions')}</th>`;
 
                 const bodyRows = filtered.map(r => {
+                    const isSelected = selected.has(r.id);
                     const cells = visibleFields.map(f => `<td>${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
-                    return `<tr>${cells}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}">✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}">🗑️</button></td></tr>`;
+                    return `<tr><td class="checkbox-col"><input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}">✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}">🗑️</button></td></tr>`;
                 }).join('');
 
                 tableHtml = `<div class="table-wrapper"><table><thead><tr>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table></div>`;
@@ -949,6 +1739,7 @@
                     </div>
                     <div class="card-body">
                         <div class="filters-section">${filtersHtml}</div>
+                        ${renderBulkActionsBar(tableId)}
                         <div class="record-count">${t('recordsShowing', { filtered: filtered.length, total: table.records.length })}</div>
                         ${tableHtml}
                         <details><summary>${t('columnVisibility')}</summary><div class="column-toggles">${togglesHtml}</div></details>
@@ -1019,7 +1810,55 @@
             renderTablesList();
             renderStats();
             renderGeneratorTable();
+            renderCollectionsList();
+            renderTagsList();
             document.getElementById('dbNameInput').value = database.meta.name;
+        }
+
+        function renderCollectionsList() {
+            if (!database.meta.collections) database.meta.collections = [];
+            const container = document.getElementById('collectionsList');
+            const empty = document.getElementById('emptyCollections');
+            if (database.meta.collections.length === 0) { container.innerHTML = ''; empty.hidden = false; return; }
+            empty.hidden = true;
+            container.innerHTML = database.meta.collections.map(col => {
+                const count = col.members?.length || 0;
+                const descPreview = col.description ? escapeHtml(col.description.substring(0, 100)) + (col.description.length > 100 ? '...' : '') : '';
+                return `
+                <div class="collection-card" data-collection="${col.id}">
+                    <div class="collection-card-header">
+                        <div class="collection-card-color" style="background: ${col.color || '#4a90d9'}"></div>
+                        <div class="collection-card-name">${escapeHtml(col.name)}</div>
+                        <div class="collection-card-count">${count} ${t('collectionMembers')}</div>
+                    </div>
+                    ${descPreview ? `<div class="collection-card-desc">${descPreview}</div>` : ''}
+                </div>`;
+            }).join('');
+        }
+
+        function renderTagsList() {
+            if (!database.meta.tags) database.meta.tags = [];
+            const container = document.getElementById('tagsList');
+            const empty = document.getElementById('emptyTags');
+            if (database.meta.tags.length === 0) { container.innerHTML = ''; empty.hidden = false; return; }
+            empty.hidden = true;
+            container.innerHTML = database.meta.tags.map(tag => {
+                // Count records with this tag
+                let count = 0;
+                database.tables.forEach(tb => {
+                    tb.records.forEach(r => {
+                        if (r.tags && r.tags.includes(tag.id)) count++;
+                    });
+                });
+                return `
+                <div class="tag-card" data-tag="${tag.id}">
+                    <div class="tag-card-header">
+                        <div class="collection-card-color" style="background: ${tag.color || '#e74c3c'}"></div>
+                        <div class="tag-card-name">${escapeHtml(tag.name)}</div>
+                        <div class="tag-card-count">${count} ${t('collectionMembers')}</div>
+                    </div>
+                </div>`;
+            }).join('');
         }
 
         function renderTablesList() {
@@ -1148,12 +1987,23 @@
             document.querySelectorAll('.table-tab').forEach(t => t.classList.remove('active'));
             document.querySelector(`.table-tab[data-table-id="${tabId}"]`)?.classList.add('active');
             document.getElementById('management-content').classList.remove('active');
+            document.getElementById('classification-content').classList.remove('active');
+            document.getElementById('tableContents').innerHTML = '';
+            
             if (tabId === 'management') {
                 renderManagement();
+            } else if (tabId === 'classification') {
+                renderClassification();
             } else {
                 activeTableId = tabId;
                 renderTableContent(tabId);
             }
+        }
+        
+        function renderClassification() {
+            document.getElementById('classification-content').classList.add('active');
+            renderCollectionsList();
+            renderTagsList();
         }
 
         // Table Modal
@@ -1177,7 +2027,641 @@
             renderAll();
         }
 
-        // Field Modal
+        // Collection Modal
+        function openCollectionModal(collectionId = null) {
+            if (!database.meta.collections) database.meta.collections = [];
+            document.getElementById('collectionName').value = '';
+            document.getElementById('collectionColor').value = '#4a90d9';
+            document.getElementById('collectionDescription').value = '';
+            document.getElementById('collectionId').value = '';
+            if (collectionId) {
+                const col = database.meta.collections.find(c => c.id === collectionId);
+                if (col) {
+                    document.getElementById('collectionModalTitle').textContent = t('editCollection');
+                    document.getElementById('collectionId').value = col.id;
+                    document.getElementById('collectionName').value = col.name;
+                    document.getElementById('collectionColor').value = col.color || '#4a90d9';
+                    document.getElementById('collectionDescription').value = col.description || '';
+                }
+            } else {
+                document.getElementById('collectionModalTitle').textContent = t('addCollection');
+            }
+            openModal('collectionModal');
+        }
+
+        function saveCollection() {
+            if (!database.meta.collections) database.meta.collections = [];
+            const id = document.getElementById('collectionId').value;
+            const name = document.getElementById('collectionName').value.trim();
+            const color = document.getElementById('collectionColor').value;
+            const description = document.getElementById('collectionDescription').value;
+            if (!name) return;
+            if (id) {
+                const col = database.meta.collections.find(c => c.id === id);
+                if (col) { col.name = name; col.color = color; col.description = description; }
+            } else {
+                database.meta.collections.push({ id: generateId(), name, color, description, members: [] });
+            }
+            closeModal('collectionModal');
+            renderCollectionsList();
+        }
+
+        function deleteCollection(collectionId) {
+            confirmAction(t('confirmDeleteCollection'), () => {
+                database.meta.collections = database.meta.collections.filter(c => c.id !== collectionId);
+                closeModal('viewCollectionModal');
+                renderCollectionsList();
+            });
+        }
+
+        let currentViewCollectionId = null;
+        
+        function viewCollectionDetails(collectionId) {
+            const col = database.meta.collections?.find(c => c.id === collectionId);
+            if (!col) return;
+            currentViewCollectionId = collectionId;
+            
+            document.getElementById('viewCollectionModalTitle').innerHTML = `📁 <span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:${col.color || '#4a90d9'};vertical-align:middle;margin-right:8px;"></span>${escapeHtml(col.name)}`;
+            
+            let html = '';
+            
+            // Description
+            if (col.description) {
+                html += `<div class="collection-detail-desc"><div class="markdown-content">${parseMarkdown(col.description)}</div></div>`;
+            }
+            
+            // Members grouped by table
+            html += `<h3>${t('recordsInCollection')} (${col.members?.length || 0})</h3>`;
+            if (!col.members || col.members.length === 0) {
+                html += `<p style="color: var(--text-muted); font-style: italic;">${t('noRecordsInCollection')}</p>`;
+            } else {
+                // Group by table
+                const byTable = {};
+                col.members.forEach(m => {
+                    if (!byTable[m.tableId]) byTable[m.tableId] = [];
+                    byTable[m.tableId].push(m.recordId);
+                });
+                
+                Object.entries(byTable).forEach(([tableId, recordIds]) => {
+                    const table = getTableById(tableId);
+                    if (!table) return;
+                    
+                    html += `<h4 style="margin-top: 1rem; margin-bottom: 0.5rem;">${escapeHtml(table.name)}</h4>`;
+                    html += '<ul class="collection-members-list">';
+                    recordIds.forEach(recordId => {
+                        const record = getRecordById(tableId, recordId);
+                        if (!record) return;
+                        html += `<li>
+                            <span><a href="#" class="record-link" data-action="viewFromCollection" data-table="${tableId}" data-record="${recordId}">${escapeHtml(getPrimaryFieldValue(table, record))}</a></span>
+                            <button type="button" class="btn btn-sm btn-danger remove-from-collection-btn" data-collection="${collectionId}" data-table="${tableId}" data-record="${recordId}" title="${t('removeFromCollection')}">✕</button>
+                        </li>`;
+                    });
+                    html += '</ul>';
+                });
+            }
+            
+            document.getElementById('viewCollectionContent').innerHTML = html;
+            openModal('viewCollectionModal');
+        }
+
+        let currentViewTagId = null;
+        
+        function viewTagDetails(tagId) {
+            const tag = database.meta.tags?.find(t => t.id === tagId);
+            if (!tag) return;
+            currentViewTagId = tagId;
+            
+            document.getElementById('viewTagModalTitle').innerHTML = `🏷️ <span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:${tag.color || '#e74c3c'};vertical-align:middle;margin-right:8px;"></span>${escapeHtml(tag.name)}`;
+            
+            // Find all records with this tag, grouped by table
+            const byTable = {};
+            let totalCount = 0;
+            database.tables.forEach(tb => {
+                tb.records.forEach(r => {
+                    if (r.tags && r.tags.includes(tagId)) {
+                        if (!byTable[tb.id]) byTable[tb.id] = { table: tb, records: [] };
+                        byTable[tb.id].records.push(r);
+                        totalCount++;
+                    }
+                });
+            });
+            
+            let html = `<h3>${t('recordsWithTag')} (${totalCount})</h3>`;
+            if (totalCount === 0) {
+                html += `<p style="color: var(--text-muted); font-style: italic;">${t('noRecords')}</p>`;
+            } else {
+                Object.values(byTable).forEach(({ table, records }) => {
+                    html += `<h4 style="margin-top: 1rem; margin-bottom: 0.5rem;">${escapeHtml(table.name)}</h4>`;
+                    html += '<ul class="collection-members-list">';
+                    records.forEach(record => {
+                        html += `<li>
+                            <span><a href="#" class="record-link" data-action="viewFromTag" data-table="${table.id}" data-record="${record.id}">${escapeHtml(getPrimaryFieldValue(table, record))}</a></span>
+                            <button type="button" class="btn btn-sm btn-danger remove-tag-btn" data-tag="${tagId}" data-table="${table.id}" data-record="${record.id}" title="${t('removeThisTag')}">✕</button>
+                        </li>`;
+                    });
+                    html += '</ul>';
+                });
+            }
+            
+            document.getElementById('viewTagContent').innerHTML = html;
+            openModal('viewTagModal');
+        }
+
+        // Tag Modal
+        function openTagModal(tagId = null) {
+            if (!database.meta.tags) database.meta.tags = [];
+            document.getElementById('tagName').value = '';
+            document.getElementById('tagColor').value = '#e74c3c';
+            document.getElementById('tagId').value = '';
+            if (tagId) {
+                const tag = database.meta.tags.find(t => t.id === tagId);
+                if (tag) {
+                    document.getElementById('tagModalTitle').textContent = t('editTable');
+                    document.getElementById('tagId').value = tag.id;
+                    document.getElementById('tagName').value = tag.name;
+                    document.getElementById('tagColor').value = tag.color || '#e74c3c';
+                }
+            } else {
+                document.getElementById('tagModalTitle').textContent = t('addTag');
+            }
+            openModal('tagModal');
+        }
+
+        function saveTag() {
+            if (!database.meta.tags) database.meta.tags = [];
+            const id = document.getElementById('tagId').value;
+            const name = document.getElementById('tagName').value.trim();
+            const color = document.getElementById('tagColor').value;
+            if (!name) return;
+            if (id) {
+                const tag = database.meta.tags.find(t => t.id === id);
+                if (tag) { tag.name = name; tag.color = color; }
+            } else {
+                database.meta.tags.push({ id: generateId(), name, color });
+            }
+            closeModal('tagModal');
+            renderTagsList();
+        }
+
+        function deleteTag(tagId) {
+            confirmAction(t('confirmDeleteTag'), () => {
+                database.meta.tags = database.meta.tags.filter(t => t.id !== tagId);
+                // Remove tag from all records
+                database.tables.forEach(tb => {
+                    tb.records.forEach(r => {
+                        if (r.tags) r.tags = r.tags.filter(t => t !== tagId);
+                    });
+                });
+                renderTagsList();
+            });
+        }
+
+        // Add to collection modal
+        let addToCollectionContext = { tableId: null, recordId: null };
+        
+        function openAddToCollectionModal(tableId, recordId) {
+            addToCollectionContext = { tableId, recordId };
+            document.getElementById('addToCollectionTableId').value = tableId;
+            document.getElementById('addToCollectionRecordId').value = recordId;
+            
+            const select = document.getElementById('addToCollectionSelect');
+            const existingCollections = getRecordCollections(tableId, recordId);
+            const existingIds = existingCollections.map(c => c.id);
+            
+            // Filter out collections the record is already in
+            const availableCollections = (database.meta.collections || []).filter(c => !existingIds.includes(c.id));
+            
+            if (availableCollections.length === 0) {
+                select.innerHTML = `<option value="">${t('noCollections')}</option>`;
+            } else {
+                select.innerHTML = `<option value="">-- ${t('selectCollection')} --</option>` + 
+                    availableCollections.map(col => `<option value="${col.id}">${escapeHtml(col.name)}</option>`).join('');
+            }
+            
+            openModal('addToCollectionModal');
+        }
+        
+        function confirmAddToCollection() {
+            const collectionId = document.getElementById('addToCollectionSelect').value;
+            if (!collectionId) return;
+            
+            const { tableId, recordId } = addToCollectionContext;
+            toggleCollectionMembership(collectionId, tableId, recordId, true);
+            closeModal('addToCollectionModal');
+            
+            // Refresh view if open
+            if (currentRecordId === recordId && currentRecordTableId === tableId) {
+                viewRecord(tableId, recordId);
+            }
+        }
+
+        // Add tag to record modal
+        let addTagContext = { tableId: null, recordId: null };
+        
+        function openAddTagModal(tableId, recordId) {
+            addTagContext = { tableId, recordId };
+            document.getElementById('addTagTableId').value = tableId;
+            document.getElementById('addTagRecordId').value = recordId;
+            
+            const select = document.getElementById('addTagSelect');
+            const existingTags = getRecordTags(tableId, recordId);
+            const existingIds = existingTags.map(t => t.id);
+            
+            // Filter out tags the record already has
+            const availableTags = (database.meta.tags || []).filter(t => !existingIds.includes(t.id));
+            
+            if (availableTags.length === 0) {
+                select.innerHTML = `<option value="">${t('noTags')}</option>`;
+            } else {
+                select.innerHTML = `<option value="">-- ${t('selectTag')} --</option>` + 
+                    availableTags.map(tag => `<option value="${tag.id}">${escapeHtml(tag.name)}</option>`).join('');
+            }
+            
+            openModal('addTagToRecordModal');
+        }
+        
+        function confirmAddTag() {
+            const tagId = document.getElementById('addTagSelect').value;
+            if (!tagId) return;
+            
+            const { tableId, recordId } = addTagContext;
+            toggleTagAssignment(tagId, tableId, recordId, true);
+            closeModal('addTagToRecordModal');
+            
+            // Refresh view if open
+            if (currentRecordId === recordId && currentRecordTableId === tableId) {
+                viewRecord(tableId, recordId);
+            }
+        }
+
+        function toggleCollectionMembership(collectionId, tableId, recordId, add) {
+            const col = database.meta.collections.find(c => c.id === collectionId);
+            if (!col) return;
+            if (!col.members) col.members = [];
+            
+            if (add) {
+                if (!col.members.some(m => m.tableId === tableId && m.recordId === recordId)) {
+                    col.members.push({ tableId, recordId });
+                }
+            } else {
+                col.members = col.members.filter(m => !(m.tableId === tableId && m.recordId === recordId));
+            }
+        }
+
+        function toggleTagAssignment(tagId, tableId, recordId, add) {
+            const record = getRecordById(tableId, recordId);
+            if (!record) return;
+            if (!record.tags) record.tags = [];
+            
+            if (add) {
+                if (!record.tags.includes(tagId)) {
+                    record.tags.push(tagId);
+                }
+            } else {
+                record.tags = record.tags.filter(t => t !== tagId);
+            }
+        }
+
+        // Get collections for a record
+        function getRecordCollections(tableId, recordId) {
+            if (!database.meta.collections) return [];
+            return database.meta.collections.filter(col => 
+                col.members?.some(m => m.tableId === tableId && m.recordId === recordId)
+            );
+        }
+
+        // Get tags for a record
+        function getRecordTags(tableId, recordId) {
+            if (!database.meta.tags) return [];
+            const record = getRecordById(tableId, recordId);
+            if (!record || !record.tags) return [];
+            return database.meta.tags.filter(tag => record.tags.includes(tag.id));
+        }
+
+        // Structure view functions
+        let structureRootTableId = null;
+        let structureRootRecordId = null;
+        let structureExpandedNodes = new Set();
+        let structureLoadedAll = new Set();
+        const STRUCTURE_MAX_DEPTH = 4;
+        const STRUCTURE_MAX_ITEMS = 10;
+        
+        function getDirectChildren(tableId, recordId) {
+            // Find all records that have this record as parent
+            const children = [];
+            database.tables.forEach(tb => {
+                tb.fields.filter(f => f.type === 'parent').forEach(parentField => {
+                    tb.records.forEach(r => {
+                        if (r.values[parentField.id] === recordId) {
+                            children.push({ table: tb, record: r, parentField });
+                        }
+                    });
+                });
+            });
+            return children;
+        }
+        
+        function countAllDescendants(tableId, recordId, visited = new Set()) {
+            const key = `${tableId}_${recordId}`;
+            if (visited.has(key)) return 0; // Prevent cycles
+            visited.add(key);
+            
+            const children = getDirectChildren(tableId, recordId);
+            let count = children.length;
+            children.forEach(child => {
+                count += countAllDescendants(child.table.id, child.record.id, visited);
+            });
+            return count;
+        }
+        
+        function openStructureModal(tableId, recordId) {
+            structureRootTableId = tableId;
+            structureRootRecordId = recordId;
+            structureExpandedNodes = new Set();
+            structureLoadedAll = new Set();
+            
+            const table = getTableById(tableId);
+            const record = getRecordById(tableId, recordId);
+            if (!table || !record) return;
+            
+            const name = getPrimaryFieldValue(table, record);
+            document.getElementById('structureModalTitle').innerHTML = `🌳 ${t('structure')}: ${escapeHtml(name)}`;
+            
+            renderStructureTree();
+            renderStructureGraph();
+            openModal('structureModal');
+        }
+        
+        function renderStructureTree() {
+            const container = document.getElementById('structureTreeContainer');
+            const table = getTableById(structureRootTableId);
+            const record = getRecordById(structureRootTableId, structureRootRecordId);
+            
+            if (!table || !record) {
+                container.innerHTML = `<p class="tree-empty">${t('noDescendants')}</p>`;
+                return;
+            }
+            
+            const children = getDirectChildren(structureRootTableId, structureRootRecordId);
+            if (children.length === 0) {
+                container.innerHTML = `<p class="tree-empty">${t('noDescendants')}</p>`;
+                return;
+            }
+            
+            const rootKey = `${structureRootTableId}_${structureRootRecordId}`;
+            structureExpandedNodes.add(rootKey); // Root is always expanded
+            
+            let html = '<ul class="tree-root">';
+            html += renderTreeNode(structureRootTableId, structureRootRecordId, 0, true);
+            html += '</ul>';
+            
+            container.innerHTML = html;
+        }
+        
+        function renderTreeNode(tableId, recordId, depth, isRoot = false) {
+            const table = getTableById(tableId);
+            const record = getRecordById(tableId, recordId);
+            if (!table || !record) return '';
+            
+            const key = `${tableId}_${recordId}`;
+            const children = getDirectChildren(tableId, recordId);
+            const totalDescendants = countAllDescendants(tableId, recordId);
+            const hasChildren = children.length > 0;
+            const isExpanded = structureExpandedNodes.has(key);
+            const showAll = structureLoadedAll.has(key);
+            const name = getPrimaryFieldValue(table, record);
+            
+            let html = '';
+            
+            if (!isRoot) {
+                html += '<li class="tree-item">';
+                html += `<button type="button" class="tree-toggle ${hasChildren ? '' : 'empty'}" data-key="${key}" data-table="${tableId}" data-record="${recordId}">${hasChildren ? (isExpanded ? '▼' : '▶') : ''}</button>`;
+                html += `<a href="#" class="tree-link" data-action="viewFromStructure" data-table="${tableId}" data-record="${recordId}">${escapeHtml(name)}</a>`;
+                html += `<span class="tree-table">(${escapeHtml(table.name)})</span>`;
+                if (totalDescendants > 0) {
+                    html += `<span class="tree-count">[${totalDescendants} ${t('descendants')}]</span>`;
+                }
+            }
+            
+            if (hasChildren && (isExpanded || isRoot)) {
+                const maxDepthReached = depth >= STRUCTURE_MAX_DEPTH && !showAll;
+                const itemsToShow = showAll ? children.length : Math.min(children.length, STRUCTURE_MAX_ITEMS);
+                
+                html += `<ul class="tree-children ${isExpanded || isRoot ? '' : 'collapsed'}">`;
+                
+                for (let i = 0; i < itemsToShow; i++) {
+                    const child = children[i];
+                    if (maxDepthReached) {
+                        // Just show item without children
+                        const childName = getPrimaryFieldValue(child.table, child.record);
+                        const childDescendants = countAllDescendants(child.table.id, child.record.id);
+                        html += '<li class="tree-item">';
+                        html += `<button type="button" class="tree-toggle empty"></button>`;
+                        html += `<a href="#" class="tree-link" data-action="viewFromStructure" data-table="${child.table.id}" data-record="${child.record.id}">${escapeHtml(childName)}</a>`;
+                        html += `<span class="tree-table">(${escapeHtml(child.table.name)})</span>`;
+                        if (childDescendants > 0) {
+                            html += `<span class="tree-count">[${childDescendants} ${t('descendants')}]</span>`;
+                        }
+                        html += '</li>';
+                    } else {
+                        html += renderTreeNode(child.table.id, child.record.id, depth + 1);
+                    }
+                }
+                
+                if (children.length > STRUCTURE_MAX_ITEMS && !showAll) {
+                    html += `<li class="tree-item"><span class="tree-load-more" data-key="${key}" data-action="loadAll">... ${t('loadAll')} (${children.length - STRUCTURE_MAX_ITEMS} ${t('loadMore').replace('...', '')})</span></li>`;
+                }
+                
+                html += '</ul>';
+            }
+            
+            if (!isRoot) {
+                html += '</li>';
+            }
+            
+            return html;
+        }
+        
+        function toggleTreeNode(key, tableId, recordId) {
+            if (structureExpandedNodes.has(key)) {
+                structureExpandedNodes.delete(key);
+            } else {
+                structureExpandedNodes.add(key);
+            }
+            renderStructureTree();
+        }
+        
+        function loadAllTreeItems(key) {
+            structureLoadedAll.add(key);
+            renderStructureTree();
+        }
+        
+        function renderStructureGraph() {
+            const container = document.getElementById('structureGraphContainer');
+            const table = getTableById(structureRootTableId);
+            const record = getRecordById(structureRootTableId, structureRootRecordId);
+            
+            if (!table || !record) {
+                container.innerHTML = `<p class="tree-empty">${t('noDescendants')}</p>`;
+                return;
+            }
+            
+            // Build tree data structure
+            const treeData = buildTreeData(structureRootTableId, structureRootRecordId, 0, new Set());
+            
+            if (!treeData.children || treeData.children.length === 0) {
+                container.innerHTML = `<p class="tree-empty">${t('noDescendants')}</p>`;
+                return;
+            }
+            
+            // Calculate tree layout
+            const nodeWidth = 150;
+            const nodeHeight = 30;
+            const levelGap = 180;
+            const nodeGap = 10;
+            
+            // Assign positions
+            const positions = [];
+            let maxY = 0;
+            
+            function assignPositions(node, x, y) {
+                node.x = x;
+                node.y = y;
+                positions.push(node);
+                maxY = Math.max(maxY, y);
+                
+                if (node.children && node.children.length > 0) {
+                    const childX = x + levelGap;
+                    let currentY = y - ((node.children.length - 1) * (nodeHeight + nodeGap)) / 2;
+                    
+                    node.children.forEach(child => {
+                        assignPositions(child, childX, currentY);
+                        currentY += nodeHeight + nodeGap;
+                    });
+                }
+            }
+            
+            // First pass: calculate subtree heights
+            function calcSubtreeHeight(node) {
+                if (!node.children || node.children.length === 0) {
+                    node.subtreeHeight = nodeHeight;
+                    return node.subtreeHeight;
+                }
+                let totalHeight = 0;
+                node.children.forEach(child => {
+                    totalHeight += calcSubtreeHeight(child) + nodeGap;
+                });
+                totalHeight -= nodeGap;
+                node.subtreeHeight = Math.max(nodeHeight, totalHeight);
+                return node.subtreeHeight;
+            }
+            
+            function assignPositions2(node, x, yStart, yEnd) {
+                const yMid = (yStart + yEnd) / 2;
+                node.x = x;
+                node.y = yMid;
+                positions.push(node);
+                maxY = Math.max(maxY, yEnd);
+                
+                if (node.children && node.children.length > 0) {
+                    const childX = x + levelGap;
+                    let currentY = yStart;
+                    
+                    node.children.forEach(child => {
+                        const childEnd = currentY + child.subtreeHeight;
+                        assignPositions2(child, childX, currentY, childEnd);
+                        currentY = childEnd + nodeGap;
+                    });
+                }
+            }
+            
+            calcSubtreeHeight(treeData);
+            assignPositions2(treeData, 40, 40, 40 + treeData.subtreeHeight);
+            
+            // Calculate SVG size
+            const maxX = Math.max(...positions.map(p => p.x)) + nodeWidth + 40;
+            const svgHeight = maxY + 40;
+            const svgWidth = Math.max(maxX, 400);
+            
+            // Generate table colors
+            const tableColors = {};
+            const colorPalette = ['#3498db', '#e74c3c', '#2ecc71', '#9b59b6', '#f39c12', '#1abc9c', '#e67e22', '#34495e'];
+            let colorIndex = 0;
+            database.tables.forEach(tb => {
+                tableColors[tb.id] = colorPalette[colorIndex % colorPalette.length];
+                colorIndex++;
+            });
+            
+            // Build SVG
+            let svg = `<svg class="graph-svg" width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}">`;
+            
+            // Draw links first (behind nodes)
+            function drawLinks(node) {
+                if (node.children) {
+                    node.children.forEach(child => {
+                        const startX = node.x + nodeWidth;
+                        const startY = node.y + nodeHeight / 2;
+                        const endX = child.x;
+                        const endY = child.y + nodeHeight / 2;
+                        const midX = (startX + endX) / 2;
+                        svg += `<path class="graph-link" d="M${startX},${startY} C${midX},${startY} ${midX},${endY} ${endX},${endY}"/>`;
+                        drawLinks(child);
+                    });
+                }
+            }
+            drawLinks(treeData);
+            
+            // Draw nodes
+            positions.forEach(node => {
+                const color = tableColors[node.tableId] || '#3498db';
+                const textWidth = Math.min(node.name.length * 7, nodeWidth - 10);
+                const displayName = node.name.length > 20 ? node.name.substring(0, 18) + '...' : node.name;
+                
+                svg += `<g class="graph-node" data-table="${node.tableId}" data-record="${node.recordId}">`;
+                svg += `<rect x="${node.x}" y="${node.y}" width="${nodeWidth}" height="${nodeHeight}" style="stroke: ${color}"/>`;
+                svg += `<text x="${node.x + 8}" y="${node.y + nodeHeight/2 + 4}" style="fill: ${color}">${escapeHtml(displayName)}</text>`;
+                svg += '</g>';
+            });
+            
+            svg += '</svg>';
+            container.innerHTML = svg;
+        }
+        
+        function buildTreeData(tableId, recordId, depth, visited) {
+            const key = `${tableId}_${recordId}`;
+            if (visited.has(key)) return null; // Prevent cycles
+            visited.add(key);
+            
+            const table = getTableById(tableId);
+            const record = getRecordById(tableId, recordId);
+            if (!table || !record) return null;
+            
+            const node = {
+                tableId,
+                recordId,
+                name: getPrimaryFieldValue(table, record),
+                tableName: table.name,
+                children: []
+            };
+            
+            // Limit depth for graph
+            if (depth < STRUCTURE_MAX_DEPTH) {
+                const children = getDirectChildren(tableId, recordId);
+                // Limit items for graph
+                const itemsToShow = Math.min(children.length, STRUCTURE_MAX_ITEMS);
+                for (let i = 0; i < itemsToShow; i++) {
+                    const child = children[i];
+                    const childNode = buildTreeData(child.table.id, child.record.id, depth + 1, new Set(visited));
+                    if (childNode) {
+                        node.children.push(childNode);
+                    }
+                }
+            }
+            
+            return node;
+        }
+
+        // View collection contents
         function openFieldModal(fieldId = null) {
             const table = getTableById(editingFieldTableId);
             if (!table) return;
@@ -1279,7 +2763,7 @@
             if (!table) return;
             currentRecordTableId = tableId;
             currentRecordId = recordId;
-            document.getElementById('recordModalTitle').textContent = recordId ? t('edit') : t('addRecord');
+            document.getElementById('recordModalTitle').textContent = recordId ? `${t('edit')}: ${table.name}` : `${t('addRecord')}: ${table.name}`;
             const record = recordId ? getRecordById(tableId, recordId) : null;
             document.getElementById('recordForm').innerHTML = table.fields.filter(f => f.type !== 'children').map(f => buildFormField(table, f, record?.values[f.id] ?? '', record)).join('');
             openModal('recordModal');
@@ -1292,7 +2776,7 @@
                 case 'text': input = `<input type="text" id="${id}" value="${escapeHtml(value)}">`; break;
                 case 'textarea': input = `<textarea id="${id}" rows="5">${escapeHtml(value)}</textarea>`; break;
                 case 'number': input = `<input type="number" id="${id}" value="${escapeHtml(value)}" step="any">`; break;
-                case 'date': input = `<input type="date" id="${id}" value="${escapeHtml(value)}">`; break;
+                case 'date': input = `<div class="date-input-group"><input type="date" id="${id}" value="${escapeHtml(value)}" class="date-picker"><input type="text" id="${id}_text" value="${escapeHtml(value)}" placeholder="yyyy-mm-dd" pattern="\\d{4}-\\d{2}-\\d{2}" class="date-text" title="Formát: yyyy-mm-dd"></div>`; break;
                 case 'url': input = `<input type="url" id="${id}" value="${escapeHtml(value)}" placeholder="https://">`; break;
                 case 'boolean': return `<div class="form-group"><div class="checkbox-group"><input type="checkbox" id="${id}" ${value ? 'checked' : ''}><label for="${id}">${escapeHtml(field.name)}</label></div></div>`;
                 case 'select':
@@ -1415,8 +2899,17 @@
                 return;
             }
             
+            // Quick create mode - just close modal, don't change view
+            if (quickCreateMode) {
+                quickCreateMode = false;
+                currentRecordId = null;
+                currentRecordTableId = null;
+                autoSave();
+                return;
+            }
+            
             currentRecordId = null;
-            if (activeTab !== 'management') renderTableContent(currentRecordTableId);
+            if (activeTab !== 'management' && activeTab !== 'classification') renderTableContent(currentRecordTableId);
             else renderStats();
             currentRecordTableId = null;
         }
@@ -1427,8 +2920,10 @@
             if (!table || !record) return;
             currentRecordTableId = tableId;
             currentRecordId = recordId;
-            document.getElementById('viewRecordModalTitle').textContent = getPrimaryFieldValue(table, record);
-            document.getElementById('viewRecordContent').innerHTML = table.fields.map(f => {
+            document.getElementById('viewRecordModalTitle').innerHTML = `📝 ${escapeHtml(table.name)}: ${escapeHtml(getPrimaryFieldValue(table, record))}`;
+            
+            // Build fields HTML
+            let fieldsHtml = table.fields.map(f => {
                 const v = record.values[f.id];
                 let dv = '';
                 let rawValue = ''; // Pro kopírování
@@ -1515,6 +3010,84 @@
                 
                 return `<div class="view-field"><div class="view-field-header"><span class="view-field-label">${escapeHtml(f.name)}</span>${copyBtn}</div><div class="view-field-value">${dv}</div></div>`;
             }).join('');
+            
+            // Collections and Tags section  
+            const collections = getRecordCollections(tableId, recordId);
+            const tags = getRecordTags(tableId, recordId);
+            
+            // Section: Record fields
+            let contentHtml = '<div class="view-record-section">';
+            contentHtml += `<div class="view-record-section-title">📋 ${t('recordFields')}</div>`;
+            contentHtml += fieldsHtml || `<p style="color: var(--text-muted); font-style: italic;">${t('noFields')}</p>`;
+            contentHtml += '</div>';
+            
+            // Section: Classification (Collections & Tags)
+            contentHtml += '<div class="view-record-section">';
+            contentHtml += `<div class="view-record-section-title">🏷️ ${t('classification')}</div>`;
+            contentHtml += '<div class="record-classification">';
+            
+            // Collections row
+            contentHtml += '<div class="record-classification-row">';
+            contentHtml += `<span class="record-classification-label">${t('collections')}:</span>`;
+            contentHtml += '<div class="record-classification-items">';
+            if (collections.length > 0) {
+                collections.forEach(col => {
+                    contentHtml += `<span class="collection-badge" style="background: ${col.color || '#4a90d9'}">
+                        <a href="#" class="collection-link" data-collection="${col.id}" style="color: white; text-decoration: none;">${escapeHtml(col.name)}</a>
+                        <button type="button" class="remove-badge-btn" data-action="removeFromCollection" data-collection="${col.id}" data-table="${tableId}" data-record="${recordId}" title="${t('removeFromCollection')}">✕</button>
+                    </span>`;
+                });
+            }
+            contentHtml += `<button type="button" class="btn btn-sm btn-success add-classification-btn open-add-collection-btn" data-table="${tableId}" data-record="${recordId}">➕</button>`;
+            contentHtml += '</div></div>';
+            
+            // Tags row
+            contentHtml += '<div class="record-classification-row">';
+            contentHtml += `<span class="record-classification-label">${t('tags')}:</span>`;
+            contentHtml += '<div class="record-classification-items">';
+            if (tags.length > 0) {
+                tags.forEach(tag => {
+                    contentHtml += `<span class="tag-badge" style="background: ${tag.color || '#e74c3c'}">
+                        <a href="#" class="tag-link" data-tag="${tag.id}" style="color: white; text-decoration: none;">${escapeHtml(tag.name)}</a>
+                        <button type="button" class="remove-badge-btn" data-action="removeTag" data-tag="${tag.id}" data-table="${tableId}" data-record="${recordId}" title="${t('removeThisTag')}">✕</button>
+                    </span>`;
+                });
+            }
+            contentHtml += `<button type="button" class="btn btn-sm btn-success add-classification-btn open-add-tag-btn" data-table="${tableId}" data-record="${recordId}">➕</button>`;
+            contentHtml += '</div></div>';
+            
+            contentHtml += '</div></div>';
+            
+            // Section: Related records (from collections)
+            if (collections.length > 0) {
+                let hasRelated = false;
+                let relatedContent = '';
+                collections.forEach(col => {
+                    const otherMembers = col.members?.filter(m => !(m.tableId === tableId && m.recordId === recordId)) || [];
+                    if (otherMembers.length > 0) {
+                        hasRelated = true;
+                        relatedContent += `<div class="related-group">`;
+                        relatedContent += `<div class="related-group-title"><span class="color-dot" style="background: ${col.color || '#4a90d9'}"></span>${escapeHtml(col.name)}</div>`;
+                        relatedContent += '<ul class="related-list">';
+                        otherMembers.forEach(m => {
+                            const relTable = getTableById(m.tableId);
+                            const relRecord = relTable ? getRecordById(m.tableId, m.recordId) : null;
+                            if (relTable && relRecord) {
+                                relatedContent += `<li><a href="#" class="record-link" data-action="viewInModal" data-table="${m.tableId}" data-record="${m.recordId}">${escapeHtml(getPrimaryFieldValue(relTable, relRecord))}</a> <span class="related-table-name">(${escapeHtml(relTable.name)})</span></li>`;
+                            }
+                        });
+                        relatedContent += '</ul></div>';
+                    }
+                });
+                if (hasRelated) {
+                    contentHtml += '<div class="view-record-section">';
+                    contentHtml += `<div class="view-record-section-title">🔗 ${t('relatedRecords')}</div>`;
+                    contentHtml += relatedContent;
+                    contentHtml += '</div>';
+                }
+            }
+            
+            document.getElementById('viewRecordContent').innerHTML = contentHtml;
             openModal('viewRecordModal');
         }
 
@@ -1607,12 +3180,14 @@
         // File operations
         function createNewDatabase() {
             confirmAction(t('confirmNewDb'), () => {
-                database = { meta: { name: '', columnVisibility: {}, groupStates: {} }, tables: [] };
+                database = { meta: { name: '', columnVisibility: {}, groupStates: {}, collections: [], tags: [] }, tables: [] };
                 activeTab = 'management';
                 activeTableId = null;
                 tableFilters = {};
                 tableSearches = {};
                 tableSorts = {};
+                collectionFilter = null;
+                tagFilter = null;
                 renderAll();
             });
         }
@@ -1633,7 +3208,9 @@
                 meta: { 
                     name: data.meta?.name || '', 
                     columnVisibility: data.meta?.columnVisibility || {},
-                    groupStates: data.meta?.groupStates || {}
+                    groupStates: data.meta?.groupStates || {},
+                    collections: data.meta?.collections || [],
+                    tags: data.meta?.tags || []
                 }, 
                 tables: data.tables || [] 
             };
@@ -1642,6 +3219,9 @@
             tableFilters = {};
             tableSearches = {};
             tableSorts = {};
+            collectionFilter = null;
+            tagFilter = null;
+            document.getElementById('dbNameInput').value = database.meta.name;
             renderAll();
         }
 
@@ -1699,7 +3279,9 @@
 
         function renderAll() {
             renderTableTabs();
+            updateQuickCreateOptions();
             if (activeTab === 'management') renderManagement();
+            else if (activeTab === 'classification') renderClassification();
             else renderTableContent(activeTab);
             applyTranslations();
             updateDocumentTitle();
@@ -1711,6 +3293,16 @@
             const langSelect = document.getElementById('langSelect');
             langSelect.value = currentLang;
             langSelect.addEventListener('change', e => { currentLang = e.target.value; localStorage.setItem('db-editor-lang', currentLang); renderAll(); });
+
+            // Quick create select
+            document.getElementById('quickCreateSelect').addEventListener('change', e => {
+                const tableId = e.target.value;
+                if (tableId) {
+                    quickCreateMode = true;
+                    openRecordModal(tableId);
+                    e.target.value = ''; // Reset select
+                }
+            });
 
             document.getElementById('tableTabs').addEventListener('click', e => {
                 const tab = e.target.closest('.table-tab');
@@ -1742,6 +3334,26 @@
             document.getElementById('btnSaveField').addEventListener('click', saveField);
             document.getElementById('btnSaveRecord').addEventListener('click', saveRecord);
             document.getElementById('btnEditFromView').addEventListener('click', () => { closeModal('viewRecordModal'); openRecordModal(currentRecordTableId, currentRecordId); });
+            document.getElementById('btnStructureFromView').addEventListener('click', () => { openStructureModal(currentRecordTableId, currentRecordId); });
+            
+            // Bulk edit modal
+            // Bulk edit modal - dynamic rows
+            document.getElementById('btnAddBulkField').addEventListener('click', addBulkEditRow);
+            document.getElementById('bulkEditFieldsContainer').addEventListener('change', e => {
+                const select = e.target.closest('.bulk-edit-field-select');
+                if (select) {
+                    updateBulkEditValueInput(select.dataset.row);
+                }
+            });
+            document.getElementById('bulkEditFieldsContainer').addEventListener('click', e => {
+                const removeBtn = e.target.closest('.bulk-edit-remove-row');
+                if (removeBtn) {
+                    removeBulkEditRow(removeBtn.dataset.row);
+                }
+            });
+            document.getElementById('btnApplyBulkEdit').addEventListener('click', applyBulkEdit);
+            document.getElementById('btnApplyBulkCollection').addEventListener('click', applyBulkAddToCollection);
+            document.getElementById('btnApplyBulkTag').addEventListener('click', applyBulkAddTag);
             document.getElementById('btnConfirmYes').addEventListener('click', () => { closeModal('confirmModal'); if (confirmCallback) { confirmCallback(); confirmCallback = null; } });
 
             document.getElementById('fieldType').addEventListener('change', e => {
@@ -1780,6 +3392,45 @@
             });
             document.getElementById('btnGenerate').addEventListener('click', generateText);
             document.getElementById('btnCopyGenerated').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('generatorOutput').textContent); alert(t('jsonCopied')); });
+
+            // Collections and Tags
+            document.getElementById('btnAddCollection').addEventListener('click', () => openCollectionModal());
+            document.getElementById('btnSaveCollection').addEventListener('click', saveCollection);
+            document.getElementById('btnAddTag').addEventListener('click', () => openTagModal());
+            document.getElementById('btnSaveTag').addEventListener('click', saveTag);
+            
+            // View/Edit/Delete collection from modal
+            document.getElementById('btnEditCollectionFromView').addEventListener('click', () => {
+                closeModal('viewCollectionModal');
+                openCollectionModal(currentViewCollectionId);
+            });
+            document.getElementById('btnDeleteCollectionFromView').addEventListener('click', () => {
+                deleteCollection(currentViewCollectionId);
+            });
+            
+            // View/Edit/Delete tag from modal
+            document.getElementById('btnEditTagFromView').addEventListener('click', () => {
+                closeModal('viewTagModal');
+                openTagModal(currentViewTagId);
+            });
+            document.getElementById('btnDeleteTagFromView').addEventListener('click', () => {
+                deleteTag(currentViewTagId);
+                closeModal('viewTagModal');
+            });
+            
+            // Add to collection modal
+            document.getElementById('btnConfirmAddToCollection').addEventListener('click', confirmAddToCollection);
+            document.getElementById('btnQuickCreateCollection').addEventListener('click', () => {
+                closeModal('addToCollectionModal');
+                openCollectionModal();
+            });
+            
+            // Add tag modal
+            document.getElementById('btnConfirmAddTag').addEventListener('click', confirmAddTag);
+            document.getElementById('btnQuickCreateTag').addEventListener('click', () => {
+                closeModal('addTagToRecordModal');
+                openTagModal();
+            });
 
             // Export modal
             document.querySelectorAll('#exportModal .format-tab').forEach(tab => tab.addEventListener('click', () => {
@@ -1838,8 +3489,23 @@
                 if (target.classList.contains('add-record-btn')) openRecordModal(target.dataset.table);
                 if (target.classList.contains('export-table-btn')) openExportModal(target.dataset.table);
                 if (target.classList.contains('import-table-btn')) openImportModal(target.dataset.table);
+                if (target.classList.contains('view-record-btn')) viewRecord(target.dataset.table, target.dataset.record);
                 if (target.classList.contains('edit-record-btn')) openRecordModal(target.dataset.table, target.dataset.record);
-                if (target.classList.contains('delete-record-btn')) confirmAction(t('confirmDeleteRecord'), () => { const table = getTableById(target.dataset.table); if (table) table.records = table.records.filter(r => r.id !== target.dataset.record); renderTableContent(target.dataset.table); });
+                if (target.classList.contains('delete-record-btn')) confirmAction(t('confirmDeleteRecord'), () => { 
+                    const tableId = target.dataset.table;
+                    const recordId = target.dataset.record;
+                    const table = getTableById(tableId); 
+                    if (table) {
+                        table.records = table.records.filter(r => r.id !== recordId);
+                        // Remove from all collections
+                        if (database.meta.collections) {
+                            database.meta.collections.forEach(col => {
+                                if (col.members) col.members = col.members.filter(m => !(m.tableId === tableId && m.recordId === recordId));
+                            });
+                        }
+                    }
+                    renderTableContent(tableId); 
+                });
                 if (target.classList.contains('create-parent-btn')) createParentRecord(target.dataset.targetTable, target.dataset.field);
                 if (target.classList.contains('create-child-btn')) createChildRecord(target.dataset.targetTable, target.dataset.parentField, target.dataset.parentRecord);
                 if (target.classList.contains('copy-field-btn')) {
@@ -1861,21 +3527,170 @@
                         setTimeout(() => { target.textContent = origText; }, 1500);
                     });
                 }
+                // Collections
+                if (target.classList.contains('open-add-collection-btn')) openAddToCollectionModal(target.dataset.table, target.dataset.record);
+                if (target.classList.contains('open-add-tag-btn')) openAddTagModal(target.dataset.table, target.dataset.record);
+                if (target.classList.contains('remove-from-collection-btn')) {
+                    toggleCollectionMembership(target.dataset.collection, target.dataset.table, target.dataset.record, false);
+                    viewCollectionDetails(target.dataset.collection);
+                }
+                if (target.classList.contains('remove-tag-btn')) {
+                    toggleTagAssignment(target.dataset.tag, target.dataset.table, target.dataset.record, false);
+                    viewTagDetails(target.dataset.tag);
+                }
+                if (target.classList.contains('remove-badge-btn')) {
+                    const action = target.dataset.action;
+                    if (action === 'removeFromCollection') {
+                        toggleCollectionMembership(target.dataset.collection, target.dataset.table, target.dataset.record, false);
+                        viewRecord(target.dataset.table, target.dataset.record);
+                    } else if (action === 'removeTag') {
+                        toggleTagAssignment(target.dataset.tag, target.dataset.table, target.dataset.record, false);
+                        viewRecord(target.dataset.table, target.dataset.record);
+                    }
+                }
+                // Back to tables
+                if (target.classList.contains('back-to-tables-btn')) {
+                    if (database.tables.length > 0) {
+                        activeTab = database.tables[0].id;
+                        activeTableId = database.tables[0].id;
+                        renderAll();
+                    } else {
+                        activeTab = 'management';
+                        renderAll();
+                    }
+                }
+            });
+            
+            // Event delegation for collection/tag cards
+            document.addEventListener('click', e => {
+                const collectionCard = e.target.closest('.collection-card');
+                if (collectionCard && !e.target.closest('button')) {
+                    viewCollectionDetails(collectionCard.dataset.collection);
+                    return;
+                }
+                const tagCard = e.target.closest('.tag-card');
+                if (tagCard && !e.target.closest('button')) {
+                    viewTagDetails(tagCard.dataset.tag);
+                    return;
+                }
+            });
+
+            // Structure modal tabs
+            document.querySelectorAll('.structure-tab').forEach(tab => tab.addEventListener('click', () => {
+                document.querySelectorAll('.structure-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.structure-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('structure-' + tab.dataset.structureTab).classList.add('active');
+            }));
+            
+            // Structure tree interactions
+            document.getElementById('structureTreeContainer').addEventListener('click', e => {
+                const toggle = e.target.closest('.tree-toggle');
+                if (toggle && !toggle.classList.contains('empty')) {
+                    toggleTreeNode(toggle.dataset.key, toggle.dataset.table, toggle.dataset.record);
+                    return;
+                }
+                const loadMore = e.target.closest('.tree-load-more');
+                if (loadMore && loadMore.dataset.action === 'loadAll') {
+                    loadAllTreeItems(loadMore.dataset.key);
+                    return;
+                }
+            });
+            
+            // Structure graph interactions
+            document.getElementById('structureGraphContainer').addEventListener('click', e => {
+                const node = e.target.closest('.graph-node');
+                if (node) {
+                    viewRecord(node.dataset.table, node.dataset.record);
+                }
             });
 
             // Event delegation for record links (a tags)
             document.addEventListener('click', e => {
-                const link = e.target.closest('a.record-link');
-                if (!link) return;
-                e.preventDefault();
-                const action = link.dataset.action;
-                const tableId = link.dataset.table;
-                const recordId = link.dataset.record;
-                if (action === 'view') {
-                    viewRecord(tableId, recordId);
-                } else if (action === 'viewInModal') {
-                    closeModal('viewRecordModal');
-                    viewRecord(tableId, recordId);
+                const link = e.target.closest('a.record-link, a.tree-link');
+                if (link) {
+                    e.preventDefault();
+                    const action = link.dataset.action;
+                    const tableId = link.dataset.table;
+                    const recordId = link.dataset.record;
+                    if (action === 'view') {
+                        viewRecord(tableId, recordId);
+                    } else if (action === 'viewInModal') {
+                        // Keep current modal open, open new record on top
+                        viewRecord(tableId, recordId);
+                    } else if (action === 'viewFromCollection') {
+                        // Keep collection modal open
+                        viewRecord(tableId, recordId);
+                    } else if (action === 'viewFromTag') {
+                        // Keep tag modal open
+                        viewRecord(tableId, recordId);
+                    } else if (action === 'viewFromStructure') {
+                        // Keep structure modal open
+                        viewRecord(tableId, recordId);
+                    }
+                    return;
+                }
+                // Collection badge/link click - keep current modal open
+                const colBadge = e.target.closest('a.collection-badge, a.collection-link');
+                if (colBadge) {
+                    e.preventDefault();
+                    const colId = colBadge.dataset.collection;
+                    if (colId) {
+                        viewCollectionDetails(colId);
+                    }
+                    return;
+                }
+                // Tag badge/link click - keep current modal open
+                const tagBadge = e.target.closest('a.tag-badge, a.tag-link');
+                if (tagBadge) {
+                    e.preventDefault();
+                    const tagId = tagBadge.dataset.tag;
+                    if (tagId) {
+                        viewTagDetails(tagId);
+                    }
+                    return;
+                }
+            });
+
+            // Event delegation for bulk selection checkboxes
+            document.addEventListener('change', e => {
+                const checkbox = e.target.closest('.bulk-checkbox');
+                if (!checkbox) return;
+                
+                const tableId = checkbox.dataset.table;
+                if (checkbox.classList.contains('bulk-select-all')) {
+                    toggleSelectAll(tableId, checkbox.checked);
+                } else if (checkbox.classList.contains('bulk-select-row')) {
+                    toggleSelectRow(tableId, checkbox.dataset.record, checkbox.checked);
+                }
+            });
+            
+            // Event delegation for bulk action buttons
+            document.addEventListener('click', e => {
+                const editBtn = e.target.closest('.bulk-edit-field-btn');
+                if (editBtn) {
+                    openBulkEditModal(editBtn.dataset.table);
+                    return;
+                }
+                const addColBtn = e.target.closest('.bulk-add-collection-btn');
+                if (addColBtn) {
+                    openBulkAddToCollectionModal(addColBtn.dataset.table);
+                    return;
+                }
+                const addTagBtn = e.target.closest('.bulk-add-tag-btn');
+                if (addTagBtn) {
+                    openBulkAddTagModal(addTagBtn.dataset.table);
+                    return;
+                }
+                const deleteBtn = e.target.closest('.bulk-delete-btn');
+                if (deleteBtn) {
+                    bulkDelete(deleteBtn.dataset.table);
+                    return;
+                }
+                const deselectBtn = e.target.closest('.bulk-deselect');
+                if (deselectBtn) {
+                    clearSelection(deselectBtn.dataset.table);
+                    return;
                 }
             });
 
@@ -1904,12 +3719,45 @@
                     database.meta.columnVisibility[tableId][e.target.dataset.field] = e.target.checked;
                     renderTableContent(tableId);
                 }
+                // Collection filter
+                if (e.target.classList.contains('collection-filter')) {
+                    collectionFilter = e.target.value || null;
+                    renderTableContent(e.target.dataset.table);
+                }
+                // Tag filter
+                if (e.target.classList.contains('tag-filter')) {
+                    tagFilter = e.target.value || null;
+                    renderTableContent(e.target.dataset.table);
+                }
+                // Assign collection checkbox
+                if (e.target.classList.contains('assign-collection-cb')) {
+                    const tableId = document.getElementById('assignTableId').value;
+                    const recordId = document.getElementById('assignRecordId').value;
+                    toggleCollectionMembership(e.target.dataset.collection, tableId, recordId, e.target.checked);
+                }
+                // Assign tag checkbox
+                if (e.target.classList.contains('assign-tag-cb')) {
+                    const tableId = document.getElementById('assignTableId').value;
+                    const recordId = document.getElementById('assignRecordId').value;
+                    toggleTagAssignment(e.target.dataset.tag, tableId, recordId, e.target.checked);
+                }
             });
 
             document.addEventListener('input', e => {
                 if (e.target.classList.contains('table-search')) {
                     tableSearches[e.target.dataset.table] = e.target.value;
                     renderTableContent(e.target.dataset.table);
+                }
+                // Sync date picker with text input
+                if (e.target.classList.contains('date-picker')) {
+                    const textInput = document.getElementById(e.target.id + '_text');
+                    if (textInput) textInput.value = e.target.value;
+                }
+                if (e.target.classList.contains('date-text')) {
+                    const dateInput = document.getElementById(e.target.id.replace('_text', ''));
+                    if (dateInput && /^\d{4}-\d{2}-\d{2}$/.test(e.target.value)) {
+                        dateInput.value = e.target.value;
+                    }
                 }
             });
 
