@@ -29,6 +29,7 @@
         .skip-link { position: absolute; top: -40px; left: 0; background: var(--primary); color: white; padding: 8px 16px; z-index: 1000; text-decoration: none; }
         .skip-link:focus { top: 0; }
         header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 1rem 2rem; }
+        nav { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); padding: 0 2rem 0.5rem 2rem; }
         .header-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
         .header-title { font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
         .header-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
@@ -61,6 +62,39 @@
         .card-header { background: var(--bg); padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
         .card-header h2 { font-size: 1.1rem; font-weight: 600; color: var(--primary); }
         .card-body { padding: 1.5rem; }
+        .card-footer-actions { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+        
+        /* Notes */
+        .notes-section { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .notes-section h4 { margin: 0 0 0.75rem 0; display: flex; align-items: center; gap: 0.5rem; }
+        .notes-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .note-item { padding: 0.75rem; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; }
+        .note-item.resolved { opacity: 0.7; background: var(--hover); }
+        .note-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.8rem; color: var(--text-muted); }
+        .note-text { white-space: pre-wrap; word-break: break-word; }
+        .note-actions { display: flex; gap: 0.25rem; }
+        .note-actions button { padding: 0.2rem 0.4rem; font-size: 0.75rem; }
+        .note-status { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.75rem; }
+        .note-status.resolved { background: var(--success); color: white; }
+        .note-status.unresolved { background: var(--warning); color: #000; }
+        .add-note-form { margin-top: 0.75rem; }
+        .add-note-form textarea { width: 100%; min-height: 60px; margin-bottom: 0.5rem; }
+        .notes-table { width: 100%; }
+        .notes-table th, .notes-table td { text-align: left; padding: 0.5rem; border-bottom: 1px solid var(--border); }
+        .notes-table .note-preview { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .notes-filter-bar { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .notes-badge { background: var(--danger); color: white; padding: 0.1rem 0.4rem; border-radius: 10px; font-size: 0.75rem; margin-left: 0.3rem; }
+        
+        /* Simple mode - hide advanced features */
+        .advanced-mode-toggle { display: flex; align-items: center; gap: 0.4rem; color: white; font-size: 0.85rem; margin-right: 0.5rem; }
+        .advanced-mode-toggle input { width: 1rem; height: 1rem; cursor: pointer; }
+        .advanced-mode-toggle label { cursor: pointer; white-space: nowrap; }
+        body.simple-mode .advanced-only { display: none !important; }
+        
+        /* Keyboard navigation - selected row */
+        .data-table tbody tr.keyboard-selected { background: var(--primary-light, #e3f2fd) !important; outline: 2px solid var(--primary); outline-offset: -2px; }
+        .data-table tbody tr:focus { outline: 2px solid var(--primary); outline-offset: -2px; }
+        kbd { display: inline-block; padding: 0.2rem 0.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; font-family: monospace; font-size: 0.9rem; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
         .form-group { margin-bottom: 1rem; }
         label { display: block; margin-bottom: 0.3rem; font-weight: 500; }
         input[type="text"], input[type="number"], input[type="date"], input[type="search"], textarea, select {
@@ -98,6 +132,17 @@
         .filter-item select { padding: 0.4rem 0.6rem; }
         .search-box { position: relative; flex: 2; min-width: 200px; }
         .search-box input { padding-left: 2.5rem; }
+        
+        /* Views tabs - accessible */
+        .views-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; align-items: center; justify-content: space-between; }
+        .views-tabs { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+        .views-tabs [role="tab"] { padding: 0.4rem 0.75rem; background: var(--bg); border: 1px solid var(--border); border-radius: 6px 6px 0 0; cursor: pointer; font-size: 0.9rem; }
+        .views-tabs [role="tab"]:hover { background: var(--hover); }
+        .views-tabs [role="tab"]:focus { outline: 2px solid var(--primary); outline-offset: 2px; }
+        .views-tabs [role="tab"][aria-selected="true"] { background: var(--primary); color: white; border-color: var(--primary); }
+        .views-actions { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+        .view-save-btn { padding: 0.4rem 0.6rem; background: var(--success); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+        .view-save-btn:hover { opacity: 0.9; }
         .search-box::before { content: "🔍"; position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); font-size: 0.9rem; }
 
         details { margin-top: 1rem; }
@@ -109,6 +154,16 @@
 
         .field-list { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
         .field-item { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1rem; border-bottom: 1px solid var(--border); background: white; }
+        
+        /* Management tables */
+        .management-table { width: 100%; border-collapse: collapse; }
+        .management-table th, .management-table td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+        .management-table th { background: var(--bg); font-weight: 600; color: var(--text-muted); }
+        .management-table td { vertical-align: middle; }
+        .management-table .col-order { width: 70px; white-space: nowrap; }
+        .management-table .col-actions { width: 150px; white-space: nowrap; }
+        .management-table .col-order button { margin-right: 0.25rem; }
+        .management-table .badge { margin-left: 0.5rem; }
         .field-item:last-child { border-bottom: none; }
         .field-item-info { flex: 1; }
         .field-item-name { font-weight: 600; color: var(--primary); }
@@ -120,6 +175,7 @@
         .badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
         .badge-primary { background: var(--primary-light); color: white; }
         .badge-filter { background: var(--accent); color: white; }
+        .badge-group { background: #9b59b6; color: white; }
 
         .record-link { color: var(--primary); text-decoration: underline; cursor: pointer; background: none; border: none; font: inherit; padding: 0; display: inline; text-align: left; }
         .record-link:hover, .record-link:focus { color: var(--accent); outline: none; }
@@ -131,6 +187,29 @@
         .language-selector select option { color: var(--text); }
         .quick-create-selector select { width: auto; padding: 0.4rem 0.6rem; background: rgba(39,174,96,0.3); color: white; border-color: rgba(255,255,255,0.3); cursor: pointer; }
         .quick-create-selector select option { color: var(--text); }
+        
+        /* Global search */
+        .global-search { position: relative; }
+        .global-search input { width: 200px; padding: 0.4rem 0.75rem; border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; background: rgba(255,255,255,0.1); color: white; font-size: 0.9rem; }
+        .global-search input::placeholder { color: rgba(255,255,255,0.7); }
+        .global-search input:focus { outline: none; background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); }
+        
+        /* Search results modal */
+        .search-results-list { max-height: 60vh; overflow-y: auto; }
+        .search-result-item { display: block; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); text-decoration: none; color: var(--text); transition: background 0.2s; }
+        .search-result-item:hover { background: var(--bg); }
+        .search-result-table { font-size: 0.8em; color: var(--text-muted); margin-bottom: 0.25rem; }
+        .search-result-name { font-weight: 600; color: var(--primary); }
+        .search-result-preview { font-size: 0.9em; color: var(--text-muted); margin-top: 0.25rem; }
+        .search-result-highlight { background: rgba(241, 196, 15, 0.3); padding: 0.1em 0.2em; border-radius: 2px; }
+        .search-no-results { padding: 2rem; text-align: center; color: var(--text-muted); }
+        
+        /* Import preview */
+        .import-preview-box { margin-top: 1rem; padding: 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+        .import-preview-box h4 { margin: 0 0 0.75rem 0; font-size: 0.95rem; color: var(--text-muted); }
+        .import-mapping-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .import-mapping-table th, .import-mapping-table td { padding: 0.4rem 0.6rem; border: 1px solid var(--border); text-align: left; }
+        .import-mapping-table th { background: var(--border); font-weight: 600; }
 
         .record-count { font-size: 0.9rem; color: var(--text-muted); padding: 0.5rem 0; }
         .record-count strong { color: var(--primary); }
@@ -322,6 +401,27 @@
         .tree-load-more:hover { text-decoration: underline; }
         .tree-empty { color: var(--text-muted); font-style: italic; }
         
+        /* Structure ancestors breadcrumb */
+        .structure-ancestors { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; }
+        .ancestors-label { font-weight: 600; color: var(--text-muted); margin-right: 0.5rem; }
+        .ancestors-path { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem; margin-top: 0.5rem; }
+        .ancestor-link { color: var(--primary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; background: rgba(74, 144, 217, 0.1); transition: background 0.2s; }
+        .ancestor-link:hover { background: rgba(74, 144, 217, 0.2); text-decoration: none; }
+        .ancestor-table { font-size: 0.8em; color: var(--text-muted); }
+        .ancestor-count { font-size: 0.8em; color: var(--text-muted); margin-left: 0.25rem; }
+        .ancestor-separator { color: var(--text-muted); margin: 0 0.25rem; }
+        .ancestor-current { font-weight: 600; color: var(--text); padding: 0.25rem 0.5rem; background: var(--primary); color: white; border-radius: 4px; }
+        
+        /* Tree notes */
+        .tree-notes-toggle { background: none; border: none; cursor: pointer; font-size: 0.85rem; color: var(--primary); padding: 0.1rem 0.3rem; margin-left: 0.25rem; border-radius: 3px; }
+        .tree-notes-toggle:hover { background: rgba(74, 144, 217, 0.1); }
+        .tree-notes-container { background: #fffbe6; border: 1px solid #ffe58f; border-radius: 6px; padding: 0.5rem 0.75rem; margin: 0.25rem 0 0.25rem 1.5rem; font-size: 0.9rem; }
+        .tree-note-item { padding: 0.25rem 0; border-bottom: 1px dashed #ffe58f; }
+        .tree-note-item:last-child { border-bottom: none; }
+        .tree-note-status { margin-right: 0.3rem; }
+        .tree-note-text { color: var(--text); }
+        .tree-note-resolved { opacity: 0.6; text-decoration: line-through; }
+        
         /* Graph styles */
         #structureGraphContainer { width: 100%; height: 100%; overflow: auto; }
         .graph-svg { display: block; }
@@ -353,7 +453,7 @@
         
         /* View record sections */
         .view-record-section { margin-bottom: 1.5rem; }
-        .view-record-section-title { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem; }
+        .view-record-section-title { font-size: 1.1rem; font-weight: 600; color: var(--text-muted); margin: 0 0 0.75rem 0; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem; }
 
         @media (max-width: 768px) {
             header { padding: 1rem; }
@@ -373,18 +473,25 @@
                 <span data-i18n="appName">Editor databáze</span>
             </div>
             <div class="header-actions">
-                <button type="button" class="btn btn-success" id="btnSaveWiki" style="display:none;"><span aria-hidden="true">📤</span> <span data-i18n="saveToWiki">Uložit na wiki</span></button>
-                <button type="button" class="btn btn-secondary" id="btnNew"><span aria-hidden="true">📄</span> <span data-i18n="newDb">Nová</span></button>
-                <button type="button" class="btn btn-secondary" id="btnLoad"><span aria-hidden="true">📂</span> <span data-i18n="load">Načíst</span></button>
-                <button type="button" class="btn btn-primary" id="btnSave"><span aria-hidden="true">💾</span> <span data-i18n="save">Uložit</span></button>
-                <button type="button" class="btn btn-secondary" id="btnCopyJson"><span aria-hidden="true">📋</span> <span data-i18n="copyJson">Kopírovat JSON</span></button>
-                <button type="button" class="btn btn-secondary" id="btnPasteJson"><span aria-hidden="true">📥</span> <span data-i18n="pasteJson">Vložit JSON</span></button>
+                <button type="button" class="btn btn-success" id="btnSaveWiki" style="display:none;" accesskey="s"><span aria-hidden="true">📤</span> <span data-i18n="saveToWiki">Uložit na wiki</span></button>
+                <button type="button" class="btn btn-secondary advanced-only" id="btnNew"><span aria-hidden="true">📄</span> <span data-i18n="newDb">Nová</span></button>
+                <button type="button" class="btn btn-secondary advanced-only" id="btnLoad"><span aria-hidden="true">📂</span> <span data-i18n="load">Načíst</span></button>
+                <button type="button" class="btn btn-primary" id="btnSave" accesskey="s"><span aria-hidden="true">💾</span> <span data-i18n="save">Uložit</span></button>
+                <button type="button" class="btn btn-secondary advanced-only" id="btnCopyJson"><span aria-hidden="true">📋</span> <span data-i18n="copyJson">Kopírovat JSON</span></button>
+                <button type="button" class="btn btn-secondary advanced-only" id="btnPasteJson"><span aria-hidden="true">📥</span> <span data-i18n="pasteJson">Vložit JSON</span></button>
+                <div class="global-search">
+                    <input type="search" id="globalSearchInput" placeholder="🔍 Hledat..." data-i18n-placeholder="globalSearchPlaceholder" aria-label="Globální vyhledávání">
+                </div>
                 <div class="quick-create-selector">
-                    <select id="quickCreateSelect" aria-label="Rychlé vytvoření záznamu">
+                    <select id="quickCreateSelect" aria-label="Rychlé vytvoření záznamu" accesskey="q">
                         <option value="" data-i18n="quickCreate">➕ Nový záznam...</option>
                     </select>
                 </div>
-                <div class="language-selector">
+                <div class="advanced-mode-toggle">
+                    <input type="checkbox" id="advancedModeToggle" accesskey="x">
+                    <label for="advancedModeToggle" data-i18n="allFeatures">Všechny funkce</label>
+                </div>
+                <div class="language-selector advanced-only">
                     <select id="langSelect" aria-label="Jazyk">
                         <option value="cs">🇨🇿 Čeština</option>
                         <option value="en">🇬🇧 English</option>
@@ -392,9 +499,12 @@
                 </div>
             </div>
         </div>
-        <div class="table-tabs" id="tableTabs"></div>
         <input type="file" id="fileInput" accept=".jsondb" hidden>
     </header>
+
+    <nav aria-label="Tabulky databáze">
+        <div class="table-tabs" id="tableTabs" role="tablist"></div>
+    </nav>
 
     <main id="main-content">
         <div id="tableContents"></div>
@@ -402,8 +512,9 @@
         <!-- Classification Section (Zatřídění) -->
         <div class="tab-content" id="classification-content">
             <div class="sub-tabs">
-                <button type="button" class="sub-tab active" data-subtab="class-collections" data-i18n="collections">Kolekce</button>
-                <button type="button" class="sub-tab" data-subtab="class-tags" data-i18n="tags">Tagy</button>
+                <button type="button" class="sub-tab active" data-subtab="class-collections" data-i18n="collections" accesskey="c">Kolekce</button>
+                <button type="button" class="sub-tab" data-subtab="class-tags" data-i18n="tags" accesskey="t">Tagy</button>
+                <button type="button" class="sub-tab" data-subtab="class-notes" data-i18n="notes" accesskey="m">Poznámky</button>
             </div>
 
             <!-- Collections Sub-tab -->
@@ -439,6 +550,27 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Notes Sub-tab -->
+            <div class="sub-content" id="class-notes">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 data-i18n="notes">Poznámky</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="notes-filter-bar">
+                            <button type="button" class="btn btn-sm btn-secondary notes-filter-btn active" data-filter="all" data-i18n="allNotes">Všechny</button>
+                            <button type="button" class="btn btn-sm btn-secondary notes-filter-btn" data-filter="unresolved" data-i18n="unresolvedNotes">Nevyřízené</button>
+                            <button type="button" class="btn btn-sm btn-secondary notes-filter-btn" data-filter="resolved" data-i18n="resolvedNotes">Vyřízené</button>
+                        </div>
+                        <div id="notesListGlobal"></div>
+                        <div id="emptyNotes" class="empty-state" hidden>
+                            <div class="empty-state-icon">📝</div>
+                            <p data-i18n="noNotesInDatabase">V databázi nejsou žádné poznámky.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Management Section -->
@@ -447,6 +579,7 @@
                 <button type="button" class="sub-tab active" data-subtab="sub-database" data-i18n="database">Databáze</button>
                 <button type="button" class="sub-tab" data-subtab="sub-tables" data-i18n="tables">Tabulky</button>
                 <button type="button" class="sub-tab" data-subtab="sub-tools" data-i18n="tools">Nástroje</button>
+                <button type="button" class="sub-tab" data-subtab="sub-shortcuts" data-i18n="keyboardShortcuts">Klávesové zkratky</button>
             </div>
 
             <!-- Database Sub-tab -->
@@ -529,6 +662,45 @@
                         <div class="inline-actions" style="margin-top: 0.5rem;">
                             <button type="button" class="btn btn-sm btn-secondary" id="btnCopyGenerated" hidden><span aria-hidden="true">📋</span> <span data-i18n="copy">Kopírovat</span></button>
                         </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Keyboard Shortcuts Sub-tab -->
+            <div class="sub-content" id="sub-shortcuts">
+                <div class="card">
+                    <div class="card-header"><h2 data-i18n="keyboardShortcuts">Klávesové zkratky</h2></div>
+                    <div class="card-body">
+                        <p style="margin-bottom: 1rem; color: var(--text-muted);" data-i18n="shortcutDescription">Klávesové zkratky používají modifikátor prohlížeče (Alt, Alt+Shift, Ctrl+Option)</p>
+                        <table class="management-table">
+                            <thead><tr>
+                                <th data-i18n="accesskeyModifier">Modifikátor + klávesa</th>
+                                <th data-i18n="description">Popis</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr><td><kbd>Mod</kbd>+<kbd>S</kbd></td><td data-i18n="shortcutSave">Uložit databázi</td></tr>
+                                <tr><td><kbd>Mod</kbd>+<kbd>X</kbd></td><td data-i18n="shortcutToggleMode">Přepnout režim (základní/pokročilý)</td></tr>
+                                <tr><td><kbd>Mod</kbd>+<kbd>N</kbd></td><td data-i18n="shortcutNewRecord">Nový záznam v aktuální tabulce</td></tr>
+                                <tr><td><kbd>Mod</kbd>+<kbd>Q</kbd></td><td data-i18n="shortcutQuickCreate">Rychlé vytvoření záznamu</td></tr>
+                                <tr><td><kbd>Mod</kbd>+<kbd>U</kbd></td><td data-i18n="shortcutSaveRecord">Uložit záznam (v modálu)</td></tr>
+                                <tr><td><kbd>Mod</kbd>+<kbd>Z</kbd></td><td data-i18n="shortcutClassification">Přejít do zatřídění</td></tr>
+                                <tr><td><kbd>Mod</kbd>+<kbd>C</kbd></td><td data-i18n="shortcutCollections">Přejít do kolekcí</td></tr>
+                                <tr><td><kbd>Mod</kbd>+<kbd>T</kbd></td><td data-i18n="shortcutTags">Přejít do tagů</td></tr>
+                                <tr><td><kbd>Mod</kbd>+<kbd>M</kbd></td><td data-i18n="shortcutNotes">Přejít do poznámek</td></tr>
+                            </tbody>
+                        </table>
+                        <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem;" data-i18n="directShortcuts">Přímé zkratky (bez modifikátoru)</h3>
+                        <table class="management-table">
+                            <thead><tr>
+                                <th data-i18n="key">Klávesa</th>
+                                <th data-i18n="description">Popis</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr><td><kbd>↑</kbd> <kbd>↓</kbd></td><td data-i18n="shortcutArrows">Navigace v tabulce</td></tr>
+                                <tr><td><kbd>E</kbd></td><td data-i18n="shortcutEdit">Upravit vybraný záznam</td></tr>
+                                <tr><td><kbd>V</kbd></td><td data-i18n="shortcutView">Zobrazit vybraný záznam</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -632,8 +804,10 @@
             </div>
             <div class="modal-body"><form id="recordForm"></form></div>
             <div class="modal-footer">
+                <div class="checkbox-group" style="margin-right: auto;"><input type="checkbox" id="openAfterSave"><label for="openAfterSave" data-i18n="openAfterSave">Otevřít zobrazení</label></div>
                 <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
-                <button type="button" class="btn btn-primary" id="btnSaveRecord" data-i18n="save">Uložit</button>
+                <button type="button" class="btn btn-secondary" id="btnSaveAndAddAnother" hidden><span aria-hidden="true">➕</span> <span data-i18n="saveAndAddAnother">Uložit a přidat další</span></button>
+                <button type="button" class="btn btn-primary" id="btnSaveRecord" data-i18n="save" accesskey="u">Uložit</button>
             </div>
         </div>
     </div>
@@ -648,7 +822,10 @@
             <div class="modal-body" id="viewRecordContent"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-modal-close data-i18n="close">Zavřít</button>
+                <button type="button" class="btn btn-secondary" id="btnRefreshView" title="Obnovit obsah"><span aria-hidden="true">🔄</span> <span data-i18n="refresh">Obnovit</span></button>
                 <button type="button" class="btn btn-secondary" id="btnStructureFromView"><span aria-hidden="true">🌳</span> <span data-i18n="structure">Struktura</span></button>
+                <button type="button" class="btn btn-secondary" id="btnDuplicateRecord"><span aria-hidden="true">📋</span> <span data-i18n="duplicate">Duplikovat</span></button>
+                <button type="button" class="btn btn-secondary" id="btnToggleLock"><span aria-hidden="true">🔒</span> <span data-i18n="lockRecord">Zamknout</span></button>
                 <button type="button" class="btn btn-primary" id="btnEditFromView" data-i18n="edit">Upravit</button>
             </div>
         </div>
@@ -718,6 +895,7 @@
             <div class="modal-body" id="viewCollectionContent"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-modal-close data-i18n="close">Zavřít</button>
+                <button type="button" class="btn btn-secondary" id="btnRefreshCollection" title="Obnovit obsah"><span aria-hidden="true">🔄</span></button>
                 <button type="button" class="btn btn-danger" id="btnDeleteCollectionFromView" data-i18n="delete">Smazat</button>
                 <button type="button" class="btn btn-primary" id="btnEditCollectionFromView" data-i18n="edit">Upravit</button>
             </div>
@@ -734,6 +912,7 @@
             <div class="modal-body" id="viewTagContent"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-modal-close data-i18n="close">Zavřít</button>
+                <button type="button" class="btn btn-secondary" id="btnRefreshTag" title="Obnovit obsah"><span aria-hidden="true">🔄</span></button>
                 <button type="button" class="btn btn-danger" id="btnDeleteTagFromView" data-i18n="delete">Smazat</button>
                 <button type="button" class="btn btn-primary" id="btnEditTagFromView" data-i18n="edit">Upravit</button>
             </div>
@@ -786,6 +965,22 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-modal-close data-i18n="cancel">Zrušit</button>
                 <button type="button" class="btn btn-primary" id="btnConfirmAddTag" data-i18n="assignTags">Přiřadit tag</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Search Results Modal -->
+    <div class="modal-backdrop" id="searchResultsModal" hidden>
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 id="searchResultsTitle">🔍 Výsledky hledání</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="searchResultsList" class="search-results-list"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="close">Zavřít</button>
             </div>
         </div>
     </div>
@@ -945,6 +1140,7 @@
                     <input type="checkbox" id="importHasHeader" checked>
                     <label for="importHasHeader" data-i18n="hasHeader">První řádek obsahuje názvy sloupců</label>
                 </div>
+                <button type="button" class="btn btn-sm btn-secondary" id="btnPreviewImport" style="margin-top: 0.5rem;"><span aria-hidden="true">👁️</span> <span data-i18n="previewImport">Zobrazit náhled mapování</span></button>
                 <div id="importPreview"></div>
             </div>
             <div class="modal-footer">
@@ -1004,7 +1200,7 @@
                 typeNumber: "Číslo", typeDate: "Datum", typeBoolean: "Ano/Ne", typeSelect: "Výběr ze seznamu",
                 typeParent: "Nadřazený záznam", typeChildren: "Podřízené záznamy", typeComposite: "Složený", typeUrl: "URL odkaz", editTable: "Upravit", editField: "Upravit pole",
                 compositeFields: "Vložit pole:", compositeTemplate: "Šablona složeného pole", createNew: "Vytvořit nový", fieldGroup: "Seskupovat záznamy", groupCollapsed: "sbaleno", groupExpanded: "rozbaleno", addChild: "Přidat podřízený", copyField: "Kopírovat", copiedToClipboard: "Zkopírováno do schránky",
-                collections: "Kolekce", tags: "Tagy", addCollection: "Přidat kolekci", addTag: "Přidat tag", collectionName: "Název kolekce", tagName: "Název tagu", color: "Barva", noCollections: "Zatím nemáte žádné kolekce.", noTags: "Zatím nemáte žádné tagy.", collectionMembers: "záznamů", confirmDeleteCollection: "Smazat tuto kolekci?", confirmDeleteTag: "Smazat tento tag?", addToCollection: "Přidat do kolekce", removeFromCollection: "Odebrat z kolekce", assignTags: "Přiřadit tagy", relatedRecords: "Související záznamy", inCollection: "V kolekci", withTag: "S tagem", allCollections: "Všechny kolekce", allTags: "Všechny tagy", viewCollection: "Zobrazit kolekci", collectionContents: "Obsah kolekce", backToTables: "Zpět na tabulky", recordsInCollection: "Záznamy v kolekci", noRecordsInCollection: "Kolekce neobsahuje žádné záznamy.", fromTable: "z tabulky", manageCollections: "Spravovat kolekce", manageTags: "Spravovat tagy", classification: "Zatřídění", description: "Popis", collectionDescription: "Popis kolekce", selectCollection: "Vyberte kolekci", selectTag: "Vyberte tag", createNewCollection: "Vytvořit novou kolekci", createNewTag: "Vytvořit nový tag", removeFromThisCollection: "Odebrat z této kolekce", removeThisTag: "Odebrat tento tag", collectionDetails: "Podrobnosti kolekce", tagDetails: "Podrobnosti tagu", editCollection: "Upravit kolekci", editTag: "Upravit tag", recordsWithTag: "Záznamy s tagem", quickCreate: "➕ Nový záznam...", structure: "Struktura", textView: "Textový pohled", graphView: "Grafický pohled", showStructure: "Zobrazit strukturu", noDescendants: "Tento záznam nemá žádné podřízené záznamy.", loadMore: "Načíst více...", loadAll: "Načíst všechny", descendants: "potomků", selectedRecords: "vybráno", bulkEditField: "Upravit pole", clearSelection: "Zrušit výběr", selectAll: "Vybrat vše", newValue: "Nová hodnota", apply: "Použít", confirmBulkDelete: "Opravdu smazat {count} záznamů?", addedToCollection: "Přidáno {count} záznamů do kolekce.", addedTag: "Tag přidán k {count} záznamům.", recordFields: "Pole záznamu", bulkEditFields: "Hromadná úprava polí", addAnotherField: "Přidat další pole"
+                collections: "Kolekce", tags: "Tagy", addCollection: "Přidat kolekci", addTag: "Přidat tag", collectionName: "Název kolekce", tagName: "Název tagu", color: "Barva", noCollections: "Zatím nemáte žádné kolekce.", noTags: "Zatím nemáte žádné tagy.", collectionMembers: "záznamů", confirmDeleteCollection: "Smazat tuto kolekci?", confirmDeleteTag: "Smazat tento tag?", addToCollection: "Přidat do kolekce", removeFromCollection: "Odebrat z kolekce", assignTags: "Přiřadit tagy", relatedRecords: "Související záznamy", inCollection: "V kolekci", withTag: "S tagem", allCollections: "Všechny kolekce", allTags: "Všechny tagy", viewCollection: "Zobrazit kolekci", collectionContents: "Obsah kolekce", backToTables: "Zpět na tabulky", recordsInCollection: "Záznamy v kolekci", noRecordsInCollection: "Kolekce neobsahuje žádné záznamy.", fromTable: "z tabulky", manageCollections: "Spravovat kolekce", manageTags: "Spravovat tagy", classification: "Zatřídění", description: "Popis", collectionDescription: "Popis kolekce", selectCollection: "Vyberte kolekci", selectTag: "Vyberte tag", createNewCollection: "Vytvořit novou kolekci", createNewTag: "Vytvořit nový tag", removeFromThisCollection: "Odebrat z této kolekce", removeThisTag: "Odebrat tento tag", collectionDetails: "Podrobnosti kolekce", tagDetails: "Podrobnosti tagu", editCollection: "Upravit kolekci", editTag: "Upravit tag", recordsWithTag: "Záznamy s tagem", quickCreate: "➕ Nový záznam...", structure: "Struktura", textView: "Textový pohled", graphView: "Grafický pohled", showStructure: "Zobrazit strukturu", noDescendants: "Tento záznam nemá žádné podřízené záznamy.", loadMore: "Načíst více...", loadAll: "Načíst všechny", descendants: "potomků", selectedRecords: "vybráno", bulkEditField: "Upravit pole", clearSelection: "Zrušit výběr", selectAll: "Vybrat vše", newValue: "Nová hodnota", apply: "Použít", confirmBulkDelete: "Opravdu smazat {count} záznamů?", addedToCollection: "Přidáno {count} záznamů do kolekce.", addedTag: "Tag přidán k {count} záznamům.", recordFields: "Pole záznamu", bulkEditFields: "Hromadná úprava polí", addAnotherField: "Přidat další pole", openAfterSave: "Otevřít zobrazení", ancestors: "Předci", showStructureFrom: "Zobrazit strukturu od tohoto záznamu", order: "Pořadí", tableName: "Název tabulky", fields: "Pole", records: "Záznamy", manageFields: "Spravovat pole", moveUp: "Posunout nahoru", moveDown: "Posunout dolů", fieldName: "Název pole", type: "Typ", options: "Možnosti", primary: "Primární", filter: "Filtr", group: "Seskupit", duplicate: "Duplikovat", saveAndAddAnother: "Uložit a přidat další", searchResults: "Výsledky hledání", noSearchResults: "Žádné výsledky nebyly nalezeny.", globalSearchPlaceholder: "🔍 Hledat...", refresh: "Obnovit", previewImport: "Zobrazit náhled mapování", columnMapping: "Mapování sloupců", targetField: "Cílové pole", unmapped: "Nenamapováno", column: "Sloupec", sampleData: "Ukázka dat", rows: "řádků", noDataToPreview: "Vložte data pro zobrazení náhledu", allRecords: "Všechny záznamy", saveView: "Uložit pohled", viewName: "Název pohledu", newView: "Nový pohled", updateView: "Aktualizovat pohled", renameView: "Přejmenovat pohled", confirmDeleteView: "Opravdu smazat tento pohled?", lockRecord: "Zamknout záznam", unlockRecord: "Odemknout záznam", recordLocked: "Tento záznam je zamčený a nelze ho upravovat.", savedViews: "Uložené pohledy", notes: "Poznámky", addNote: "Přidat poznámku", editNote: "Upravit poznámku", deleteNote: "Smazat poznámku", noNotes: "Žádné poznámky", noteText: "Text poznámky", noteResolved: "Vyřízeno", noteUnresolved: "Nevyřízeno", markResolved: "Označit jako vyřízené", markUnresolved: "Označit jako nevyřízené", confirmDeleteNote: "Opravdu smazat tuto poznámku?", allNotes: "Všechny poznámky", unresolvedNotes: "Nevyřízené", resolvedNotes: "Vyřízené", noNotesInDatabase: "V databázi nejsou žádné poznámky.", noteFor: "Poznámka k", notesCount: "poznámek", allFeatures: "Všechny funkce", showInSimpleMode: "Zobrazit v základním režimu", keyboardShortcuts: "Klávesové zkratky", shortcutSave: "Uložit databázi", shortcutToggleMode: "Přepnout režim (základní/pokročilý)", shortcutNewRecord: "Nový záznam v aktuální tabulce", shortcutQuickCreate: "Rychlé vytvoření záznamu", shortcutSaveRecord: "Uložit záznam (v modálu)", shortcutCollections: "Přejít do kolekcí", shortcutTags: "Přejít do tagů", shortcutNotes: "Přejít do poznámek", shortcutClassification: "Přejít do zatřídění", shortcutEdit: "Upravit vybraný záznam", shortcutView: "Zobrazit vybraný záznam", shortcutArrows: "Navigace v tabulce", shortcutDescription: "Klávesové zkratky používají modifikátor prohlížeče (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifikátor + klávesa", directShortcuts: "Přímé zkratky (bez modifikátoru)", key: "Klávesa"
             },
             en: {
                 skipToContent: "Skip to content", appName: "Database Editor", dbName: "Database name", newDb: "New", load: "Load", save: "Save",
@@ -1034,12 +1230,12 @@
                 typeNumber: "Number", typeDate: "Date", typeBoolean: "Yes/No", typeSelect: "Select from list",
                 typeParent: "Parent record", typeChildren: "Child records", typeComposite: "Composite", typeUrl: "URL link", editTable: "Edit", editField: "Edit field",
                 compositeFields: "Insert field:", compositeTemplate: "Composite field template", createNew: "Create new", fieldGroup: "Group records", groupCollapsed: "collapsed", groupExpanded: "expanded", addChild: "Add child", copyField: "Copy", copiedToClipboard: "Copied to clipboard",
-                collections: "Collections", tags: "Tags", addCollection: "Add collection", addTag: "Add tag", collectionName: "Collection name", tagName: "Tag name", color: "Color", noCollections: "You have no collections yet.", noTags: "You have no tags yet.", collectionMembers: "records", confirmDeleteCollection: "Delete this collection?", confirmDeleteTag: "Delete this tag?", addToCollection: "Add to collection", removeFromCollection: "Remove from collection", assignTags: "Assign tags", relatedRecords: "Related records", inCollection: "In collection", withTag: "With tag", allCollections: "All collections", allTags: "All tags", viewCollection: "View collection", collectionContents: "Collection contents", backToTables: "Back to tables", recordsInCollection: "Records in collection", noRecordsInCollection: "Collection contains no records.", fromTable: "from table", manageCollections: "Manage collections", manageTags: "Manage tags", classification: "Classification", description: "Description", collectionDescription: "Collection description", selectCollection: "Select collection", selectTag: "Select tag", createNewCollection: "Create new collection", createNewTag: "Create new tag", removeFromThisCollection: "Remove from this collection", removeThisTag: "Remove this tag", collectionDetails: "Collection details", tagDetails: "Tag details", editCollection: "Edit collection", editTag: "Edit tag", recordsWithTag: "Records with tag", quickCreate: "➕ New record...", structure: "Structure", textView: "Text view", graphView: "Graph view", showStructure: "Show structure", noDescendants: "This record has no child records.", loadMore: "Load more...", loadAll: "Load all", descendants: "descendants", selectedRecords: "selected", bulkEditField: "Edit field", clearSelection: "Clear selection", selectAll: "Select all", newValue: "New value", apply: "Apply", confirmBulkDelete: "Delete {count} records?", addedToCollection: "Added {count} records to collection.", addedTag: "Tag added to {count} records.", recordFields: "Record fields", bulkEditFields: "Bulk edit fields", addAnotherField: "Add another field"
+                collections: "Collections", tags: "Tags", addCollection: "Add collection", addTag: "Add tag", collectionName: "Collection name", tagName: "Tag name", color: "Color", noCollections: "You have no collections yet.", noTags: "You have no tags yet.", collectionMembers: "records", confirmDeleteCollection: "Delete this collection?", confirmDeleteTag: "Delete this tag?", addToCollection: "Add to collection", removeFromCollection: "Remove from collection", assignTags: "Assign tags", relatedRecords: "Related records", inCollection: "In collection", withTag: "With tag", allCollections: "All collections", allTags: "All tags", viewCollection: "View collection", collectionContents: "Collection contents", backToTables: "Back to tables", recordsInCollection: "Records in collection", noRecordsInCollection: "Collection contains no records.", fromTable: "from table", manageCollections: "Manage collections", manageTags: "Manage tags", classification: "Classification", description: "Description", collectionDescription: "Collection description", selectCollection: "Select collection", selectTag: "Select tag", createNewCollection: "Create new collection", createNewTag: "Create new tag", removeFromThisCollection: "Remove from this collection", removeThisTag: "Remove this tag", collectionDetails: "Collection details", tagDetails: "Tag details", editCollection: "Edit collection", editTag: "Edit tag", recordsWithTag: "Records with tag", quickCreate: "➕ New record...", structure: "Structure", textView: "Text view", graphView: "Graph view", showStructure: "Show structure", noDescendants: "This record has no child records.", loadMore: "Load more...", loadAll: "Load all", descendants: "descendants", selectedRecords: "selected", bulkEditField: "Edit field", clearSelection: "Clear selection", selectAll: "Select all", newValue: "New value", apply: "Apply", confirmBulkDelete: "Delete {count} records?", addedToCollection: "Added {count} records to collection.", addedTag: "Tag added to {count} records.", recordFields: "Record fields", bulkEditFields: "Bulk edit fields", addAnotherField: "Add another field", openAfterSave: "Open after save", ancestors: "Ancestors", showStructureFrom: "Show structure from this record", order: "Order", tableName: "Table name", fields: "Fields", records: "Records", manageFields: "Manage fields", moveUp: "Move up", moveDown: "Move down", fieldName: "Field name", type: "Type", options: "Options", primary: "Primary", filter: "Filter", group: "Group", duplicate: "Duplicate", saveAndAddAnother: "Save and add another", searchResults: "Search results", noSearchResults: "No results found.", globalSearchPlaceholder: "🔍 Search...", refresh: "Refresh", previewImport: "Preview mapping", columnMapping: "Column mapping", targetField: "Target field", unmapped: "Unmapped", column: "Column", sampleData: "Sample data", rows: "rows", noDataToPreview: "Paste data to see preview", allRecords: "All records", saveView: "Save view", viewName: "View name", newView: "New view", updateView: "Update view", renameView: "Rename view", confirmDeleteView: "Delete this view?", lockRecord: "Lock record", unlockRecord: "Unlock record", recordLocked: "This record is locked and cannot be edited.", savedViews: "Saved views", notes: "Notes", addNote: "Add note", editNote: "Edit note", deleteNote: "Delete note", noNotes: "No notes", noteText: "Note text", noteResolved: "Resolved", noteUnresolved: "Unresolved", markResolved: "Mark as resolved", markUnresolved: "Mark as unresolved", confirmDeleteNote: "Delete this note?", allNotes: "All notes", unresolvedNotes: "Unresolved", resolvedNotes: "Resolved", noNotesInDatabase: "No notes in database.", noteFor: "Note for", notesCount: "notes", allFeatures: "All features", showInSimpleMode: "Show in simple mode", keyboardShortcuts: "Keyboard shortcuts", shortcutSave: "Save database", shortcutToggleMode: "Toggle mode (simple/advanced)", shortcutNewRecord: "New record in current table", shortcutQuickCreate: "Quick create record", shortcutSaveRecord: "Save record (in modal)", shortcutCollections: "Go to collections", shortcutTags: "Go to tags", shortcutNotes: "Go to notes", shortcutClassification: "Go to classification", shortcutEdit: "Edit selected record", shortcutView: "View selected record", shortcutArrows: "Navigate in table", shortcutDescription: "Keyboard shortcuts use browser modifier (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifier + key", directShortcuts: "Direct shortcuts (no modifier)", key: "Key"
             }
         };
 
         let currentLang = localStorage.getItem('db-editor-lang') || 'cs';
-        let database = { meta: { name: 'Nová databáze', columnVisibility: {}, groupStates: {}, collections: [], tags: [] }, tables: [] };
+        let database = { meta: { name: 'Nová databáze', columnVisibility: {}, groupStates: {}, collections: [], tags: [], views: {}, notes: [] }, tables: [] };
         let activeTableId = null;
         let activeTab = 'management';
         let quickCreateMode = false;
@@ -1049,6 +1245,9 @@
         let tableSorts = {};
         let collectionFilter = null;
         let tagFilter = null;
+        let activeViewId = null;
+        let advancedMode = false; // Simple mode is default
+        let selectedRowIndex = -1; // Keyboard navigation in table
         let selectedRecords = {}; // { tableId: Set of recordIds }
         let editingFieldTableId = null;
         let currentRecordId = null;
@@ -1060,6 +1259,8 @@
         const generateId = () => 'id_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
         const t = (key, r = {}) => { let s = translations[currentLang]?.[key] || key; for (const [k, v] of Object.entries(r)) s = s.replace(`{${k}}`, v); return s; };
         const escapeHtml = s => s == null ? '' : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        // Safe attribute escape - handles all special chars including backticks and template literal syntax
+        const escapeAttr = s => s == null ? '' : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/`/g, '&#96;').replace(/\$/g, '&#36;');
         const getTableById = id => database.tables.find(tb => tb.id === id);
         const getRecordById = (tId, rId) => getTableById(tId)?.records.find(r => r.id === rId);
         function getPrimaryFieldValue(table, record) { 
@@ -1086,8 +1287,9 @@
 
         function autoSave() {
             try {
-                localStorage.setItem('db-editor-autosave', JSON.stringify(database));
-                localStorage.setItem('db-editor-autosave-tab', activeTab);
+                // Use sessionStorage so each tab has its own database
+                sessionStorage.setItem('db-editor-autosave', JSON.stringify(database));
+                sessionStorage.setItem('db-editor-autosave-tab', activeTab);
             } catch (e) {
                 console.warn('Auto-save failed:', e);
             }
@@ -1095,7 +1297,8 @@
 
         function loadAutoSave() {
             try {
-                const saved = localStorage.getItem('db-editor-autosave');
+                // Use sessionStorage so each tab has its own database
+                const saved = sessionStorage.getItem('db-editor-autosave');
                 if (saved) {
                     const data = JSON.parse(saved);
                     database = { 
@@ -1104,11 +1307,13 @@
                             columnVisibility: data.meta?.columnVisibility || {},
                             groupStates: data.meta?.groupStates || {},
                             collections: data.meta?.collections || [],
-                            tags: data.meta?.tags || []
+                            tags: data.meta?.tags || [],
+                            views: data.meta?.views || {},
+                            notes: data.meta?.notes || []
                         }, 
                         tables: data.tables || [] 
                     };
-                    const savedTab = localStorage.getItem('db-editor-autosave-tab');
+                    const savedTab = sessionStorage.getItem('db-editor-autosave-tab');
                     if (savedTab && (savedTab === 'management' || getTableById(savedTab))) {
                         activeTab = savedTab;
                         activeTableId = savedTab !== 'management' ? savedTab : (database.tables[0]?.id || null);
@@ -1130,7 +1335,19 @@
             document.documentElement.lang = currentLang;
         }
 
-        function openModal(id) { document.getElementById(id).hidden = false; document.body.style.overflow = 'hidden'; }
+        function openModal(id) { 
+            document.getElementById(id).hidden = false; 
+            document.body.style.overflow = 'hidden';
+            // Autofocus on first input/textarea (skip view modals)
+            const noFocusModals = ['viewRecordModal', 'viewCollectionModal', 'viewTagModal', 'confirmModal', 'structureModal', 'searchResultsModal'];
+            if (!noFocusModals.includes(id)) {
+                setTimeout(() => {
+                    const modal = document.getElementById(id);
+                    const firstInput = modal.querySelector('input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]), textarea, select');
+                    if (firstInput) firstInput.focus();
+                }, 50);
+            }
+        }
         function closeModal(id) { 
             document.getElementById(id).hidden = true; 
             document.body.style.overflow = ''; 
@@ -1187,11 +1404,17 @@
 
         function renderTableTabs() {
             const container = document.getElementById('tableTabs');
-            let html = database.tables.map(tb => 
-                `<button type="button" class="table-tab ${activeTab === tb.id ? 'active' : ''}" data-table-id="${tb.id}">${escapeHtml(tb.name)}</button>`
-            ).join('');
-            html += `<button type="button" class="table-tab classification-tab ${activeTab === 'classification' ? 'active' : ''}" data-table-id="classification">🏷️ ${t('classification')}</button>`;
-            html += `<button type="button" class="table-tab management-tab ${activeTab === 'management' ? 'active' : ''}" data-table-id="management">⚙️ ${t('management')}</button>`;
+            let html = database.tables.map(tb => {
+                // In simple mode, hide tables with showInSimpleMode=false
+                const hideInSimple = !advancedMode && tb.showInSimpleMode === false;
+                return `<button type="button" class="table-tab ${activeTab === tb.id ? 'active' : ''}" data-table-id="${tb.id}"${hideInSimple ? ' hidden' : ''}>${escapeHtml(tb.name)}</button>`;
+            }).join('');
+            const unresolvedNotesCount = (database.meta.notes || []).filter(n => !n.resolved).length;
+            const notesBadge = unresolvedNotesCount > 0 ? `<span class="notes-badge">${unresolvedNotesCount}</span>` : '';
+            html += `<button type="button" class="table-tab classification-tab ${activeTab === 'classification' ? 'active' : ''}" data-table-id="classification" accesskey="z">🏷️ ${t('classification')}${notesBadge}</button>`;
+            // Management tab - hidden in simple mode
+            const hideManagement = !advancedMode;
+            html += `<button type="button" class="table-tab management-tab ${activeTab === 'management' ? 'active' : ''}" data-table-id="management"${hideManagement ? ' hidden' : ''}>⚙️ ${t('management')}</button>`;
             container.innerHTML = html;
         }
         
@@ -1337,7 +1560,7 @@
                     break;
                 case 'select':
                     const opts = (field.options || '').split(',').map(o => o.trim()).filter(o => o);
-                    inputHtml = `<select id="${inputId}" class="bulk-edit-value" data-row="${rowId}"><option value="">-- ${t('selectField')} --</option>${opts.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join('')}</select>`;
+                    inputHtml = `<select id="${inputId}" class="bulk-edit-value" data-row="${rowId}"><option value="">-- ${t('selectField')} --</option>${opts.map(o => `<option value="${escapeAttr(o)}">${escapeHtml(o)}</option>`).join('')}</select>`;
                     break;
                 case 'parent':
                     const tt = getTableById(field.targetTableId);
@@ -1487,7 +1710,7 @@
             const count = getSelectedCount(tableId);
             if (count === 0) return;
             
-            showConfirm(t('confirmBulkDelete', { count }), () => {
+            confirmAction(t('confirmBulkDelete', { count }), () => {
                 const table = getTableById(tableId);
                 if (!table) return;
                 
@@ -1506,6 +1729,95 @@
                 clearSelection(tableId);
                 autoSave();
             });
+        }
+
+        // Global search
+        function performGlobalSearch(query) {
+            if (!query || query.length < 2) return [];
+            
+            const results = [];
+            const q = query.toLowerCase();
+            
+            database.tables.forEach(table => {
+                table.records.forEach(record => {
+                    let matchedFields = [];
+                    let matchScore = 0;
+                    
+                    table.fields.forEach(field => {
+                        if (field.type === 'children' || field.type === 'composite') return;
+                        
+                        let value = record.values[field.id];
+                        if (value == null) return;
+                        
+                        // For parent fields, get the display name
+                        if (field.type === 'parent' && value) {
+                            const tt = getTableById(field.targetTableId);
+                            const pr = tt ? getRecordById(field.targetTableId, value) : null;
+                            if (pr && tt) value = getPrimaryFieldValue(tt, pr);
+                        }
+                        
+                        const strValue = String(value).toLowerCase();
+                        if (strValue.includes(q)) {
+                            matchedFields.push({ field, value: String(value) });
+                            matchScore += field.primary ? 10 : 1;
+                        }
+                    });
+                    
+                    if (matchedFields.length > 0) {
+                        results.push({
+                            table,
+                            record,
+                            matchedFields,
+                            matchScore,
+                            primaryValue: getPrimaryFieldValue(table, record)
+                        });
+                    }
+                });
+            });
+            
+            // Sort by score (primary field matches first) and then by name
+            results.sort((a, b) => {
+                if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
+                return a.primaryValue.localeCompare(b.primaryValue, currentLang);
+            });
+            
+            return results.slice(0, 50); // Limit to 50 results
+        }
+        
+        function showSearchResults(query) {
+            const results = performGlobalSearch(query);
+            const container = document.getElementById('searchResultsList');
+            
+            document.getElementById('searchResultsTitle').textContent = `🔍 ${t('searchResults')}: "${query}"`;
+            
+            if (results.length === 0) {
+                container.innerHTML = `<div class="search-no-results">${t('noSearchResults')}</div>`;
+            } else {
+                const q = query.toLowerCase();
+                container.innerHTML = results.map(r => {
+                    // Create preview from matched fields
+                    const preview = r.matchedFields.slice(0, 2).map(mf => {
+                        const val = mf.value;
+                        // Highlight matching part
+                        const idx = val.toLowerCase().indexOf(q);
+                        if (idx >= 0) {
+                            const before = escapeHtml(val.substring(Math.max(0, idx - 20), idx));
+                            const match = escapeHtml(val.substring(idx, idx + query.length));
+                            const after = escapeHtml(val.substring(idx + query.length, idx + query.length + 30));
+                            return `${mf.field.name}: ...${before}<span class="search-result-highlight">${match}</span>${after}...`;
+                        }
+                        return `${mf.field.name}: ${escapeHtml(val.substring(0, 50))}`;
+                    }).join(' | ');
+                    
+                    return `<a href="#" class="search-result-item" data-action="viewFromSearch" data-table="${r.table.id}" data-record="${r.record.id}">
+                        <div class="search-result-table">${escapeHtml(r.table.name)}</div>
+                        <div class="search-result-name">${escapeHtml(r.primaryValue)}</div>
+                        <div class="search-result-preview">${preview}</div>
+                    </a>`;
+                }).join('');
+            }
+            
+            openModal('searchResultsModal');
         }
 
         function updateQuickCreateOptions() {
@@ -1532,27 +1844,56 @@
                 return true;
             });
 
-            // Build filters HTML
-            let filtersHtml = `<div class="search-box"><input type="search" class="table-search" data-table="${tableId}" placeholder="${t('searchPlaceholder')}" value="${escapeHtml(searchQuery)}"></div>`;
+            // Build filters HTML - search box always visible, select filters only in advanced mode
+            const searchHtml = `<div class="search-box"><input type="search" class="table-search" data-table="${tableId}" placeholder="${t('searchPlaceholder')}" value="${escapeAttr(searchQuery)}"></div>`;
+            let selectFiltersHtml = '';
             table.fields.filter(f => f.filter && f.type !== 'children').forEach(f => {
                 const vals = new Set(); let hasEmpty = false;
                 table.records.forEach(r => { const v = r.values[f.id]; if (v == null || v === '') hasEmpty = true; else vals.add(String(v)); });
-                const sorted = Array.from(vals).sort();
+                const sorted = Array.from(vals).sort((a, b) => {
+                    // For parent fields, sort by display name
+                    if (f.type === 'parent' && f.targetTableId) {
+                        const ttA = getTableById(f.targetTableId);
+                        const recA = ttA ? getRecordById(f.targetTableId, a) : null;
+                        const recB = ttA ? getRecordById(f.targetTableId, b) : null;
+                        const nameA = recA ? getPrimaryFieldValue(ttA, recA) : a;
+                        const nameB = recB ? getPrimaryFieldValue(ttA, recB) : b;
+                        return nameA.localeCompare(nameB, currentLang);
+                    }
+                    return a.localeCompare(b, currentLang);
+                });
                 const cv = filters[f.id] || '';
-                filtersHtml += `<div class="filter-item"><label>${escapeHtml(f.name)}</label><select class="table-filter" data-table="${tableId}" data-field="${f.id}"><option value="">${t('allValues')}</option>${hasEmpty ? `<option value="__null__" ${cv === '__null__' ? 'selected' : ''}>${t('noValue')}</option>` : ''}${sorted.map(v => `<option value="${escapeHtml(v)}" ${cv === v ? 'selected' : ''}>${f.type === 'boolean' ? (v === 'true' ? t('yes') : t('no')) : escapeHtml(v)}</option>`).join('')}</select></div>`;
+                
+                // Build options with proper display names
+                const optionsHtml = sorted.map(v => {
+                    let displayValue = v;
+                    if (f.type === 'parent' && f.targetTableId) {
+                        const tt = getTableById(f.targetTableId);
+                        const rec = tt ? getRecordById(f.targetTableId, v) : null;
+                        displayValue = rec ? getPrimaryFieldValue(tt, rec) : v;
+                    } else if (f.type === 'boolean') {
+                        displayValue = v === 'true' ? t('yes') : t('no');
+                    }
+                    return `<option value="${escapeAttr(v)}" ${cv === v ? 'selected' : ''}>${escapeHtml(displayValue)}</option>`;
+                }).join('');
+                
+                selectFiltersHtml += `<div class="filter-item"><label>${escapeHtml(f.name)}</label><select class="table-filter" data-table="${tableId}" data-field="${f.id}"><option value="">${t('allValues')}</option>${hasEmpty ? `<option value="__null__" ${cv === '__null__' ? 'selected' : ''}>${t('noValue')}</option>` : ''}${optionsHtml}</select></div>`;
             });
             
             // Collection filter
             if (database.meta.collections?.length > 0) {
                 const colFilterVal = collectionFilter || '';
-                filtersHtml += `<div class="filter-item"><label>${t('inCollection')}</label><select class="collection-filter" data-table="${tableId}"><option value="">${t('allCollections')}</option>${database.meta.collections.map(col => `<option value="${col.id}" ${colFilterVal === col.id ? 'selected' : ''}>${escapeHtml(col.name)}</option>`).join('')}</select></div>`;
+                selectFiltersHtml += `<div class="filter-item"><label>${t('inCollection')}</label><select class="collection-filter" data-table="${tableId}"><option value="">${t('allCollections')}</option>${database.meta.collections.map(col => `<option value="${col.id}" ${colFilterVal === col.id ? 'selected' : ''}>${escapeHtml(col.name)}</option>`).join('')}</select></div>`;
             }
             
             // Tag filter
             if (database.meta.tags?.length > 0) {
                 const tagFilterVal = tagFilter || '';
-                filtersHtml += `<div class="filter-item"><label>${t('withTag')}</label><select class="tag-filter" data-table="${tableId}"><option value="">${t('allTags')}</option>${database.meta.tags.map(tag => `<option value="${tag.id}" ${tagFilterVal === tag.id ? 'selected' : ''}>${escapeHtml(tag.name)}</option>`).join('')}</select></div>`;
+                selectFiltersHtml += `<div class="filter-item"><label>${t('withTag')}</label><select class="tag-filter" data-table="${tableId}"><option value="">${t('allTags')}</option>${database.meta.tags.map(tag => `<option value="${tag.id}" ${tagFilterVal === tag.id ? 'selected' : ''}>${escapeHtml(tag.name)}</option>`).join('')}</select></div>`;
             }
+            
+            // Combine: search always, select filters only in advanced mode
+            const filtersHtml = searchHtml + (advancedMode ? selectFiltersHtml : '');
 
             // Filter records
             let filtered = table.records.filter(r => {
@@ -1696,8 +2037,9 @@
                     if (!isCollapsed) {
                         group.records.forEach(r => {
                             const isSelected = selected.has(r.id);
-                            const cells = visibleFields.map(f => `<td>${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
-                            groupedHtml += `<tr id="${groupId}"><td class="checkbox-col"><input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}">✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}">🗑️</button></td></tr>`;
+                            const lockIcon = r.locked ? '<span class="lock-icon" title="' + t('recordLocked') + '">🔒</span> ' : '';
+                            const cells = visibleFields.map(f => `<td>${f.primary ? lockIcon : ''}${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
+                            groupedHtml += `<tr id="${groupId}"><td class="checkbox-col"><input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}"${r.locked ? ' disabled' : ''}>✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}"${r.locked ? ' disabled' : ''}>🗑️</button></td></tr>`;
                         });
                     }
                     groupedHtml += `</tbody>`;
@@ -1720,29 +2062,58 @@
 
                 const bodyRows = filtered.map(r => {
                     const isSelected = selected.has(r.id);
-                    const cells = visibleFields.map(f => `<td>${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
-                    return `<tr><td class="checkbox-col"><input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}">✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}">🗑️</button></td></tr>`;
+                    const lockIcon = r.locked ? '<span class="lock-icon" title="' + t('recordLocked') + '">🔒</span> ' : '';
+                    const cells = visibleFields.map(f => `<td>${f.primary ? lockIcon : ''}${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
+                    return `<tr><td class="checkbox-col"><input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}"${r.locked ? ' disabled' : ''}>✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}"${r.locked ? ' disabled' : ''}>🗑️</button></td></tr>`;
                 }).join('');
 
                 tableHtml = `<div class="table-wrapper"><table><thead><tr>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table></div>`;
             }
+
+            // Build views bar (accessible tabs)
+            const views = getTableViews(tableId);
+            const hasActiveView = activeViewId && views.some(v => v.id === activeViewId);
+            
+            let viewsHtml = '<div class="views-bar">';
+            viewsHtml += '<div class="views-tabs" role="tablist" aria-label="' + t('savedViews') + '">';
+            viewsHtml += `<button type="button" role="tab" aria-selected="${!activeViewId}" tabindex="${!activeViewId ? '0' : '-1'}" data-view="" data-table="${tableId}">${t('allRecords')}</button>`;
+            views.forEach((v, idx) => {
+                const isActive = activeViewId === v.id;
+                viewsHtml += `<button type="button" role="tab" aria-selected="${isActive}" tabindex="${isActive ? '0' : '-1'}" data-view="${v.id}" data-table="${tableId}">${escapeHtml(v.name)}</button>`;
+            });
+            viewsHtml += '</div>';
+            
+            // View actions toolbar - hidden in simple mode using CSS class
+            if (advancedMode) {
+                viewsHtml += '<div class="views-actions">';
+                viewsHtml += `<button type="button" class="btn btn-sm btn-success view-save-btn" data-table="${tableId}" title="${t('saveView')}"><span aria-hidden="true">➕</span> ${t('saveView')}</button>`;
+                viewsHtml += `<button type="button" class="btn btn-sm btn-secondary view-update-btn" data-table="${tableId}" ${!hasActiveView ? 'disabled' : ''} title="${t('updateView')}"><span aria-hidden="true">💾</span> ${t('updateView')}</button>`;
+                viewsHtml += `<button type="button" class="btn btn-sm btn-secondary view-rename-btn" data-table="${tableId}" ${!hasActiveView ? 'disabled' : ''} title="${t('renameView')}"><span aria-hidden="true">✏️</span> ${t('renameView')}</button>`;
+                viewsHtml += `<button type="button" class="btn btn-sm btn-danger view-delete-btn" data-table="${tableId}" ${!hasActiveView ? 'disabled' : ''} title="${t('delete')}"><span aria-hidden="true">🗑️</span> ${t('delete')}</button>`;
+                viewsHtml += '</div>';
+            }
+            viewsHtml += '</div>';
 
             container.innerHTML = `
                 <div class="card">
                     <div class="card-header">
                         <h2>${escapeHtml(table.name)}</h2>
                         <div class="inline-actions">
-                            <button type="button" class="btn btn-sm btn-secondary export-table-btn" data-table="${tableId}"><span aria-hidden="true">📤</span> ${t('export')}</button>
-                            <button type="button" class="btn btn-sm btn-secondary import-table-btn" data-table="${tableId}"><span aria-hidden="true">📥</span> ${t('import')}</button>
-                            <button type="button" class="btn btn-success add-record-btn" data-table="${tableId}"><span aria-hidden="true">➕</span> ${t('addRecord')}</button>
+                            <button type="button" class="btn btn-sm btn-secondary export-table-btn advanced-only" data-table="${tableId}"><span aria-hidden="true">📤</span> ${t('export')}</button>
+                            <button type="button" class="btn btn-sm btn-secondary import-table-btn advanced-only" data-table="${tableId}"><span aria-hidden="true">📥</span> ${t('import')}</button>
+                            <button type="button" class="btn btn-success add-record-btn" data-table="${tableId}" accesskey="n"><span aria-hidden="true">➕</span> ${t('addRecord')}</button>
                         </div>
                     </div>
                     <div class="card-body">
+                        ${viewsHtml}
                         <div class="filters-section">${filtersHtml}</div>
                         ${renderBulkActionsBar(tableId)}
                         <div class="record-count">${t('recordsShowing', { filtered: filtered.length, total: table.records.length })}</div>
                         ${tableHtml}
                         <details><summary>${t('columnVisibility')}</summary><div class="column-toggles">${togglesHtml}</div></details>
+                        <div class="card-footer-actions">
+                            <button type="button" class="btn btn-success add-record-btn" data-table="${tableId}"><span aria-hidden="true">➕</span> ${t('addRecord')}</button>
+                        </div>
                     </div>
                 </div>
             `;
@@ -1860,29 +2231,190 @@
                 </div>`;
             }).join('');
         }
+        
+        // Notes management
+        let notesFilter = 'all';
+        
+        function getRecordNotes(tableId, recordId) {
+            if (!database.meta.notes) database.meta.notes = [];
+            return database.meta.notes.filter(n => n.tableId === tableId && n.recordId === recordId);
+        }
+        
+        function addNote(tableId, recordId, text) {
+            if (!database.meta.notes) database.meta.notes = [];
+            const note = {
+                id: generateId(),
+                tableId: tableId,
+                recordId: recordId,
+                text: text,
+                createdAt: Date.now(),
+                resolved: false
+            };
+            database.meta.notes.push(note);
+            autoSave();
+            return note;
+        }
+        
+        function updateNote(noteId, text) {
+            const note = database.meta.notes?.find(n => n.id === noteId);
+            if (note) {
+                note.text = text;
+                autoSave();
+            }
+        }
+        
+        function deleteNote(noteId) {
+            if (!database.meta.notes) return;
+            const idx = database.meta.notes.findIndex(n => n.id === noteId);
+            if (idx !== -1) {
+                database.meta.notes.splice(idx, 1);
+                autoSave();
+            }
+        }
+        
+        function toggleNoteResolved(noteId) {
+            const note = database.meta.notes?.find(n => n.id === noteId);
+            if (note) {
+                note.resolved = !note.resolved;
+                autoSave();
+            }
+        }
+        
+        function renderNotesSection(tableId, recordId, container) {
+            const notes = getRecordNotes(tableId, recordId);
+            let html = `<div class="notes-section">
+                <h4><span aria-hidden="true">📝</span> ${t('notes')} (${notes.length})</h4>`;
+            
+            if (notes.length > 0) {
+                html += '<div class="notes-list">';
+                notes.sort((a, b) => b.createdAt - a.createdAt).forEach(note => {
+                    const date = new Date(note.createdAt).toLocaleString(currentLang);
+                    const statusClass = note.resolved ? 'resolved' : 'unresolved';
+                    const statusText = note.resolved ? t('noteResolved') : t('noteUnresolved');
+                    const toggleText = note.resolved ? t('markUnresolved') : t('markResolved');
+                    html += `
+                        <div class="note-item ${statusClass}" data-note="${note.id}">
+                            <div class="note-header">
+                                <span class="note-status ${statusClass}">${note.resolved ? '✓' : '○'} ${statusText}</span>
+                                <span class="note-date">${date}</span>
+                            </div>
+                            <div class="note-text">${escapeHtml(note.text)}</div>
+                            <div class="note-actions">
+                                <button type="button" class="btn btn-sm btn-secondary note-toggle-btn" data-note="${note.id}" title="${toggleText}">${note.resolved ? '↩️' : '✓'}</button>
+                                <button type="button" class="btn btn-sm btn-secondary note-edit-btn" data-note="${note.id}" title="${t('editNote')}">✏️</button>
+                                <button type="button" class="btn btn-sm btn-danger note-delete-btn" data-note="${note.id}" title="${t('deleteNote')}">🗑️</button>
+                            </div>
+                        </div>`;
+                });
+                html += '</div>';
+            } else {
+                html += `<p style="color: var(--text-muted); font-style: italic;">${t('noNotes')}</p>`;
+            }
+            
+            // Add note form
+            html += `
+                <div class="add-note-form">
+                    <textarea id="newNoteText" placeholder="${t('noteText')}..." rows="2"></textarea>
+                    <button type="button" class="btn btn-sm btn-success" id="btnAddNote" data-table="${tableId}" data-record="${recordId}">
+                        <span aria-hidden="true">➕</span> ${t('addNote')}
+                    </button>
+                </div>
+            </div>`;
+            
+            container.innerHTML = html;
+        }
+        
+        function renderGlobalNotesList() {
+            if (!database.meta.notes) database.meta.notes = [];
+            const container = document.getElementById('notesListGlobal');
+            const empty = document.getElementById('emptyNotes');
+            
+            // Filter notes
+            let notes = database.meta.notes.slice();
+            if (notesFilter === 'unresolved') notes = notes.filter(n => !n.resolved);
+            else if (notesFilter === 'resolved') notes = notes.filter(n => n.resolved);
+            
+            if (notes.length === 0) { 
+                container.innerHTML = ''; 
+                empty.hidden = false; 
+                return; 
+            }
+            empty.hidden = true;
+            
+            // Sort by date (newest first)
+            notes.sort((a, b) => b.createdAt - a.createdAt);
+            
+            let html = '<table class="notes-table"><thead><tr>';
+            html += `<th>${t('noteText')}</th>`;
+            html += `<th>${t('record')}</th>`;
+            html += `<th>${t('table')}</th>`;
+            html += `<th>${t('date')}</th>`;
+            html += `<th>${t('status')}</th>`;
+            html += `<th>${t('actions')}</th>`;
+            html += '</tr></thead><tbody>';
+            
+            notes.forEach(note => {
+                const table = getTableById(note.tableId);
+                const record = getRecordById(note.tableId, note.recordId);
+                const tableName = table ? table.name : '?';
+                const recordName = record && table ? getPrimaryFieldValue(table, record) : '?';
+                const date = new Date(note.createdAt).toLocaleDateString(currentLang);
+                const statusClass = note.resolved ? 'resolved' : 'unresolved';
+                const statusText = note.resolved ? t('noteResolved') : t('noteUnresolved');
+                const toggleText = note.resolved ? t('markUnresolved') : t('markResolved');
+                const previewText = note.text.length > 50 ? note.text.substring(0, 50) + '...' : note.text;
+                
+                html += `<tr>
+                    <td class="note-preview" title="${escapeAttr(note.text)}">${escapeHtml(previewText)}</td>
+                    <td><a href="#" class="record-link" data-action="view" data-table="${note.tableId}" data-record="${note.recordId}">${escapeHtml(recordName)}</a></td>
+                    <td>${escapeHtml(tableName)}</td>
+                    <td>${date}</td>
+                    <td><span class="note-status ${statusClass}">${note.resolved ? '✓' : '○'} ${statusText}</span></td>
+                    <td class="note-actions">
+                        <button type="button" class="btn btn-sm btn-secondary note-toggle-btn" data-note="${note.id}" title="${toggleText}">${note.resolved ? '↩️' : '✓'}</button>
+                        <button type="button" class="btn btn-sm btn-danger note-delete-btn" data-note="${note.id}" title="${t('deleteNote')}">🗑️</button>
+                    </td>
+                </tr>`;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
 
         function renderTablesList() {
             const container = document.getElementById('tablesList');
             const empty = document.getElementById('emptyTables');
             if (database.tables.length === 0) { container.innerHTML = ''; empty.hidden = false; document.getElementById('fieldsCard').hidden = true; return; }
             empty.hidden = true;
-            container.innerHTML = database.tables.map((tb, i) => `
-                <div class="field-item">
-                    <div class="move-buttons">
-                        <button type="button" class="btn btn-sm btn-secondary btn-icon move-table-btn" data-table="${tb.id}" data-dir="-1" ${i === 0 ? 'disabled' : ''}>▲</button>
-                        <button type="button" class="btn btn-sm btn-secondary btn-icon move-table-btn" data-table="${tb.id}" data-dir="1" ${i === database.tables.length - 1 ? 'disabled' : ''}>▼</button>
-                    </div>
-                    <div class="field-item-info">
-                        <div class="field-item-name">${escapeHtml(tb.name)}</div>
-                        <div class="field-item-meta">${tb.fields.length} polí, ${tb.records.length} záznamů</div>
-                    </div>
-                    <div class="field-item-actions">
-                        <button type="button" class="btn btn-sm btn-secondary show-fields-btn" data-table="${tb.id}">📋 Pole</button>
-                        <button type="button" class="btn btn-sm btn-secondary edit-table-btn" data-table="${tb.id}">✏️</button>
-                        <button type="button" class="btn btn-sm btn-danger delete-table-btn" data-table="${tb.id}">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
+            let html = `<table class="management-table">
+                <thead><tr>
+                    <th class="col-order">${t('order')}</th>
+                    <th>${t('tableName')}</th>
+                    <th>${t('fields')}</th>
+                    <th>${t('records')}</th>
+                    <th>${t('showInSimpleMode')}</th>
+                    <th class="col-actions">${t('actions')}</th>
+                </tr></thead><tbody>`;
+            database.tables.forEach((tb, i) => {
+                const showInSimple = tb.showInSimpleMode !== false; // default true
+                html += `<tr>
+                    <td class="col-order">
+                        <button type="button" class="btn btn-sm btn-secondary btn-icon move-table-btn" data-table="${tb.id}" data-dir="-1" ${i === 0 ? 'disabled' : ''} title="${t('moveUp')}">▲</button>
+                        <button type="button" class="btn btn-sm btn-secondary btn-icon move-table-btn" data-table="${tb.id}" data-dir="1" ${i === database.tables.length - 1 ? 'disabled' : ''} title="${t('moveDown')}">▼</button>
+                    </td>
+                    <td><strong>${escapeHtml(tb.name)}</strong></td>
+                    <td>${tb.fields.length}</td>
+                    <td>${tb.records.length}</td>
+                    <td><input type="checkbox" class="table-simple-mode-toggle" data-table="${tb.id}" ${showInSimple ? 'checked' : ''} aria-label="${t('showInSimpleMode')}"></td>
+                    <td class="col-actions">
+                        <button type="button" class="btn btn-sm btn-secondary show-fields-btn" data-table="${tb.id}" title="${t('manageFields')}">📋 ${t('fields')}</button>
+                        <button type="button" class="btn btn-sm btn-secondary edit-table-btn" data-table="${tb.id}" title="${t('edit')}">✏️</button>
+                        <button type="button" class="btn btn-sm btn-danger delete-table-btn" data-table="${tb.id}" title="${t('delete')}">🗑️</button>
+                    </td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
         }
 
         function showFieldsForTable(tableId) {
@@ -1901,32 +2433,49 @@
             if (!table || table.fields.length === 0) { container.innerHTML = ''; empty.hidden = false; return; }
             empty.hidden = true;
             const typeNames = { text: t('typeText'), textarea: t('typeTextarea'), number: t('typeNumber'), date: t('typeDate'), url: t('typeUrl'), boolean: t('typeBoolean'), select: t('typeSelect'), composite: t('typeComposite'), parent: t('typeParent'), children: t('typeChildren') };
-            container.innerHTML = table.fields.map((f, i) => {
+            
+            let html = `<table class="management-table">
+                <thead><tr>
+                    <th class="col-order">${t('order')}</th>
+                    <th>${t('fieldName')}</th>
+                    <th>${t('type')}</th>
+                    <th>${t('options')}</th>
+                    <th class="col-actions">${t('actions')}</th>
+                </tr></thead><tbody>`;
+            
+            table.fields.forEach((f, i) => {
                 const badges = [];
-                if (f.primary) badges.push('<span class="badge badge-primary">Primární</span>');
-                if (f.filter) badges.push('<span class="badge badge-filter">Filtr</span>');
+                if (f.primary) badges.push(`<span class="badge badge-primary">${t('primary')}</span>`);
+                if (f.filter) badges.push(`<span class="badge badge-filter">${t('filter')}</span>`);
+                if (f.group) badges.push(`<span class="badge badge-group">${t('group')}</span>`);
+                
                 let targetInfo = '';
                 if ((f.type === 'parent' || f.type === 'children') && f.targetTableId) {
                     const tt = getTableById(f.targetTableId);
-                    targetInfo = ` → ${tt?.name || '?'}`;
+                    targetInfo = `→ ${tt?.name || '?'}`;
                 }
-                return `
-                    <div class="field-item">
-                        <div class="move-buttons">
-                            <button type="button" class="btn btn-sm btn-secondary btn-icon move-field-btn" data-field="${f.id}" data-dir="-1" ${i === 0 ? 'disabled' : ''}>▲</button>
-                            <button type="button" class="btn btn-sm btn-secondary btn-icon move-field-btn" data-field="${f.id}" data-dir="1" ${i === table.fields.length - 1 ? 'disabled' : ''}>▼</button>
-                        </div>
-                        <div class="field-item-info">
-                            <div class="field-item-name">${escapeHtml(f.name)}</div>
-                            <div class="field-item-meta">${typeNames[f.type] || f.type}${targetInfo} ${f.type === 'select' ? `(${escapeHtml(f.options || '')})` : ''} ${badges.join(' ')}</div>
-                        </div>
-                        <div class="field-item-actions">
-                            <button type="button" class="btn btn-sm btn-secondary edit-field-btn" data-field="${f.id}">✏️</button>
-                            <button type="button" class="btn btn-sm btn-danger delete-field-btn" data-field="${f.id}">🗑️</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+                
+                let optionsInfo = '';
+                if (f.type === 'select' && f.options) optionsInfo = escapeHtml(f.options);
+                else if (targetInfo) optionsInfo = targetInfo;
+                
+                html += `<tr>
+                    <td class="col-order">
+                        <button type="button" class="btn btn-sm btn-secondary btn-icon move-field-btn" data-field="${f.id}" data-dir="-1" ${i === 0 ? 'disabled' : ''} title="${t('moveUp')}">▲</button>
+                        <button type="button" class="btn btn-sm btn-secondary btn-icon move-field-btn" data-field="${f.id}" data-dir="1" ${i === table.fields.length - 1 ? 'disabled' : ''} title="${t('moveDown')}">▼</button>
+                    </td>
+                    <td><strong>${escapeHtml(f.name)}</strong> ${badges.join(' ')}</td>
+                    <td>${typeNames[f.type] || f.type}</td>
+                    <td>${optionsInfo}</td>
+                    <td class="col-actions">
+                        <button type="button" class="btn btn-sm btn-secondary edit-field-btn" data-field="${f.id}" title="${t('edit')}">✏️</button>
+                        <button type="button" class="btn btn-sm btn-danger delete-field-btn" data-field="${f.id}" title="${t('delete')}">🗑️</button>
+                    </td>
+                </tr>`;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
         }
 
         function renderStats() {
@@ -1984,7 +2533,8 @@
 
         function switchTab(tabId) {
             activeTab = tabId;
-            document.querySelectorAll('.table-tab').forEach(t => t.classList.remove('active'));
+            activeViewId = null; // Reset view when switching tables
+            document.querySelectorAll('.table-tab').forEach(tab => tab.classList.remove('active'));
             document.querySelector(`.table-tab[data-table-id="${tabId}"]`)?.classList.add('active');
             document.getElementById('management-content').classList.remove('active');
             document.getElementById('classification-content').classList.remove('active');
@@ -2000,10 +2550,101 @@
             }
         }
         
+        // Views management
+        function getTableViews(tableId) {
+            if (!database.meta.views) database.meta.views = {};
+            if (!database.meta.views[tableId]) database.meta.views[tableId] = [];
+            return database.meta.views[tableId];
+        }
+        
+        function saveCurrentView(tableId) {
+            const name = prompt(t('viewName'), t('newView'));
+            if (!name) return;
+            
+            const views = getTableViews(tableId);
+            const view = {
+                id: generateId(),
+                name: name,
+                filters: JSON.parse(JSON.stringify(tableFilters[tableId] || {})),
+                search: tableSearches[tableId] || '',
+                sort: JSON.parse(JSON.stringify(tableSorts[tableId] || { field: null, dir: 'asc' })),
+                columnVisibility: JSON.parse(JSON.stringify(database.meta.columnVisibility[tableId] || {})),
+                collectionFilter: collectionFilter,
+                tagFilter: tagFilter
+            };
+            views.push(view);
+            activeViewId = view.id;
+            autoSave();
+            renderTableContent(tableId);
+        }
+        
+        function loadView(tableId, viewId) {
+            const views = getTableViews(tableId);
+            const view = views.find(v => v.id === viewId);
+            if (!view) return;
+            
+            activeViewId = viewId;
+            tableFilters[tableId] = JSON.parse(JSON.stringify(view.filters || {}));
+            tableSearches[tableId] = view.search || '';
+            tableSorts[tableId] = JSON.parse(JSON.stringify(view.sort || { field: null, dir: 'asc' }));
+            database.meta.columnVisibility[tableId] = JSON.parse(JSON.stringify(view.columnVisibility || {}));
+            collectionFilter = view.collectionFilter || null;
+            tagFilter = view.tagFilter || null;
+            renderTableContent(tableId);
+        }
+        
+        function clearView(tableId) {
+            activeViewId = null;
+            tableFilters[tableId] = {};
+            tableSearches[tableId] = '';
+            tableSorts[tableId] = { field: null, dir: 'asc' };
+            collectionFilter = null;
+            tagFilter = null;
+            renderTableContent(tableId);
+        }
+        
+        function updateView(tableId, viewId) {
+            const views = getTableViews(tableId);
+            const view = views.find(v => v.id === viewId);
+            if (!view) return;
+            
+            view.filters = JSON.parse(JSON.stringify(tableFilters[tableId] || {}));
+            view.search = tableSearches[tableId] || '';
+            view.sort = JSON.parse(JSON.stringify(tableSorts[tableId] || { field: null, dir: 'asc' }));
+            view.columnVisibility = JSON.parse(JSON.stringify(database.meta.columnVisibility[tableId] || {}));
+            view.collectionFilter = collectionFilter;
+            view.tagFilter = tagFilter;
+            autoSave();
+            renderTableContent(tableId);
+        }
+        
+        function renameView(tableId, viewId) {
+            const views = getTableViews(tableId);
+            const view = views.find(v => v.id === viewId);
+            if (!view) return;
+            
+            const name = prompt(t('viewName'), view.name);
+            if (!name) return;
+            view.name = name;
+            autoSave();
+            renderTableContent(tableId);
+        }
+        
+        function deleteView(tableId, viewId) {
+            if (!confirm(t('confirmDeleteView'))) return;
+            const views = getTableViews(tableId);
+            const idx = views.findIndex(v => v.id === viewId);
+            if (idx !== -1) views.splice(idx, 1);
+            if (activeViewId === viewId) activeViewId = null;
+            autoSave();
+            renderTableContent(tableId);
+        }
+        
         function renderClassification() {
             document.getElementById('classification-content').classList.add('active');
             renderCollectionsList();
             renderTagsList();
+            renderGlobalNotesList();
         }
 
         // Table Modal
@@ -2015,6 +2656,7 @@
                 if (tb) { document.getElementById('tableModalTitle').textContent = t('editTable'); document.getElementById('tableId').value = tb.id; document.getElementById('tableName').value = tb.name; }
             } else { document.getElementById('tableModalTitle').textContent = t('addTable'); }
             openModal('tableModal');
+            setTimeout(() => document.getElementById('tableName').focus(), 50);
         }
 
         function saveTable() {
@@ -2047,6 +2689,7 @@
                 document.getElementById('collectionModalTitle').textContent = t('addCollection');
             }
             openModal('collectionModal');
+            setTimeout(() => document.getElementById('collectionName').focus(), 50);
         }
 
         function saveCollection() {
@@ -2121,6 +2764,8 @@
             }
             
             document.getElementById('viewCollectionContent').innerHTML = html;
+            // Store collection id for refresh
+            document.getElementById('viewCollectionModal').dataset.collectionId = collectionId;
             openModal('viewCollectionModal');
         }
 
@@ -2164,6 +2809,8 @@
             }
             
             document.getElementById('viewTagContent').innerHTML = html;
+            // Store tag id for refresh
+            document.getElementById('viewTagModal').dataset.tagId = tagId;
             openModal('viewTagModal');
         }
 
@@ -2185,6 +2832,7 @@
                 document.getElementById('tagModalTitle').textContent = t('addTag');
             }
             openModal('tagModal');
+            setTimeout(() => document.getElementById('tagName').focus(), 50);
         }
 
         function saveTag() {
@@ -2343,6 +2991,7 @@
         let structureRootRecordId = null;
         let structureExpandedNodes = new Set();
         let structureLoadedAll = new Set();
+        let structureExpandedNotes = new Set();
         const STRUCTURE_MAX_DEPTH = 4;
         const STRUCTURE_MAX_ITEMS = 10;
         
@@ -2359,6 +3008,35 @@
                 });
             });
             return children;
+        }
+        
+        function getAncestors(tableId, recordId, visited = new Set()) {
+            // Get all ancestors (parents, grandparents, etc.) of a record
+            const key = `${tableId}_${recordId}`;
+            if (visited.has(key)) return []; // Prevent cycles
+            visited.add(key);
+            
+            const ancestors = [];
+            const table = getTableById(tableId);
+            const record = getRecordById(tableId, recordId);
+            if (!table || !record) return ancestors;
+            
+            // Find parent fields in this table
+            table.fields.filter(f => f.type === 'parent').forEach(parentField => {
+                const parentId = record.values[parentField.id];
+                if (parentId && parentField.targetTableId) {
+                    const parentTable = getTableById(parentField.targetTableId);
+                    const parentRecord = getRecordById(parentField.targetTableId, parentId);
+                    if (parentTable && parentRecord) {
+                        // Get ancestors of parent first (for correct order)
+                        const higherAncestors = getAncestors(parentField.targetTableId, parentId, visited);
+                        ancestors.push(...higherAncestors);
+                        ancestors.push({ table: parentTable, record: parentRecord, field: parentField });
+                    }
+                }
+            });
+            
+            return ancestors;
         }
         
         function countAllDescendants(tableId, recordId, visited = new Set()) {
@@ -2379,6 +3057,7 @@
             structureRootRecordId = recordId;
             structureExpandedNodes = new Set();
             structureLoadedAll = new Set();
+            structureExpandedNotes = new Set();
             
             const table = getTableById(tableId);
             const record = getRecordById(tableId, recordId);
@@ -2402,16 +3081,40 @@
                 return;
             }
             
+            let html = '';
+            
+            // Get and render ancestors as breadcrumb
+            const ancestors = getAncestors(structureRootTableId, structureRootRecordId);
+            if (ancestors.length > 0) {
+                html += '<div class="structure-ancestors">';
+                html += `<span class="ancestors-label">📍 ${t('ancestors')}:</span>`;
+                html += '<div class="ancestors-path">';
+                ancestors.forEach((anc, idx) => {
+                    const ancName = getPrimaryFieldValue(anc.table, anc.record);
+                    const ancDescCount = countAllDescendants(anc.table.id, anc.record.id);
+                    html += `<a href="#" class="ancestor-link" data-action="switchStructureRoot" data-table="${anc.table.id}" data-record="${anc.record.id}" title="${t('showStructureFrom')}">
+                        ${escapeHtml(ancName)} <span class="ancestor-table">(${escapeHtml(anc.table.name)})</span>
+                        <span class="ancestor-count">[${ancDescCount}]</span>
+                    </a>`;
+                    html += '<span class="ancestor-separator">→</span>';
+                });
+                // Current record (not clickable, it's the current root)
+                const currentName = getPrimaryFieldValue(table, record);
+                html += `<span class="ancestor-current">${escapeHtml(currentName)}</span>`;
+                html += '</div></div>';
+            }
+            
             const children = getDirectChildren(structureRootTableId, structureRootRecordId);
             if (children.length === 0) {
-                container.innerHTML = `<p class="tree-empty">${t('noDescendants')}</p>`;
+                html += `<p class="tree-empty">${t('noDescendants')}</p>`;
+                container.innerHTML = html;
                 return;
             }
             
             const rootKey = `${structureRootTableId}_${structureRootRecordId}`;
             structureExpandedNodes.add(rootKey); // Root is always expanded
             
-            let html = '<ul class="tree-root">';
+            html += '<ul class="tree-root">';
             html += renderTreeNode(structureRootTableId, structureRootRecordId, 0, true);
             html += '</ul>';
             
@@ -2441,6 +3144,22 @@
                 if (totalDescendants > 0) {
                     html += `<span class="tree-count">[${totalDescendants} ${t('descendants')}]</span>`;
                 }
+                // Notes button
+                const recordNotes = getRecordNotes(tableId, recordId);
+                if (recordNotes.length > 0) {
+                    const notesKey = `notes_${tableId}_${recordId}`;
+                    const notesExpanded = structureExpandedNotes.has(notesKey);
+                    html += `<button type="button" class="tree-notes-toggle" data-action="toggleTreeNotes" data-key="${notesKey}" data-table="${tableId}" data-record="${recordId}" title="${t('notes')}">📝 ${recordNotes.length}</button>`;
+                    if (notesExpanded) {
+                        html += '<div class="tree-notes-container">';
+                        recordNotes.forEach(note => {
+                            const statusIcon = note.resolved ? '✓' : '○';
+                            const resolvedClass = note.resolved ? ' tree-note-resolved' : '';
+                            html += `<div class="tree-note-item${resolvedClass}"><span class="tree-note-status">${statusIcon}</span><span class="tree-note-text">${escapeHtml(note.text)}</span></div>`;
+                        });
+                        html += '</div>';
+                    }
+                }
             }
             
             if (hasChildren && (isExpanded || isRoot)) {
@@ -2461,6 +3180,22 @@
                         html += `<span class="tree-table">(${escapeHtml(child.table.name)})</span>`;
                         if (childDescendants > 0) {
                             html += `<span class="tree-count">[${childDescendants} ${t('descendants')}]</span>`;
+                        }
+                        // Notes button for maxDepthReached items
+                        const childNotes = getRecordNotes(child.table.id, child.record.id);
+                        if (childNotes.length > 0) {
+                            const notesKey = `notes_${child.table.id}_${child.record.id}`;
+                            const notesExpanded = structureExpandedNotes.has(notesKey);
+                            html += `<button type="button" class="tree-notes-toggle" data-action="toggleTreeNotes" data-key="${notesKey}" data-table="${child.table.id}" data-record="${child.record.id}" title="${t('notes')}">📝 ${childNotes.length}</button>`;
+                            if (notesExpanded) {
+                                html += '<div class="tree-notes-container">';
+                                childNotes.forEach(note => {
+                                    const statusIcon = note.resolved ? '✓' : '○';
+                                    const resolvedClass = note.resolved ? ' tree-note-resolved' : '';
+                                    html += `<div class="tree-note-item${resolvedClass}"><span class="tree-note-status">${statusIcon}</span><span class="tree-note-text">${escapeHtml(note.text)}</span></div>`;
+                                });
+                                html += '</div>';
+                            }
                         }
                         html += '</li>';
                     } else {
@@ -2506,11 +3241,33 @@
                 return;
             }
             
+            let html = '';
+            
+            // Get and render ancestors as breadcrumb (same as tree view)
+            const ancestors = getAncestors(structureRootTableId, structureRootRecordId);
+            if (ancestors.length > 0) {
+                html += '<div class="structure-ancestors">';
+                html += `<span class="ancestors-label">📍 ${t('ancestors')}:</span>`;
+                html += '<div class="ancestors-path">';
+                ancestors.forEach((anc, idx) => {
+                    const ancName = getPrimaryFieldValue(anc.table, anc.record);
+                    const ancDescCount = countAllDescendants(anc.table.id, anc.record.id);
+                    html += `<a href="#" class="ancestor-link" data-action="switchStructureRoot" data-table="${anc.table.id}" data-record="${anc.record.id}" title="${t('showStructureFrom')}">
+                        ${escapeHtml(ancName)} <span class="ancestor-table">(${escapeHtml(anc.table.name)})</span>
+                        <span class="ancestor-count">[${ancDescCount}]</span>
+                    </a>`;
+                    html += '<span class="ancestor-separator">→</span>';
+                });
+                const currentName = getPrimaryFieldValue(table, record);
+                html += `<span class="ancestor-current">${escapeHtml(currentName)}</span>`;
+                html += '</div></div>';
+            }
+            
             // Build tree data structure
             const treeData = buildTreeData(structureRootTableId, structureRootRecordId, 0, new Set());
             
             if (!treeData.children || treeData.children.length === 0) {
-                container.innerHTML = `<p class="tree-empty">${t('noDescendants')}</p>`;
+                container.innerHTML = html + `<p class="tree-empty">${t('noDescendants')}</p>`;
                 return;
             }
             
@@ -2624,7 +3381,7 @@
             });
             
             svg += '</svg>';
-            container.innerHTML = svg;
+            container.innerHTML = html + svg;
         }
         
         function buildTreeData(tableId, recordId, depth, visited) {
@@ -2707,6 +3464,7 @@
                 }
             } else { document.getElementById('fieldModalTitle').textContent = t('addField'); }
             openModal('fieldModal');
+            setTimeout(() => document.getElementById('fieldName').focus(), 50);
         }
 
         function populateTargetTableSelect(selId = '') {
@@ -2765,27 +3523,39 @@
             currentRecordId = recordId;
             document.getElementById('recordModalTitle').textContent = recordId ? `${t('edit')}: ${table.name}` : `${t('addRecord')}: ${table.name}`;
             const record = recordId ? getRecordById(tableId, recordId) : null;
-            document.getElementById('recordForm').innerHTML = table.fields.filter(f => f.type !== 'children').map(f => buildFormField(table, f, record?.values[f.id] ?? '', record)).join('');
+            const isNewRecord = !recordId;
+            document.getElementById('recordForm').innerHTML = table.fields.filter(f => f.type !== 'children' && f.type !== 'composite').map(f => buildFormField(table, f, record?.values[f.id] ?? '', record, isNewRecord)).join('');
+            // Show "Save and add another" only when creating new record
+            document.getElementById('btnSaveAndAddAnother').hidden = !!recordId;
             openModal('recordModal');
+            // Focus first editable field
+            setTimeout(() => {
+                const firstInput = document.querySelector('#recordForm input:not([disabled]):not([type="checkbox"]):not([type="hidden"]), #recordForm textarea:not([disabled]), #recordForm select:not([disabled])');
+                if (firstInput) firstInput.focus();
+            }, 50);
         }
 
-        function buildFormField(table, field, value, record) {
+        function buildFormField(table, field, value, record, isNewRecord = false) {
             const id = `record_${field.id}`;
             let input = '';
             switch (field.type) {
-                case 'text': input = `<input type="text" id="${id}" value="${escapeHtml(value)}">`; break;
-                case 'textarea': input = `<textarea id="${id}" rows="5">${escapeHtml(value)}</textarea>`; break;
-                case 'number': input = `<input type="number" id="${id}" value="${escapeHtml(value)}" step="any">`; break;
-                case 'date': input = `<div class="date-input-group"><input type="date" id="${id}" value="${escapeHtml(value)}" class="date-picker"><input type="text" id="${id}_text" value="${escapeHtml(value)}" placeholder="yyyy-mm-dd" pattern="\\d{4}-\\d{2}-\\d{2}" class="date-text" title="Formát: yyyy-mm-dd"></div>`; break;
-                case 'url': input = `<input type="url" id="${id}" value="${escapeHtml(value)}" placeholder="https://">`; break;
+                case 'text': input = `<input type="text" id="${id}" value="${escapeAttr(value)}">`; break;
+                case 'textarea': input = `<textarea id="${id}" rows="5">${escapeAttr(value)}</textarea>`; break;
+                case 'number': input = `<input type="number" id="${id}" value="${escapeAttr(value)}" step="any">`; break;
+                case 'date': 
+                    // Default to today's date for new records
+                    const dateValue = (isNewRecord && !value) ? new Date().toISOString().split('T')[0] : value;
+                    input = `<div class="date-input-group"><input type="date" id="${id}" value="${escapeAttr(dateValue)}" class="date-picker"><input type="text" id="${id}_text" value="${escapeAttr(dateValue)}" placeholder="yyyy-mm-dd" pattern="\\d{4}-\\d{2}-\\d{2}" class="date-text" title="Formát: yyyy-mm-dd"></div>`; 
+                    break;
+                case 'url': input = `<input type="url" id="${id}" value="${escapeAttr(value)}" placeholder="https://">`; break;
                 case 'boolean': return `<div class="form-group"><div class="checkbox-group"><input type="checkbox" id="${id}" ${value ? 'checked' : ''}><label for="${id}">${escapeHtml(field.name)}</label></div></div>`;
                 case 'select':
                     const opts = (field.options || '').split(',').map(o => o.trim()).filter(o => o);
-                    input = `<select id="${id}"><option value="">-- ${t('selectField')} --</option>${opts.map(o => `<option value="${escapeHtml(o)}" ${value === o ? 'selected' : ''}>${escapeHtml(o)}</option>`).join('')}</select>`;
+                    input = `<select id="${id}"><option value="">-- ${t('selectField')} --</option>${opts.map(o => `<option value="${escapeAttr(o)}" ${value === o ? 'selected' : ''}>${escapeHtml(o)}</option>`).join('')}</select>`;
                     break;
                 case 'composite':
                     const compVal = record ? evaluateCompositeField(table, field, record) : '';
-                    input = `<input type="text" id="${id}" value="${escapeHtml(compVal)}" readonly disabled style="background: var(--bg); cursor: not-allowed;">`;
+                    input = `<input type="text" id="${id}" value="${escapeAttr(compVal)}" readonly disabled style="background: var(--bg); cursor: not-allowed;">`;
                     break;
                 case 'parent':
                     const tt = getTableById(field.targetTableId);
@@ -2825,7 +3595,7 @@
             }
             const record = state.recordId ? getRecordById(state.tableId, state.recordId) : { values: state.values };
             document.getElementById('recordModalTitle').textContent = state.recordId ? t('edit') : t('addRecord');
-            document.getElementById('recordForm').innerHTML = table.fields.filter(f => f.type !== 'children').map(f => {
+            document.getElementById('recordForm').innerHTML = table.fields.filter(f => f.type !== 'children' && f.type !== 'composite').map(f => {
                 const val = state.values[f.id] !== undefined ? state.values[f.id] : (record?.values[f.id] ?? '');
                 return buildFormField(table, f, val, record);
             }).join('');
@@ -2849,8 +3619,7 @@
                 returnToTableId: currentRecordTableId,
                 returnToRecordId: currentRecordId
             };
-            // Close view modal and open new record modal with pre-filled parent
-            closeModal('viewRecordModal');
+            // Open new record modal with pre-filled parent (keep view modal open)
             openRecordModalWithParent(targetTableId, parentFieldId, parentRecordId);
         }
 
@@ -2863,11 +3632,41 @@
             // Create a temporary record object with pre-filled parent
             const prefilledValues = {};
             prefilledValues[parentFieldId] = parentRecordId;
-            document.getElementById('recordForm').innerHTML = table.fields.filter(f => f.type !== 'children').map(f => {
+            document.getElementById('recordForm').innerHTML = table.fields.filter(f => f.type !== 'children' && f.type !== 'composite').map(f => {
                 const val = prefilledValues[f.id] ?? '';
-                return buildFormField(table, f, val, null);
+                return buildFormField(table, f, val, null, true); // isNewRecord = true
             }).join('');
             openModal('recordModal');
+        }
+
+        function saveAndAddAnother() {
+            const table = getTableById(currentRecordTableId);
+            if (!table) return;
+            const values = {};
+            table.fields.filter(f => f.type !== 'children' && f.type !== 'composite').forEach(f => {
+                const el = document.getElementById(`record_${f.id}`);
+                if (!el) return;
+                if (f.type === 'boolean') values[f.id] = el.checked;
+                else if (f.type === 'number') values[f.id] = el.value ? parseFloat(el.value) : null;
+                else values[f.id] = el.value;
+            });
+            
+            // Save current record
+            const newRecordId = generateId();
+            table.records.push({ id: newRecordId, values: JSON.parse(JSON.stringify(values)) });
+            autoSave();
+            
+            // Update table content in background
+            if (activeTab !== 'management' && activeTab !== 'classification') renderTableContent(currentRecordTableId);
+            
+            // Reset for new record but keep values in form
+            currentRecordId = null;
+            document.getElementById('recordModalTitle').textContent = `${t('addRecord')}: ${table.name}`;
+            
+            // Flash effect to indicate save
+            const modal = document.querySelector('#recordModal .modal');
+            modal.style.boxShadow = '0 0 20px rgba(39, 174, 96, 0.5)';
+            setTimeout(() => { modal.style.boxShadow = ''; }, 300);
         }
 
         function saveRecord() {
@@ -2881,6 +3680,7 @@
                 else if (f.type === 'number') values[f.id] = el.value ? parseFloat(el.value) : null;
                 else values[f.id] = el.value;
             });
+            const openAfterSave = document.getElementById('openAfterSave').checked;
             let newRecordId = null;
             if (currentRecordId) { 
                 const r = getRecordById(currentRecordTableId, currentRecordId); 
@@ -2889,6 +3689,8 @@
                 newRecordId = generateId();
                 table.records.push({ id: newRecordId, values });
             }
+            const savedTableId = currentRecordTableId;
+            const savedRecordId = currentRecordId || newRecordId;
             closeModal('recordModal');
             
             // Check if we were creating a parent record
@@ -2905,6 +3707,10 @@
                 currentRecordId = null;
                 currentRecordTableId = null;
                 autoSave();
+                // Open view if requested
+                if (openAfterSave && savedRecordId) {
+                    viewRecord(savedTableId, savedRecordId);
+                }
                 return;
             }
             
@@ -2912,6 +3718,31 @@
             if (activeTab !== 'management' && activeTab !== 'classification') renderTableContent(currentRecordTableId);
             else renderStats();
             currentRecordTableId = null;
+            
+            // Open view if requested
+            if (openAfterSave && savedRecordId) {
+                viewRecord(savedTableId, savedRecordId);
+            }
+        }
+
+        function duplicateRecord(tableId, recordId) {
+            const table = getTableById(tableId);
+            const record = getRecordById(tableId, recordId);
+            if (!table || !record) return;
+            
+            // Create a copy of values
+            const newValues = JSON.parse(JSON.stringify(record.values));
+            const newId = generateId();
+            
+            // Add the duplicate
+            table.records.push({ id: newId, values: newValues, tags: record.tags ? [...record.tags] : [] });
+            
+            // Close view modal and open edit modal for the new record
+            closeModal('viewRecordModal');
+            autoSave();
+            
+            // Open the duplicated record for viewing
+            viewRecord(tableId, newId);
         }
 
         function viewRecord(tableId, recordId) {
@@ -3006,7 +3837,7 @@
                 if (isEmpty) return '';
                 
                 // Tlačítko pro kopírování (ne pro children)
-                const copyBtn = f.type !== 'children' && rawValue ? `<button type="button" class="btn btn-sm btn-secondary copy-field-btn" data-value="${escapeHtml(rawValue)}" title="${t('copyField')}">📋</button>` : '';
+                const copyBtn = f.type !== 'children' && rawValue ? `<button type="button" class="btn btn-sm btn-secondary copy-field-btn" data-value="${escapeAttr(rawValue)}" title="${t('copyField')}">📋</button>` : '';
                 
                 return `<div class="view-field"><div class="view-field-header"><span class="view-field-label">${escapeHtml(f.name)}</span>${copyBtn}</div><div class="view-field-value">${dv}</div></div>`;
             }).join('');
@@ -3017,13 +3848,13 @@
             
             // Section: Record fields
             let contentHtml = '<div class="view-record-section">';
-            contentHtml += `<div class="view-record-section-title">📋 ${t('recordFields')}</div>`;
+            contentHtml += `<h3 class="view-record-section-title">📋 ${t('recordFields')}</h3>`;
             contentHtml += fieldsHtml || `<p style="color: var(--text-muted); font-style: italic;">${t('noFields')}</p>`;
             contentHtml += '</div>';
             
             // Section: Classification (Collections & Tags)
             contentHtml += '<div class="view-record-section">';
-            contentHtml += `<div class="view-record-section-title">🏷️ ${t('classification')}</div>`;
+            contentHtml += `<h3 class="view-record-section-title">🏷️ ${t('classification')}</h3>`;
             contentHtml += '<div class="record-classification">';
             
             // Collections row
@@ -3081,13 +3912,39 @@
                 });
                 if (hasRelated) {
                     contentHtml += '<div class="view-record-section">';
-                    contentHtml += `<div class="view-record-section-title">🔗 ${t('relatedRecords')}</div>`;
+                    contentHtml += `<h3 class="view-record-section-title">🔗 ${t('relatedRecords')}</h3>`;
                     contentHtml += relatedContent;
                     contentHtml += '</div>';
                 }
             }
             
+            // Notes section container
+            contentHtml += '<div id="viewRecordNotesContainer"></div>';
+            
             document.getElementById('viewRecordContent').innerHTML = contentHtml;
+            
+            // Render notes section
+            renderNotesSection(tableId, recordId, document.getElementById('viewRecordNotesContainer'));
+            
+            // Store record info on modal for refresh
+            const modal = document.getElementById('viewRecordModal');
+            modal.dataset.tableId = tableId;
+            modal.dataset.recordId = recordId;
+            
+            // Update lock button and edit button based on lock state
+            const isLocked = record.locked === true;
+            const lockBtn = document.getElementById('btnToggleLock');
+            const editBtn = document.getElementById('btnEditFromView');
+            lockBtn.innerHTML = isLocked 
+                ? `<span aria-hidden="true">🔓</span> <span data-i18n="unlockRecord">${t('unlockRecord')}</span>`
+                : `<span aria-hidden="true">🔒</span> <span data-i18n="lockRecord">${t('lockRecord')}</span>`;
+            editBtn.disabled = isLocked;
+            editBtn.title = isLocked ? t('recordLocked') : '';
+            
+            // Update title with lock icon
+            const lockIcon = isLocked ? '🔒 ' : '';
+            document.getElementById('viewRecordModalTitle').innerHTML = `${lockIcon}📝 ${escapeHtml(table.name)}: ${escapeHtml(getPrimaryFieldValue(table, record))}`;
+            
             openModal('viewRecordModal');
         }
 
@@ -3122,6 +3979,72 @@
             document.getElementById('importPreview').innerHTML = '';
             openModal('importModal');
         }
+        
+        function previewImport() {
+            const table = getTableById(activeTableId);
+            if (!table) return;
+            const text = document.getElementById('importInput').value;
+            if (!text.trim()) {
+                document.getElementById('importPreview').innerHTML = `<p style="color: var(--text-muted); font-style: italic;">${t('noDataToPreview')}</p>`;
+                return;
+            }
+            
+            const delim = importFormat === 'csv' ? ',' : '\t';
+            const hasHeader = document.getElementById('importHasHeader').checked;
+            const rows = parseDelimited(text, delim);
+            
+            if (rows.length === 0) return;
+            
+            const fields = table.fields.filter(f => f.type !== 'children');
+            
+            let html = '<div class="import-preview-box">';
+            html += `<h4>${t('columnMapping')}</h4>`;
+            html += '<table class="import-mapping-table"><thead><tr><th>CSV</th><th>→</th><th>${t("targetField")}</th></tr></thead><tbody>';
+            
+            if (hasHeader && rows.length > 0) {
+                const headerRow = rows[0];
+                headerRow.forEach((headerName, i) => {
+                    const normalizedHeader = headerName.trim().toLowerCase();
+                    const matchedField = fields.find(f => f.name.toLowerCase() === normalizedHeader);
+                    const status = matchedField ? '✅' : '⚠️';
+                    let targetName = matchedField ? escapeHtml(matchedField.name) : `<span style="color: var(--danger);">${t('unmapped')}</span>`;
+                    if (matchedField && matchedField.type === 'parent') {
+                        const tt = getTableById(matchedField.targetTableId);
+                        targetName += tt ? ` <small style="color: var(--text-muted);">(→ ${escapeHtml(tt.name)})</small>` : '';
+                    }
+                    html += `<tr><td>${escapeHtml(headerName)}</td><td>${status}</td><td>${targetName}</td></tr>`;
+                });
+            } else {
+                const firstRow = rows[0];
+                firstRow.forEach((_, i) => {
+                    const field = fields[i];
+                    let targetName = field ? escapeHtml(field.name) : `<span style="color: var(--danger);">${t('unmapped')}</span>`;
+                    if (field && field.type === 'parent') {
+                        const tt = getTableById(field.targetTableId);
+                        targetName += tt ? ` <small style="color: var(--text-muted);">(→ ${escapeHtml(tt.name)})</small>` : '';
+                    }
+                    const status = field ? '✅' : '⚠️';
+                    html += `<tr><td>${t('column')} ${i + 1}</td><td>${status}</td><td>${targetName}</td></tr>`;
+                });
+            }
+            
+            html += '</tbody></table>';
+            
+            // Show sample data
+            const dataRows = hasHeader ? rows.slice(1) : rows;
+            const sampleRows = dataRows.slice(0, 3);
+            if (sampleRows.length > 0) {
+                html += `<h4 style="margin-top: 1rem;">${t('sampleData')} (${dataRows.length} ${t('rows')})</h4>`;
+                html += '<table class="import-mapping-table"><tbody>';
+                sampleRows.forEach(row => {
+                    html += '<tr>' + row.map(c => `<td>${escapeHtml(c.substring(0, 30))}${c.length > 30 ? '...' : ''}</td>`).join('') + '</tr>';
+                });
+                html += '</tbody></table>';
+            }
+            
+            html += '</div>';
+            document.getElementById('importPreview').innerHTML = html;
+        }
 
         function parseDelimited(text, delim) {
             const lines = []; let cur = '', inQ = false;
@@ -3138,40 +4061,101 @@
             const delim = importFormat === 'csv' ? ',' : '\t';
             const hasHeader = document.getElementById('importHasHeader').checked;
             const rows = parseDelimited(text, delim);
-            const dataRows = hasHeader ? rows.slice(1) : rows;
-            const fields = table.fields.filter(f => f.type !== 'children' && f.type !== 'parent');
+            
+            if (rows.length === 0) return;
+            
+            // Get importable fields (exclude children only, parent is now supported)
+            const fields = table.fields.filter(f => f.type !== 'children');
             const primaryField = fields.find(f => f.primary);
-            const primaryFieldIndex = primaryField ? fields.indexOf(primaryField) : -1;
-            let countNew = 0, countUpdated = 0;
+            
+            // Build column-to-field mapping
+            let columnMapping = []; // Array of field objects (or null if no match)
+            
+            if (hasHeader && rows.length > 0) {
+                // Map by header names
+                const headerRow = rows[0];
+                columnMapping = headerRow.map(headerName => {
+                    const normalizedHeader = headerName.trim().toLowerCase();
+                    // Find field by name (case-insensitive)
+                    return fields.find(f => f.name.toLowerCase() === normalizedHeader) || null;
+                });
+            } else {
+                // Map by position
+                columnMapping = fields.slice(0, rows[0]?.length || 0);
+            }
+            
+            const dataRows = hasHeader ? rows.slice(1) : rows;
+            let countNew = 0, countUpdated = 0, countSkipped = 0;
             
             dataRows.forEach(row => {
-                if (row.every(c => !c.trim())) return;
+                if (row.every(c => !c.trim())) return; // Skip empty rows
+                
                 const values = {};
-                row.forEach((c, i) => {
-                    if (i < fields.length) {
-                        const f = fields[i];
-                        if (f.type === 'number') values[f.id] = c ? parseFloat(c.replace(',', '.')) : null;
-                        else if (f.type === 'boolean') values[f.id] = c.toLowerCase() === t('yes').toLowerCase() || c === '1' || c.toLowerCase() === 'true';
-                        else values[f.id] = c;
+                let hasAnyValue = false;
+                
+                row.forEach((cellValue, colIndex) => {
+                    const field = columnMapping[colIndex];
+                    if (!field) return; // No mapping for this column
+                    
+                    const trimmedValue = cellValue.trim();
+                    if (trimmedValue === '') return; // Skip empty cells
+                    
+                    hasAnyValue = true;
+                    
+                    if (field.type === 'number') {
+                        const num = parseFloat(trimmedValue.replace(',', '.'));
+                        values[field.id] = isNaN(num) ? null : num;
+                    } else if (field.type === 'boolean') {
+                        const lower = trimmedValue.toLowerCase();
+                        values[field.id] = lower === t('yes').toLowerCase() || lower === '1' || lower === 'true' || lower === 'ano';
+                    } else if (field.type === 'parent' && field.targetTableId) {
+                        // For parent fields, find record by primary field value
+                        const targetTable = getTableById(field.targetTableId);
+                        if (targetTable) {
+                            const targetPrimaryField = targetTable.fields.find(f => f.primary);
+                            if (targetPrimaryField) {
+                                // Find record where primary field matches imported value
+                                const matchingRecord = targetTable.records.find(r => {
+                                    const primaryValue = r.values[targetPrimaryField.id];
+                                    return primaryValue && String(primaryValue).toLowerCase() === trimmedValue.toLowerCase();
+                                });
+                                if (matchingRecord) {
+                                    values[field.id] = matchingRecord.id;
+                                }
+                                // If no match found, skip this field (don't set invalid value)
+                            }
+                        }
+                    } else {
+                        values[field.id] = trimmedValue;
                     }
                 });
                 
-                // Upsert: najdi existující záznam podle primárního pole
+                if (!hasAnyValue) {
+                    countSkipped++;
+                    return;
+                }
+                
+                // Upsert: find existing record by primary field
                 let existingRecord = null;
                 if (primaryField && values[primaryField.id]) {
                     existingRecord = table.records.find(r => r.values[primaryField.id] === values[primaryField.id]);
                 }
                 
                 if (existingRecord) {
-                    // Aktualizuj existující záznam
-                    Object.assign(existingRecord.values, values);
-                    countUpdated++;
+                    // Update existing record (merge values) - but only if not locked
+                    if (!existingRecord.locked) {
+                        Object.assign(existingRecord.values, values);
+                        countUpdated++;
+                    } else {
+                        countSkipped++;
+                    }
                 } else {
-                    // Vytvoř nový záznam
+                    // Create new record
                     table.records.push({ id: generateId(), values });
                     countNew++;
                 }
             });
+            
             closeModal('importModal');
             alert(t('importSuccess', { count: countNew, updated: countUpdated }));
             renderTableContent(activeTableId);
@@ -3180,7 +4164,7 @@
         // File operations
         function createNewDatabase() {
             confirmAction(t('confirmNewDb'), () => {
-                database = { meta: { name: '', columnVisibility: {}, groupStates: {}, collections: [], tags: [] }, tables: [] };
+                database = { meta: { name: '', columnVisibility: {}, groupStates: {}, collections: [], tags: [], views: {}, notes: [] }, tables: [] };
                 activeTab = 'management';
                 activeTableId = null;
                 tableFilters = {};
@@ -3188,6 +4172,7 @@
                 tableSorts = {};
                 collectionFilter = null;
                 tagFilter = null;
+                activeViewId = null;
                 renderAll();
             });
         }
@@ -3210,7 +4195,9 @@
                     columnVisibility: data.meta?.columnVisibility || {},
                     groupStates: data.meta?.groupStates || {},
                     collections: data.meta?.collections || [],
-                    tags: data.meta?.tags || []
+                    tags: data.meta?.tags || [],
+                    views: data.meta?.views || {},
+                    notes: data.meta?.notes || []
                 }, 
                 tables: data.tables || [] 
             };
@@ -3221,18 +4208,49 @@
             tableSorts = {};
             collectionFilter = null;
             tagFilter = null;
+            activeViewId = null; // Reset active view
             document.getElementById('dbNameInput').value = database.meta.name;
             renderAll();
         }
 
-        function saveDatabase() {
-            database.meta.name = document.getElementById('dbNameInput')?.value || database.meta.name;
-            updateDocumentTitle();
-            const blob = new Blob([JSON.stringify(database, null, 2)], { type: 'application/json' });
+        // Universal file save with File System Access API (progressive enhancement)
+        async function saveFileWithDialog(content, filename, mimeType, extensions) {
+            // Try modern File System Access API first
+            if ('showSaveFilePicker' in window) {
+                try {
+                    const handle = await window.showSaveFilePicker({
+                        suggestedName: filename,
+                        types: [{
+                            description: filename.split('.').pop().toUpperCase() + ' file',
+                            accept: { [mimeType]: extensions }
+                        }]
+                    });
+                    const writable = await handle.createWritable();
+                    await writable.write(content);
+                    await writable.close();
+                    return true;
+                } catch (e) {
+                    if (e.name === 'AbortError') return false; // User cancelled
+                    // Fall through to classic download on other errors
+                }
+            }
+            
+            // Classic fallback for browsers without File System Access API
+            const blob = new Blob([content], { type: mimeType });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = (database.meta.name || 'database') + '.jsondb';
+            a.download = filename;
             a.click();
+            URL.revokeObjectURL(a.href);
+            return true;
+        }
+
+        async function saveDatabase() {
+            database.meta.name = document.getElementById('dbNameInput')?.value || database.meta.name;
+            updateDocumentTitle();
+            const content = JSON.stringify(database, null, 2);
+            const filename = (database.meta.name || 'database') + '.jsondb';
+            await saveFileWithDialog(content, filename, 'application/json', ['.jsondb', '.json']);
         }
 
         async function copyJsonToClipboard() {
@@ -3290,11 +4308,55 @@
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize simple mode (default)
+            document.body.classList.add('simple-mode');
+            const advancedToggle = document.getElementById('advancedModeToggle');
+            advancedToggle.checked = false;
+            advancedToggle.addEventListener('change', e => {
+                advancedMode = e.target.checked;
+                if (advancedMode) {
+                    document.body.classList.remove('simple-mode');
+                } else {
+                    document.body.classList.add('simple-mode');
+                }
+                renderTableTabs();
+                if (activeTableId) renderTableContent(activeTableId);
+            });
+            
             const langSelect = document.getElementById('langSelect');
             langSelect.value = currentLang;
             langSelect.addEventListener('change', e => { currentLang = e.target.value; localStorage.setItem('db-editor-lang', currentLang); renderAll(); });
 
             // Quick create select
+            // Global search
+            let searchTimeout = null;
+            document.getElementById('globalSearchInput').addEventListener('input', e => {
+                clearTimeout(searchTimeout);
+                const query = e.target.value.trim();
+                if (query.length >= 2) {
+                    searchTimeout = setTimeout(() => showSearchResults(query), 300);
+                }
+            });
+            document.getElementById('globalSearchInput').addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const query = e.target.value.trim();
+                    if (query.length >= 2) {
+                        clearTimeout(searchTimeout);
+                        showSearchResults(query);
+                    }
+                }
+            });
+            
+            // Search results click
+            document.getElementById('searchResultsList').addEventListener('click', e => {
+                const item = e.target.closest('.search-result-item');
+                if (item) {
+                    e.preventDefault();
+                    viewRecord(item.dataset.table, item.dataset.record);
+                }
+            });
+
             document.getElementById('quickCreateSelect').addEventListener('change', e => {
                 const tableId = e.target.value;
                 if (tableId) {
@@ -3333,8 +4395,124 @@
             document.getElementById('btnAddField').addEventListener('click', () => openFieldModal());
             document.getElementById('btnSaveField').addEventListener('click', saveField);
             document.getElementById('btnSaveRecord').addEventListener('click', saveRecord);
-            document.getElementById('btnEditFromView').addEventListener('click', () => { closeModal('viewRecordModal'); openRecordModal(currentRecordTableId, currentRecordId); });
-            document.getElementById('btnStructureFromView').addEventListener('click', () => { openStructureModal(currentRecordTableId, currentRecordId); });
+            document.getElementById('btnSaveAndAddAnother').addEventListener('click', saveAndAddAnother);
+            document.getElementById('btnEditFromView').addEventListener('click', () => { 
+                const modal = document.getElementById('viewRecordModal');
+                const record = getRecordById(modal.dataset.tableId, modal.dataset.recordId);
+                if (record?.locked) {
+                    alert(t('recordLocked'));
+                    return;
+                }
+                openRecordModal(modal.dataset.tableId, modal.dataset.recordId); 
+            });
+            document.getElementById('btnToggleLock').addEventListener('click', () => {
+                const modal = document.getElementById('viewRecordModal');
+                const tableId = modal.dataset.tableId;
+                const recordId = modal.dataset.recordId;
+                const record = getRecordById(tableId, recordId);
+                if (record) {
+                    record.locked = !record.locked;
+                    autoSave();
+                    viewRecord(tableId, recordId);
+                    if (activeTableId === tableId) renderTableContent(tableId);
+                }
+            });
+            document.getElementById('btnDuplicateRecord').addEventListener('click', () => { 
+                const modal = document.getElementById('viewRecordModal');
+                duplicateRecord(modal.dataset.tableId, modal.dataset.recordId); 
+            });
+            document.getElementById('btnRefreshView').addEventListener('click', () => { 
+                const modal = document.getElementById('viewRecordModal');
+                const tableId = modal.dataset.tableId;
+                const recordId = modal.dataset.recordId;
+                if (tableId && recordId) {
+                    viewRecord(tableId, recordId);
+                }
+            });
+            document.getElementById('btnStructureFromView').addEventListener('click', () => { 
+                const modal = document.getElementById('viewRecordModal');
+                openStructureModal(modal.dataset.tableId, modal.dataset.recordId); 
+            });
+            
+            // Notes event handlers in viewRecordModal
+            document.getElementById('viewRecordContent').addEventListener('click', e => {
+                const modal = document.getElementById('viewRecordModal');
+                const tableId = modal.dataset.tableId;
+                const recordId = modal.dataset.recordId;
+                
+                // Add note
+                if (e.target.closest('#btnAddNote')) {
+                    const textarea = document.getElementById('newNoteText');
+                    const text = textarea.value.trim();
+                    if (text) {
+                        addNote(tableId, recordId, text);
+                        renderNotesSection(tableId, recordId, document.getElementById('viewRecordNotesContainer'));
+                    }
+                    return;
+                }
+                
+                // Toggle note resolved
+                if (e.target.closest('.note-toggle-btn')) {
+                    const noteId = e.target.closest('.note-toggle-btn').dataset.note;
+                    toggleNoteResolved(noteId);
+                    renderNotesSection(tableId, recordId, document.getElementById('viewRecordNotesContainer'));
+                    return;
+                }
+                
+                // Edit note
+                if (e.target.closest('.note-edit-btn')) {
+                    const noteId = e.target.closest('.note-edit-btn').dataset.note;
+                    const note = database.meta.notes?.find(n => n.id === noteId);
+                    if (note) {
+                        const newText = prompt(t('editNote'), note.text);
+                        if (newText !== null && newText.trim()) {
+                            updateNote(noteId, newText.trim());
+                            renderNotesSection(tableId, recordId, document.getElementById('viewRecordNotesContainer'));
+                        }
+                    }
+                    return;
+                }
+                
+                // Delete note
+                if (e.target.closest('.note-delete-btn')) {
+                    const noteId = e.target.closest('.note-delete-btn').dataset.note;
+                    if (confirm(t('confirmDeleteNote'))) {
+                        deleteNote(noteId);
+                        renderNotesSection(tableId, recordId, document.getElementById('viewRecordNotesContainer'));
+                    }
+                    return;
+                }
+            });
+            
+            // Notes filter in classification
+            document.getElementById('class-notes').addEventListener('click', e => {
+                // Filter buttons
+                if (e.target.closest('.notes-filter-btn')) {
+                    const filter = e.target.closest('.notes-filter-btn').dataset.filter;
+                    notesFilter = filter;
+                    document.querySelectorAll('.notes-filter-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
+                    renderGlobalNotesList();
+                    return;
+                }
+                
+                // Toggle note resolved
+                if (e.target.closest('.note-toggle-btn')) {
+                    const noteId = e.target.closest('.note-toggle-btn').dataset.note;
+                    toggleNoteResolved(noteId);
+                    renderGlobalNotesList();
+                    return;
+                }
+                
+                // Delete note
+                if (e.target.closest('.note-delete-btn')) {
+                    const noteId = e.target.closest('.note-delete-btn').dataset.note;
+                    if (confirm(t('confirmDeleteNote'))) {
+                        deleteNote(noteId);
+                        renderGlobalNotesList();
+                    }
+                    return;
+                }
+            });
             
             // Bulk edit modal
             // Bulk edit modal - dynamic rows
@@ -3401,34 +4579,38 @@
             
             // View/Edit/Delete collection from modal
             document.getElementById('btnEditCollectionFromView').addEventListener('click', () => {
-                closeModal('viewCollectionModal');
                 openCollectionModal(currentViewCollectionId);
             });
             document.getElementById('btnDeleteCollectionFromView').addEventListener('click', () => {
                 deleteCollection(currentViewCollectionId);
             });
+            document.getElementById('btnRefreshCollection').addEventListener('click', () => {
+                const collectionId = document.getElementById('viewCollectionModal').dataset.collectionId;
+                if (collectionId) viewCollectionDetails(collectionId);
+            });
             
             // View/Edit/Delete tag from modal
             document.getElementById('btnEditTagFromView').addEventListener('click', () => {
-                closeModal('viewTagModal');
                 openTagModal(currentViewTagId);
             });
             document.getElementById('btnDeleteTagFromView').addEventListener('click', () => {
                 deleteTag(currentViewTagId);
                 closeModal('viewTagModal');
             });
+            document.getElementById('btnRefreshTag').addEventListener('click', () => {
+                const tagId = document.getElementById('viewTagModal').dataset.tagId;
+                if (tagId) viewTagDetails(tagId);
+            });
             
             // Add to collection modal
             document.getElementById('btnConfirmAddToCollection').addEventListener('click', confirmAddToCollection);
             document.getElementById('btnQuickCreateCollection').addEventListener('click', () => {
-                closeModal('addToCollectionModal');
                 openCollectionModal();
             });
             
             // Add tag modal
             document.getElementById('btnConfirmAddTag').addEventListener('click', confirmAddTag);
             document.getElementById('btnQuickCreateTag').addEventListener('click', () => {
-                closeModal('addTagToRecordModal');
                 openTagModal();
             });
 
@@ -3439,13 +4621,13 @@
                 updateExportOutput();
             }));
             document.getElementById('btnExportCopy').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('exportOutput').value); alert(t('jsonCopied')); });
-            document.getElementById('btnExportFile').addEventListener('click', () => {
+            document.getElementById('btnExportFile').addEventListener('click', async () => {
                 const table = getTableById(activeTableId);
-                const blob = new Blob([document.getElementById('exportOutput').value], { type: 'text/csv' });
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = `${table?.name || 'export'}.${exportFormat}`;
-                a.click();
+                const content = document.getElementById('exportOutput').value;
+                const filename = `${table?.name || 'export'}.${exportFormat}`;
+                const mimeType = exportFormat === 'csv' ? 'text/csv' : 'text/tab-separated-values';
+                const ext = exportFormat === 'csv' ? ['.csv'] : ['.tsv', '.txt'];
+                await saveFileWithDialog(content, filename, mimeType, ext);
             });
 
             // Import modal
@@ -3461,6 +4643,7 @@
                 reader.readAsText(file);
             });
             document.getElementById('btnDoImport').addEventListener('click', doImport);
+            document.getElementById('btnPreviewImport').addEventListener('click', previewImport);
             document.getElementById('btnDoPasteJson').addEventListener('click', doPasteJson);
 
             // Delegation for dynamic elements
@@ -3469,7 +4652,22 @@
                 if (!target) return;
 
                 if (target.classList.contains('edit-table-btn')) openTableModal(target.dataset.table);
-                if (target.classList.contains('delete-table-btn')) confirmAction(t('confirmDeleteTable'), () => { database.tables = database.tables.filter(tb => tb.id !== target.dataset.table); if (activeTab === target.dataset.table) activeTab = 'management'; renderAll(); });
+                if (target.classList.contains('delete-table-btn')) confirmAction(t('confirmDeleteTable'), () => { 
+                    const tableId = target.dataset.table;
+                    database.tables = database.tables.filter(tb => tb.id !== tableId); 
+                    // Remove notes for this table
+                    if (database.meta.notes) {
+                        database.meta.notes = database.meta.notes.filter(n => n.tableId !== tableId);
+                    }
+                    // Remove collection members for this table
+                    if (database.meta.collections) {
+                        database.meta.collections.forEach(col => {
+                            if (col.members) col.members = col.members.filter(m => m.tableId !== tableId);
+                        });
+                    }
+                    if (activeTab === tableId) activeTab = 'management'; 
+                    renderAll(); 
+                });
                 if (target.classList.contains('move-table-btn')) {
                     const i = database.tables.findIndex(tb => tb.id === target.dataset.table);
                     const ni = i + parseInt(target.dataset.dir);
@@ -3490,8 +4688,21 @@
                 if (target.classList.contains('export-table-btn')) openExportModal(target.dataset.table);
                 if (target.classList.contains('import-table-btn')) openImportModal(target.dataset.table);
                 if (target.classList.contains('view-record-btn')) viewRecord(target.dataset.table, target.dataset.record);
-                if (target.classList.contains('edit-record-btn')) openRecordModal(target.dataset.table, target.dataset.record);
-                if (target.classList.contains('delete-record-btn')) confirmAction(t('confirmDeleteRecord'), () => { 
+                if (target.classList.contains('edit-record-btn')) {
+                    const record = getRecordById(target.dataset.table, target.dataset.record);
+                    if (record?.locked) {
+                        alert(t('recordLocked'));
+                        return;
+                    }
+                    openRecordModal(target.dataset.table, target.dataset.record);
+                }
+                if (target.classList.contains('delete-record-btn')) {
+                    const record = getRecordById(target.dataset.table, target.dataset.record);
+                    if (record?.locked) {
+                        alert(t('recordLocked'));
+                        return;
+                    }
+                    confirmAction(t('confirmDeleteRecord'), () => { 
                     const tableId = target.dataset.table;
                     const recordId = target.dataset.record;
                     const table = getTableById(tableId); 
@@ -3503,9 +4714,14 @@
                                 if (col.members) col.members = col.members.filter(m => !(m.tableId === tableId && m.recordId === recordId));
                             });
                         }
+                        // Remove all notes for this record
+                        if (database.meta.notes) {
+                            database.meta.notes = database.meta.notes.filter(n => !(n.tableId === tableId && n.recordId === recordId));
+                        }
                     }
                     renderTableContent(tableId); 
-                });
+                    });
+                }
                 if (target.classList.contains('create-parent-btn')) createParentRecord(target.dataset.targetTable, target.dataset.field);
                 if (target.classList.contains('create-child-btn')) createChildRecord(target.dataset.targetTable, target.dataset.parentField, target.dataset.parentRecord);
                 if (target.classList.contains('copy-field-btn')) {
@@ -3595,6 +4811,38 @@
                     loadAllTreeItems(loadMore.dataset.key);
                     return;
                 }
+                const notesToggle = e.target.closest('.tree-notes-toggle');
+                if (notesToggle && notesToggle.dataset.action === 'toggleTreeNotes') {
+                    const notesKey = notesToggle.dataset.key;
+                    if (structureExpandedNotes.has(notesKey)) {
+                        structureExpandedNotes.delete(notesKey);
+                    } else {
+                        structureExpandedNotes.add(notesKey);
+                    }
+                    renderStructureTree();
+                    return;
+                }
+                const ancestorLink = e.target.closest('.ancestor-link');
+                if (ancestorLink) {
+                    e.preventDefault();
+                    // Switch structure root to this ancestor
+                    structureRootTableId = ancestorLink.dataset.table;
+                    structureRootRecordId = ancestorLink.dataset.record;
+                    structureExpandedNodes = new Set();
+                    structureLoadedAll = new Set();
+                    structureExpandedNotes = new Set();
+                    
+                    const table = getTableById(structureRootTableId);
+                    const record = getRecordById(structureRootTableId, structureRootRecordId);
+                    if (table && record) {
+                        const name = getPrimaryFieldValue(table, record);
+                        document.getElementById('structureModalTitle').innerHTML = `🌳 ${t('structure')}: ${escapeHtml(name)}`;
+                    }
+                    
+                    renderStructureTree();
+                    renderStructureGraph();
+                    return;
+                }
             });
             
             // Structure graph interactions
@@ -3602,6 +4850,28 @@
                 const node = e.target.closest('.graph-node');
                 if (node) {
                     viewRecord(node.dataset.table, node.dataset.record);
+                    return;
+                }
+                const ancestorLink = e.target.closest('.ancestor-link');
+                if (ancestorLink) {
+                    e.preventDefault();
+                    // Switch structure root to this ancestor
+                    structureRootTableId = ancestorLink.dataset.table;
+                    structureRootRecordId = ancestorLink.dataset.record;
+                    structureExpandedNodes = new Set();
+                    structureLoadedAll = new Set();
+                    structureExpandedNotes = new Set();
+                    
+                    const table = getTableById(structureRootTableId);
+                    const record = getRecordById(structureRootTableId, structureRootRecordId);
+                    if (table && record) {
+                        const name = getPrimaryFieldValue(table, record);
+                        document.getElementById('structureModalTitle').innerHTML = `🌳 ${t('structure')}: ${escapeHtml(name)}`;
+                    }
+                    
+                    renderStructureTree();
+                    renderStructureGraph();
+                    return;
                 }
             });
 
@@ -3713,11 +4983,28 @@
                     tableFilters[tableId][e.target.dataset.field] = e.target.value;
                     renderTableContent(tableId);
                 }
+                if (e.target.classList.contains('table-simple-mode-toggle')) {
+                    const tableId = e.target.dataset.table;
+                    const table = getTableById(tableId);
+                    if (table) {
+                        table.showInSimpleMode = e.target.checked;
+                        autoSave();
+                        renderTableTabs();
+                    }
+                }
                 if (e.target.classList.contains('col-toggle')) {
                     const tableId = e.target.dataset.table;
                     if (!database.meta.columnVisibility[tableId]) database.meta.columnVisibility[tableId] = {};
                     database.meta.columnVisibility[tableId][e.target.dataset.field] = e.target.checked;
+                    // Remember details open state before re-render
+                    const detailsEl = document.querySelector('#tableContents details');
+                    const wasOpen = detailsEl?.open;
                     renderTableContent(tableId);
+                    // Restore details open state
+                    if (wasOpen) {
+                        const newDetails = document.querySelector('#tableContents details');
+                        if (newDetails) newDetails.open = true;
+                    }
                 }
                 // Collection filter
                 if (e.target.classList.contains('collection-filter')) {
@@ -3762,6 +5049,7 @@
             });
 
             document.getElementById('tableContents').addEventListener('click', e => {
+                // Sort by column header
                 const th = e.target.closest('th:not(.no-sort)');
                 if (th && th.dataset.table && th.dataset.field) {
                     const tableId = th.dataset.table;
@@ -3769,6 +5057,82 @@
                     if (tableSorts[tableId].field === th.dataset.field) tableSorts[tableId].dir = tableSorts[tableId].dir === 'asc' ? 'desc' : 'asc';
                     else { tableSorts[tableId].field = th.dataset.field; tableSorts[tableId].dir = 'asc'; }
                     renderTableContent(tableId);
+                    return;
+                }
+                
+                // Views bar - save view
+                if (e.target.closest('.view-save-btn')) {
+                    const btn = e.target.closest('.view-save-btn');
+                    saveCurrentView(btn.dataset.table);
+                    return;
+                }
+                
+                // Views bar - switch view (click on tab)
+                const viewTab = e.target.closest('[role="tab"]');
+                if (viewTab) {
+                    const tableId = viewTab.dataset.table;
+                    const viewId = viewTab.dataset.view;
+                    if (viewId) {
+                        loadView(tableId, viewId);
+                    } else {
+                        clearView(tableId);
+                    }
+                    return;
+                }
+                
+                // Views bar - update view (uses activeViewId)
+                if (e.target.closest('.view-update-btn')) {
+                    if (activeViewId) {
+                        updateView(activeTableId, activeViewId);
+                    }
+                    return;
+                }
+                
+                // Views bar - rename view (uses activeViewId)
+                if (e.target.closest('.view-rename-btn')) {
+                    if (activeViewId) {
+                        renameView(activeTableId, activeViewId);
+                    }
+                    return;
+                }
+                
+                // Views bar - delete view (uses activeViewId)
+                if (e.target.closest('.view-delete-btn')) {
+                    if (activeViewId) {
+                        deleteView(activeTableId, activeViewId);
+                    }
+                    return;
+                }
+            });
+            
+            // Keyboard navigation for view tabs
+            document.getElementById('tableContents').addEventListener('keydown', e => {
+                const tab = e.target.closest('[role="tab"]');
+                if (!tab) return;
+                
+                const tablist = tab.closest('[role="tablist"]');
+                if (!tablist) return;
+                
+                const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+                const currentIndex = tabs.indexOf(tab);
+                
+                let newIndex = currentIndex;
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    newIndex = (currentIndex + 1) % tabs.length;
+                    e.preventDefault();
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                    e.preventDefault();
+                } else if (e.key === 'Home') {
+                    newIndex = 0;
+                    e.preventDefault();
+                } else if (e.key === 'End') {
+                    newIndex = tabs.length - 1;
+                    e.preventDefault();
+                }
+                
+                if (newIndex !== currentIndex) {
+                    tabs[newIndex].focus();
                 }
             });
 
@@ -3858,6 +5222,10 @@
                     
                     // Show wiki save button, hide file operations
                     document.getElementById('btnSaveWiki').style.display = '';
+                    // Remove accesskey from regular save button (wiki button has priority)
+                    document.getElementById('btnSave').removeAttribute('accesskey');
+                    // In wiki mode, file save is advanced-only (hidden in simple mode)
+                    document.getElementById('btnSave').classList.add('advanced-only');
                     
                     // Decode and load data
                     try {
@@ -3879,7 +5247,7 @@
                 }
                 
                 if (event.data.type === 'saveSuccess') {
-                    alert(t('wikiSaved'));
+                    // Success - just close the window without alert
                     window.close();
                 }
                 
@@ -3930,6 +5298,67 @@
             });
             
             // ========== END WIKI INTEGRATION ==========
+            
+            // ========== KEYBOARD SHORTCUTS ==========
+            // Accesskey shortcuts: S (save), X (toggle mode), Q (quick create), D (save record)
+            // Additional shortcuts handled here: N (new record), C/T/M (navigation), arrows (table nav), E/V (edit/view)
+            
+            document.addEventListener('keydown', e => {
+                // Don't trigger shortcuts when typing in inputs
+                const activeEl = document.activeElement;
+                const isTyping = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT' || activeEl.isContentEditable);
+                
+                // Skip if inside a modal (except for D which saves)
+                const inModal = activeEl && activeEl.closest('.modal-backdrop:not([hidden])');
+                
+                // Arrow navigation in data table
+                if (!isTyping && !inModal && activeTableId && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+                    const table = document.querySelector('.data-table tbody');
+                    if (!table) return;
+                    const rows = Array.from(table.querySelectorAll('tr:not([hidden])'));
+                    if (rows.length === 0) return;
+                    
+                    e.preventDefault();
+                    
+                    // Remove previous selection
+                    rows.forEach(r => r.classList.remove('keyboard-selected'));
+                    
+                    if (e.key === 'ArrowDown') {
+                        selectedRowIndex = Math.min(selectedRowIndex + 1, rows.length - 1);
+                    } else {
+                        selectedRowIndex = Math.max(selectedRowIndex - 1, 0);
+                    }
+                    
+                    if (selectedRowIndex >= 0 && selectedRowIndex < rows.length) {
+                        rows[selectedRowIndex].classList.add('keyboard-selected');
+                        rows[selectedRowIndex].scrollIntoView({ block: 'nearest' });
+                    }
+                    return;
+                }
+                
+                // E = Edit selected record, V = View selected record
+                if (!isTyping && !inModal && (e.key === 'e' || e.key === 'E' || e.key === 'v' || e.key === 'V')) {
+                    const selectedRow = document.querySelector('.data-table tbody tr.keyboard-selected');
+                    if (selectedRow) {
+                        const btn = e.key.toLowerCase() === 'e' 
+                            ? selectedRow.querySelector('.edit-record-btn')
+                            : selectedRow.querySelector('.view-record-btn');
+                        if (btn && !btn.disabled) {
+                            e.preventDefault();
+                            btn.click();
+                        }
+                    }
+                    return;
+                }
+            });
+            
+            // Reset selected row when table changes
+            const origRenderTableContent = renderTableContent;
+            renderTableContent = function(tableId) {
+                selectedRowIndex = -1;
+                origRenderTableContent(tableId);
+            };
+            // ========== END KEYBOARD SHORTCUTS ==========
 
             loadAutoSave();
             renderAll();

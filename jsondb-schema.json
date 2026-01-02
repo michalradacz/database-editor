@@ -1,37 +1,76 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/example/jsondb/schema.json",
-  "title": "JSONDB Database Format",
-  "description": "Schema for the .jsondb database file format used by Database Editor",
+  "$id": "https://github.com/michalradacz/database-editor/jsondb-schema.json",
+  "title": "JSONDB Database Schema",
+  "description": "Schema for JSONDB database format used by DataForge editor. Includes DataForge extensions for collections, notes, views, and record locking.",
   "type": "object",
   "required": ["meta", "tables"],
   "properties": {
     "meta": {
       "type": "object",
-      "description": "Database metadata",
+      "description": "Database metadata and settings",
       "required": ["name"],
       "properties": {
         "name": {
           "type": "string",
-          "description": "Name of the database"
+          "description": "Database name"
         },
         "columnVisibility": {
           "type": "object",
           "description": "Column visibility settings per table",
           "additionalProperties": {
             "type": "object",
-            "description": "Field visibility settings for a specific table (key is table ID)",
             "additionalProperties": {
-              "type": "boolean",
-              "description": "Whether the field (key is field ID) is visible in the table view"
+              "type": "boolean"
             }
+          }
+        },
+        "groupStates": {
+          "type": "object",
+          "description": "Group expansion states per table",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "boolean"
+            }
+          }
+        },
+        "collections": {
+          "type": "array",
+          "description": "DataForge extension: Collections for organizing records across tables",
+          "items": {
+            "$ref": "#/definitions/collection"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "DataForge extension: Tags for labeling records",
+          "items": {
+            "$ref": "#/definitions/tag"
+          }
+        },
+        "views": {
+          "type": "object",
+          "description": "DataForge extension: Saved filter views per table",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/view"
+            }
+          }
+        },
+        "notes": {
+          "type": "array",
+          "description": "DataForge extension: Notes attached to records",
+          "items": {
+            "$ref": "#/definitions/note"
           }
         }
       }
     },
     "tables": {
       "type": "array",
-      "description": "Array of tables in the database",
+      "description": "Array of database tables",
       "items": {
         "$ref": "#/definitions/table"
       }
@@ -40,28 +79,32 @@
   "definitions": {
     "table": {
       "type": "object",
-      "description": "A database table",
       "required": ["id", "name", "fields", "records"],
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the table",
+          "description": "Unique table identifier",
           "pattern": "^id_[a-z0-9]+$"
         },
         "name": {
           "type": "string",
-          "description": "Display name of the table"
+          "description": "Table display name"
+        },
+        "showInSimpleMode": {
+          "type": "boolean",
+          "description": "DataForge extension: Whether table is visible in simple mode",
+          "default": true
         },
         "fields": {
           "type": "array",
-          "description": "Array of field definitions",
+          "description": "Table field definitions",
           "items": {
             "$ref": "#/definitions/field"
           }
         },
         "records": {
           "type": "array",
-          "description": "Array of records in the table",
+          "description": "Table records",
           "items": {
             "$ref": "#/definitions/record"
           }
@@ -70,101 +113,216 @@
     },
     "field": {
       "type": "object",
-      "description": "A field definition",
       "required": ["id", "name", "type"],
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the field",
+          "description": "Unique field identifier",
           "pattern": "^id_[a-z0-9]+$"
         },
         "name": {
           "type": "string",
-          "description": "Display name of the field"
+          "description": "Field display name"
         },
         "type": {
           "type": "string",
-          "description": "Data type of the field",
-          "enum": ["text", "textarea", "number", "date", "boolean", "select", "composite", "parent", "children"]
-        },
-        "options": {
-          "type": "string",
-          "description": "Comma-separated list of options for 'select' type fields"
-        },
-        "compositeTemplate": {
-          "type": "string",
-          "description": "Template string for 'composite' type fields. Use {FieldName} placeholders."
+          "description": "Field data type",
+          "enum": ["text", "textarea", "number", "date", "url", "boolean", "select", "composite", "parent", "children"]
         },
         "primary": {
           "type": "boolean",
-          "description": "Whether this field is the primary/display field for records",
+          "description": "Whether this is the primary display field",
           "default": false
         },
         "filter": {
           "type": "boolean",
-          "description": "Whether filtering is enabled for this field",
+          "description": "Whether filtering by this field is enabled",
           "default": false
+        },
+        "group": {
+          "type": "boolean",
+          "description": "Whether grouping by this field is enabled",
+          "default": false
+        },
+        "options": {
+          "type": "string",
+          "description": "Comma-separated options for select field type"
+        },
+        "template": {
+          "type": "string",
+          "description": "Template string for composite field type using {FieldName} placeholders"
         },
         "targetTableId": {
           "type": "string",
-          "description": "ID of the target table for 'parent' and 'children' type fields",
-          "pattern": "^id_[a-z0-9]+$"
+          "description": "Target table ID for parent/children field types"
         },
         "parentFieldId": {
           "type": "string",
-          "description": "ID of the parent field in the target table for 'children' type fields",
-          "pattern": "^id_[a-z0-9]+$"
+          "description": "Parent field ID in target table for children field type"
         }
-      },
-      "allOf": [
-        {
-          "if": {
-            "properties": { "type": { "const": "select" } }
-          },
-          "then": {
-            "required": ["options"]
-          }
-        },
-        {
-          "if": {
-            "properties": { "type": { "const": "composite" } }
-          },
-          "then": {
-            "required": ["compositeTemplate"]
-          }
-        },
-        {
-          "if": {
-            "properties": { "type": { "enum": ["parent", "children"] } }
-          },
-          "then": {
-            "required": ["targetTableId"]
-          }
-        }
-      ]
+      }
     },
     "record": {
       "type": "object",
-      "description": "A data record",
       "required": ["id", "values"],
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the record",
+          "description": "Unique record identifier",
           "pattern": "^id_[a-z0-9]+$"
         },
         "values": {
           "type": "object",
-          "description": "Field values for the record. Keys are field IDs.",
-          "additionalProperties": {
-            "description": "Value of a field. Type depends on the field type.",
-            "oneOf": [
-              { "type": "string" },
-              { "type": "number" },
-              { "type": "boolean" },
-              { "type": "null" }
-            ]
+          "description": "Field values keyed by field ID",
+          "additionalProperties": true
+        },
+        "locked": {
+          "type": "boolean",
+          "description": "DataForge extension: Whether record is locked for editing",
+          "default": false
+        }
+      }
+    },
+    "collection": {
+      "type": "object",
+      "description": "DataForge extension: Collection for grouping records",
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique collection identifier",
+          "pattern": "^id_[a-z0-9]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Collection display name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Collection description"
+        },
+        "color": {
+          "type": "string",
+          "description": "Collection color (hex format)",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "members": {
+          "type": "array",
+          "description": "Array of record references in collection",
+          "items": {
+            "type": "object",
+            "required": ["tableId", "recordId"],
+            "properties": {
+              "tableId": {
+                "type": "string"
+              },
+              "recordId": {
+                "type": "string"
+              }
+            }
           }
+        }
+      }
+    },
+    "tag": {
+      "type": "object",
+      "description": "DataForge extension: Tag for labeling records",
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique tag identifier",
+          "pattern": "^id_[a-z0-9]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Tag display name"
+        },
+        "color": {
+          "type": "string",
+          "description": "Tag color (hex format)",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "records": {
+          "type": "array",
+          "description": "Array of record references with this tag",
+          "items": {
+            "type": "object",
+            "required": ["tableId", "recordId"],
+            "properties": {
+              "tableId": {
+                "type": "string"
+              },
+              "recordId": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "view": {
+      "type": "object",
+      "description": "DataForge extension: Saved filter view",
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique view identifier",
+          "pattern": "^id_[a-z0-9]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "View display name"
+        },
+        "filters": {
+          "type": "object",
+          "description": "Field filters keyed by field ID",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "collectionFilter": {
+          "type": "string",
+          "description": "Collection filter ID"
+        },
+        "tagFilter": {
+          "type": "string",
+          "description": "Tag filter ID"
+        }
+      }
+    },
+    "note": {
+      "type": "object",
+      "description": "DataForge extension: Note attached to a record",
+      "required": ["id", "tableId", "recordId", "text"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique note identifier",
+          "pattern": "^id_[a-z0-9]+$"
+        },
+        "tableId": {
+          "type": "string",
+          "description": "Table ID of the record this note is attached to"
+        },
+        "recordId": {
+          "type": "string",
+          "description": "Record ID this note is attached to"
+        },
+        "text": {
+          "type": "string",
+          "description": "Note text content"
+        },
+        "resolved": {
+          "type": "boolean",
+          "description": "Whether the note is marked as resolved",
+          "default": false
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Note creation timestamp"
         }
       }
     }

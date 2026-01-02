@@ -1,305 +1,347 @@
 # JSONDB File Format Specification
 
-**Version:** 1.0  
-**File Extension:** `.jsondb`  
-**MIME Type:** `application/json`  
-**Encoding:** UTF-8
+JSONDB is a JSON-based database format designed for simplicity, portability, and human readability. This document describes the format as implemented in DataForge, including standard features and DataForge-specific extensions.
 
 ## Overview
 
-JSONDB is a simple, human-readable database format designed for lightweight relational data storage. It supports multiple tables, various field types, and relationships between tables.
+A JSONDB file is a valid JSON document with the `.jsondb` extension. It contains:
+- Database metadata
+- Table definitions with field schemas
+- Records (data rows)
+- Optional: Collections, tags, notes, and views (DataForge extensions)
 
-## File Structure
-
-A JSONDB file is a valid JSON document with the following top-level structure:
+## Basic Structure
 
 ```json
 {
-  "meta": { ... },
-  "tables": [ ... ]
+  "meta": {
+    "name": "Database Name",
+    "columnVisibility": {},
+    "groupStates": {},
+    "collections": [],
+    "tags": [],
+    "views": {},
+    "notes": []
+  },
+  "tables": []
 }
 ```
 
-## Schema
+## Meta Object
 
-### Root Object
-
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `meta` | object | Yes | Database metadata |
-| `tables` | array | Yes | Array of table definitions |
-
-### Meta Object
+The `meta` object contains database-level settings:
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `name` | string | Yes | Human-readable name of the database |
-| `columnVisibility` | object | No | UI settings for column visibility |
+| `name` | string | Yes | Database display name |
+| `columnVisibility` | object | No | Per-table column visibility settings |
+| `groupStates` | object | No | Per-table group expansion states |
+| `collections` | array | No | DataForge extension: Collections |
+| `tags` | array | No | DataForge extension: Tags |
+| `views` | object | No | DataForge extension: Saved views |
+| `notes` | array | No | DataForge extension: Record notes |
 
-The `columnVisibility` object uses table IDs as keys, with nested objects mapping field IDs to boolean visibility values.
+## Tables
 
-### Table Object
+Each table is an object with the following structure:
+
+```json
+{
+  "id": "id_abc123",
+  "name": "Contacts",
+  "showInSimpleMode": true,
+  "fields": [],
+  "records": []
+}
+```
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
 | `id` | string | Yes | Unique identifier (format: `id_[a-z0-9]+`) |
-| `name` | string | Yes | Display name of the table |
-| `fields` | array | Yes | Array of field definitions |
-| `records` | array | Yes | Array of data records |
+| `name` | string | Yes | Table display name |
+| `showInSimpleMode` | boolean | No | DataForge extension: Visibility in simple mode |
+| `fields` | array | Yes | Field definitions |
+| `records` | array | Yes | Data records |
 
-### Field Object
+## Fields
+
+Fields define the schema for table records:
+
+```json
+{
+  "id": "id_f1",
+  "name": "Full Name",
+  "type": "text",
+  "primary": true,
+  "filter": false,
+  "group": false
+}
+```
+
+### Field Properties
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `id` | string | Yes | Unique identifier (format: `id_[a-z0-9]+`) |
-| `name` | string | Yes | Display name of the field |
-| `type` | string | Yes | Data type (see Field Types below) |
-| `options` | string | Conditional | Comma-separated values for `select` type |
-| `compositeTemplate` | string | Conditional | Template for `composite` type |
-| `primary` | boolean | No | If true, this field represents the record's display name |
-| `filter` | boolean | No | If true, filtering is enabled for this field |
-| `targetTableId` | string | Conditional | Target table ID for `parent`/`children` types |
-| `parentFieldId` | string | No | Back-reference field ID for `children` type |
+| `id` | string | Yes | Unique identifier |
+| `name` | string | Yes | Field display name |
+| `type` | string | Yes | Field data type (see below) |
+| `primary` | boolean | No | Whether this is the primary display field |
+| `filter` | boolean | No | Enable filtering by this field |
+| `group` | boolean | No | Enable grouping by this field |
+| `options` | string | No | Comma-separated options (for `select` type) |
+| `template` | string | No | Template string (for `composite` type) |
+| `targetTableId` | string | No | Target table ID (for `parent`/`children` types) |
+| `parentFieldId` | string | No | Parent field ID (for `children` type) |
 
 ### Field Types
 
 | Type | Description | Value Format |
 |------|-------------|--------------|
-| `text` | Single-line text | string |
-| `textarea` | Multi-line text with Markdown support | string |
-| `number` | Numeric value | number |
-| `date` | Date value | string (ISO 8601: `YYYY-MM-DD`) |
-| `boolean` | True/false value | boolean |
-| `select` | Selection from predefined options | string |
-| `composite` | Computed field from other fields | N/A (computed) |
-| `parent` | Reference to a record in another table | string (record ID) |
-| `children` | Computed list of referencing records | N/A (computed) |
+| `text` | Single-line text | String |
+| `textarea` | Multi-line text with Markdown support | String |
+| `number` | Numeric value | Number or numeric string |
+| `date` | Date | ISO date string (YYYY-MM-DD) |
+| `url` | Web URL | String (URL format) |
+| `boolean` | True/false value | "true" or "false" string |
+| `select` | Selection from predefined options | String (one of options) |
+| `composite` | Auto-generated from template | String (read-only) |
+| `parent` | Reference to parent record | Record ID string |
+| `children` | List of child records | Read-only, auto-generated |
 
-### Record Object
+### Composite Field Template
+
+Composite fields use a template with placeholders:
+```
+{First Name} {Last Name} ({Department})
+```
+
+Placeholders reference field names and are replaced with actual values.
+
+## Records
+
+Records contain the actual data:
+
+```json
+{
+  "id": "id_r1",
+  "values": {
+    "id_f1": "John Doe",
+    "id_f2": "john@example.com",
+    "id_f3": "2024-01-15"
+  },
+  "locked": false
+}
+```
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `id` | string | Yes | Unique identifier (format: `id_[a-z0-9]+`) |
+| `id` | string | Yes | Unique record identifier |
 | `values` | object | Yes | Field values keyed by field ID |
+| `locked` | boolean | No | DataForge extension: Record lock status |
 
-## Field Type Details
+---
 
-### Text (`text`)
-Simple single-line text input.
+## DataForge Extensions
 
-### Textarea (`textarea`)
-Multi-line text with Markdown rendering support. Supports:
-- Headers (`#`, `##`, `###`)
-- Bold (`**text**`) and italic (`*text*`)
-- Lists (ordered and unordered)
-- Code blocks and inline code
-- Blockquotes
-- Links
+The following features are DataForge-specific extensions to the JSONDB format. They are fully backward-compatible – databases without these features will work correctly, and other JSONDB-compatible tools can safely ignore them.
 
-### Number (`number`)
-Numeric values stored as JSON numbers. Supports integers and decimals.
+### Collections
 
-### Date (`date`)
-Date values stored as ISO 8601 strings (`YYYY-MM-DD`).
+Collections group records from multiple tables:
 
-### Boolean (`boolean`)
-True/false values stored as JSON booleans.
-
-### Select (`select`)
-Selection from a predefined list. Options are defined in the `options` property as a comma-separated string.
-
-**Example:**
 ```json
 {
-  "type": "select",
-  "options": "Low,Medium,High,Critical"
+  "id": "id_col1",
+  "name": "Important Contacts",
+  "description": "Key business contacts",
+  "color": "#4a90d9",
+  "members": [
+    { "tableId": "id_t1", "recordId": "id_r1" },
+    { "tableId": "id_t2", "recordId": "id_r5" }
+  ]
 }
 ```
 
-### Composite (`composite`)
-A computed field that concatenates values from other fields. The template uses `{FieldName}` placeholders.
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | string | Yes | Unique collection identifier |
+| `name` | string | Yes | Collection display name |
+| `description` | string | No | Collection description |
+| `color` | string | No | Hex color code (#RRGGBB) |
+| `members` | array | No | Array of record references |
 
-**Example:**
+### Tags
+
+Tags provide labeling functionality:
+
 ```json
 {
-  "type": "composite",
-  "compositeTemplate": "{FirstName} {LastName} ({Department})"
+  "id": "id_tag1",
+  "name": "Urgent",
+  "color": "#e74c3c",
+  "records": [
+    { "tableId": "id_t1", "recordId": "id_r1" }
+  ]
 }
 ```
 
-Composite fields can be marked as `primary` to create dynamic record display names.
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | string | Yes | Unique tag identifier |
+| `name` | string | Yes | Tag display name |
+| `color` | string | No | Hex color code (#RRGGBB) |
+| `records` | array | No | Array of record references |
 
-### Parent (`parent`)
-Creates a many-to-one relationship. The value stores the ID of a record in the target table.
+### Notes
 
-**Example:**
+Notes attach comments to records with resolution tracking:
+
 ```json
 {
-  "type": "parent",
-  "targetTableId": "id_abc123xyz"
+  "id": "id_note1",
+  "tableId": "id_t1",
+  "recordId": "id_r1",
+  "text": "Follow up next week",
+  "resolved": false,
+  "createdAt": "2024-01-15T10:30:00Z"
 }
 ```
 
-### Children (`children`)
-A computed field that displays all records from another table that reference this record. Requires `targetTableId` and optionally `parentFieldId` to specify which parent field to follow.
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | string | Yes | Unique note identifier |
+| `tableId` | string | Yes | Table ID of attached record |
+| `recordId` | string | Yes | Record ID note is attached to |
+| `text` | string | Yes | Note content |
+| `resolved` | boolean | No | Resolution status |
+| `createdAt` | string | No | ISO timestamp |
 
-## Relationships
+### Views (Saved Filters)
 
-JSONDB supports relational data through `parent` and `children` field types:
-
-1. **Parent Field**: Stores a reference (record ID) to a record in another table
-2. **Children Field**: Computed inverse relationship showing all records that reference this record
-
-**Example: Projects and Tasks**
+Views save filter configurations:
 
 ```json
 {
-  "tables": [
+  "id_t1": [
     {
-      "id": "id_projects",
-      "name": "Projects",
-      "fields": [
-        { "id": "id_pname", "name": "Name", "type": "text", "primary": true },
-        { "id": "id_ptasks", "name": "Tasks", "type": "children", "targetTableId": "id_tasks" }
-      ],
-      "records": [
-        { "id": "id_p1", "values": { "id_pname": "Website Redesign" } }
-      ]
-    },
-    {
-      "id": "id_tasks",
-      "name": "Tasks",
-      "fields": [
-        { "id": "id_tname", "name": "Name", "type": "text", "primary": true },
-        { "id": "id_tproject", "name": "Project", "type": "parent", "targetTableId": "id_projects" }
-      ],
-      "records": [
-        { "id": "id_t1", "values": { "id_tname": "Design mockups", "id_tproject": "id_p1" } },
-        { "id": "id_t2", "values": { "id_tname": "Implement frontend", "id_tproject": "id_p1" } }
-      ]
+      "id": "id_view1",
+      "name": "Active Only",
+      "filters": {
+        "id_f5": "active"
+      },
+      "collectionFilter": "",
+      "tagFilter": "id_tag1"
     }
   ]
 }
 ```
 
-## ID Generation
+Views are stored in `meta.views` object, keyed by table ID.
 
-IDs follow the pattern `id_[timestamp][random]` where:
-- `timestamp` is the current time in base-36
-- `random` is a random string in base-36
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | string | Yes | Unique view identifier |
+| `name` | string | Yes | View display name |
+| `filters` | object | No | Field filters (field ID → value) |
+| `collectionFilter` | string | No | Collection ID filter |
+| `tagFilter` | string | No | Tag ID filter |
 
-Example: `id_m4x7k2a9bc3def`
+### Record Locking
 
-## Complete Example
+Records can be locked to prevent editing:
+
+```json
+{
+  "id": "id_r1",
+  "values": { ... },
+  "locked": true
+}
+```
+
+When `locked` is `true`, the record cannot be edited or deleted until unlocked.
+
+---
+
+## ID Format
+
+All identifiers follow the pattern `id_[a-z0-9]+`:
+- Prefix: `id_`
+- Suffix: Lowercase alphanumeric characters
+- Example: `id_abc123`, `id_k7m2p9x`
+
+IDs are generated automatically and should be treated as opaque strings.
+
+## Compatibility
+
+### Backward Compatibility
+- Databases created with older versions will work correctly
+- Missing optional properties use default values
+- Unknown properties are preserved but ignored
+
+### Extension Compatibility
+- DataForge extensions are stored in standard JSON format
+- Other JSONDB tools can safely ignore extension properties
+- Extensions don't affect core table/record functionality
+
+## Example Database
 
 ```json
 {
   "meta": {
-    "name": "Contact Database",
-    "columnVisibility": {
-      "id_contacts": {
-        "id_notes": false
+    "name": "Project Tracker",
+    "columnVisibility": {},
+    "groupStates": {},
+    "collections": [
+      {
+        "id": "id_col1",
+        "name": "Priority Items",
+        "color": "#e74c3c",
+        "members": []
       }
-    }
+    ],
+    "tags": [
+      {
+        "id": "id_tag1",
+        "name": "Urgent",
+        "color": "#f39c12",
+        "records": []
+      }
+    ],
+    "views": {},
+    "notes": []
   },
   "tables": [
     {
-      "id": "id_companies",
-      "name": "Companies",
+      "id": "id_t1",
+      "name": "Tasks",
       "fields": [
         {
-          "id": "id_cname",
-          "name": "Company Name",
+          "id": "id_f1",
+          "name": "Task Name",
           "type": "text",
-          "primary": true,
-          "filter": true
-        },
-        {
-          "id": "id_cemployees",
-          "name": "Employees",
-          "type": "children",
-          "targetTableId": "id_contacts",
-          "parentFieldId": "id_company"
-        }
-      ],
-      "records": [
-        {
-          "id": "id_comp1",
-          "values": {
-            "id_cname": "Acme Corporation"
-          }
-        }
-      ]
-    },
-    {
-      "id": "id_contacts",
-      "name": "Contacts",
-      "fields": [
-        {
-          "id": "id_fname",
-          "name": "First Name",
-          "type": "text"
-        },
-        {
-          "id": "id_lname",
-          "name": "Last Name",
-          "type": "text"
-        },
-        {
-          "id": "id_fullname",
-          "name": "Full Name",
-          "type": "composite",
-          "compositeTemplate": "{First Name} {Last Name}",
           "primary": true
         },
         {
-          "id": "id_email",
-          "name": "Email",
-          "type": "text"
-        },
-        {
-          "id": "id_company",
-          "name": "Company",
-          "type": "parent",
-          "targetTableId": "id_companies",
-          "filter": true
-        },
-        {
-          "id": "id_priority",
-          "name": "Priority",
+          "id": "id_f2",
+          "name": "Status",
           "type": "select",
-          "options": "Low,Medium,High",
-          "filter": true
+          "options": "New,In Progress,Done",
+          "filter": true,
+          "group": true
         },
         {
-          "id": "id_active",
-          "name": "Active",
-          "type": "boolean",
-          "filter": true
-        },
-        {
-          "id": "id_birthdate",
-          "name": "Birth Date",
+          "id": "id_f3",
+          "name": "Due Date",
           "type": "date"
-        },
-        {
-          "id": "id_notes",
-          "name": "Notes",
-          "type": "textarea"
         }
       ],
       "records": [
         {
-          "id": "id_rec1",
+          "id": "id_r1",
           "values": {
-            "id_fname": "John",
-            "id_lname": "Doe",
-            "id_email": "john.doe@acme.com",
-            "id_company": "id_comp1",
-            "id_priority": "High",
-            "id_active": true,
-            "id_birthdate": "1985-03-15",
-            "id_notes": "Key contact for **sales** department.\n\n## Notes\n- Prefers email communication\n- Available Mon-Thu"
+            "id_f1": "Write documentation",
+            "id_f2": "In Progress",
+            "id_f3": "2024-01-20"
           }
         }
       ]
@@ -308,25 +350,7 @@ Example: `id_m4x7k2a9bc3def`
 }
 ```
 
-## Validation
+## JSON Schema
 
-A JSON Schema is available for validating JSONDB files: `jsondb-schema.json`
-
-## Importing Data
-
-When importing CSV/TSV data:
-- The first row should contain column headers matching field names
-- Records with matching primary field values are updated (upsert behavior)
-- New records are created for non-matching entries
-
-## Best Practices
-
-1. **Use descriptive names**: Table and field names should be clear and meaningful
-2. **Set primary fields**: Always designate one field as primary for better record identification
-3. **Enable filters wisely**: Only enable filtering on fields that benefit from it
-4. **Use composite fields**: For complex display names, use composite fields instead of duplicating data
-5. **Leverage relationships**: Use parent/children fields to maintain referential integrity
-
-## License
-
-This specification is released under the MIT License. Implementations are free to use this format without restriction.
+A complete JSON Schema for validation is available at:
+[jsondb-schema.json](https://github.com/michalradacz/database-editor/blob/main/jsondb-schema.json)
