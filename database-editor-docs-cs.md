@@ -1,6 +1,6 @@
-# DataForge – Editor databáze
+# JSONDB Editor – Editor databáze
 
-**DataForge** je výkonný editor databází běžící přímo v prohlížeči. Nevyžaduje žádný server, instalaci ani připojení k internetu. Vaše data zůstávají pouze ve vašem počítači.
+**JSONDB Editor** je výkonný editor databází běžící přímo v prohlížeči. Nevyžaduje žádný server, instalaci ani připojení k internetu. Vaše data zůstávají pouze ve vašem počítači.
 
 🌐 **Online verze:** [mrt.site44.com/database-editor](https://mrt.site44.com/database-editor)  
 📦 **GitHub:** [github.com/michalradacz/database-editor](https://github.com/michalradacz/database-editor)
@@ -65,6 +65,28 @@ Numerická hodnota. Umožňuje řazení podle číselné hodnoty.
 ### Datum
 Pole pro datum. V editaci se zobrazí kalendářový výběr. Při vytváření nového záznamu se automaticky vyplní dnešní datum.
 
+**Vlastní formát zobrazení:** V nastavení pole můžete definovat vlastní formát data pomocí PHP-style placeholderů:
+
+| Placeholder | Popis | Příklad |
+|-------------|-------|---------|
+| `d` | Den s nulou | 01-31 |
+| `j` | Den bez nuly | 1-31 |
+| `D` | Zkrácený den v týdnu | Po, Út |
+| `l` | Plný den v týdnu | Pondělí |
+| `N` | ISO den v týdnu | 1-7 |
+| `m` | Měsíc s nulou | 01-12 |
+| `n` | Měsíc bez nuly | 1-12 |
+| `M` | Zkrácený měsíc | Led, Úno |
+| `F` | Plný měsíc | Ledna, Února |
+| `Y` | Čtyřmístný rok | 2024 |
+| `y` | Dvoumístný rok | 24 |
+
+**Příklady formátů:**
+- `j. n. Y` → 5. 1. 2024
+- `d.m.Y` → 05.01.2024
+- `D j. F Y` → Pá 5. Ledna 2024
+- `l, j. n. Y` → Pátek, 5. 1. 2024
+
 ### URL odkaz
 Webová adresa. V zobrazení záznamu se automaticky zobrazí jako klikatelný odkaz.
 
@@ -118,6 +140,7 @@ Klikněte na tlačítko **👁️** u záznamu pro otevření detailního zobraz
 - Související záznamy (nadřazené a podřízené)
 - Kolekce a tagy přiřazené k záznamu
 - Poznámky
+- Historii změn
 
 ### Úprava záznamu
 Klikněte na tlačítko **✏️** u záznamu nebo v detailu záznamu.
@@ -133,9 +156,42 @@ Klikněte na tlačítko **🗑️** u záznamu. Před smazáním budete požád�
 
 ---
 
+## Historie změn
+
+JSONDB Editor automaticky zaznamenává historii všech změn provedených na záznamech. Historie je dostupná jak v základním, tak v pokročilém režimu.
+
+### Sledované operace
+
+Historie zaznamenává:
+- **Vytvoření** – všechny hodnoty polí při vytvoření záznamu
+- **Úprava** – pouze změněná pole (rozdíl oproti předchozímu stavu)
+- **Hromadná úprava** – změny provedené hromadnou operací
+
+### Zobrazení historie
+1. Otevřete detail záznamu kliknutím na **👁️**
+2. Klikněte na tlačítko **📜 Historie**
+3. Zobrazí se modální okno s chronologickým seznamem změn (nejnovější nahoře)
+
+### Informace v historii
+Každý záznam v historii obsahuje:
+- **Datum a čas** změny
+- **Typ operace** (Vytvoření / Úprava / Hromadná úprava)
+- **Seznam změněných polí** s jejich hodnotami
+
+### Správa historie (pokročilý režim)
+V pokročilém režimu můžete historii upravovat:
+- **🗑️ Smazat záznam** – Smaže celý záznam z historie (tlačítko v záhlaví záznamu)
+- **✕ Smazat pole** – Smaže jednotlivé pole ze záznamu historie (tlačítko u pole)
+
+Pokud smažete všechna pole ze záznamu historie, celý záznam se automaticky odstraní.
+
+**Poznámka:** Mazání historie je nevratná operace. Používejte s rozmyslem.
+
+---
+
 ## Hierarchická struktura
 
-DataForge podporuje hierarchické vztahy mezi záznamy pomocí polí typu **Nadřazený záznam** a **Podřízené záznamy**.
+JSONDB Editor podporuje hierarchické vztahy mezi záznamy pomocí polí typu **Nadřazený záznam** a **Podřízené záznamy**.
 
 ### Zobrazení struktury
 V detailu záznamu klikněte na **🌳 Zobrazit strukturu** pro otevření stromového zobrazení všech potomků záznamu.
@@ -303,7 +359,7 @@ Email: {Email}
 
 ## Zjednodušený a pokročilý režim
 
-DataForge nabízí dva režimy zobrazení:
+JSONDB Editor nabízí dva režimy zobrazení:
 
 ### Zjednodušený režim (výchozí)
 Určený pro základní uživatele. Skrývá pokročilé funkce:
@@ -312,6 +368,7 @@ Určený pro základní uživatele. Skrývá pokročilé funkce:
 - Filtry podle polí (zůstává pouze vyhledávání)
 - Tlačítka pro správu pohledů
 - Kartu Správa
+- Mazání záznamů z historie
 
 ### Pokročilý režim
 Aktivujte zaškrtnutím **Všechny funkce** v hlavičce. Zpřístupní všechny funkce aplikace.
@@ -351,7 +408,7 @@ Klávesové zkratky používají modifikátor prohlížeče:
 
 ## DokuWiki integrace
 
-DataForge lze integrovat do systému DokuWiki jako plugin.
+JSONDB Editor lze integrovat do systému DokuWiki jako plugin.
 
 ### Instalace
 1. Stáhněte složku `jsondbeditor` z GitHubu
@@ -372,12 +429,29 @@ Editor se otevře v novém okně a změny se po uložení automaticky promítnou
 
 ## Přístupnost
 
-DataForge je navržen s ohledem na přístupnost:
+JSONDB Editor je navržen s ohledem na přístupnost:
 - Plná podpora klávesové navigace
 - ARIA atributy pro odečítače obrazovky
 - Sémantické HTML5 elementy
 - Dostatečný barevný kontrast
 - Responzivní design pro různé velikosti obrazovky
+
+---
+
+## Ochrana neuložených změn
+
+JSONDB Editor chrání vaši práci před ztrátou:
+
+### Upozornění na neuložené změny
+Pokud provedete jakékoliv změny v databázi (přidání/úprava/smazání záznamů, úprava struktury apod.), v horní části okna se zobrazí žlutý banner s upozorněním: **"⚠️ Změnili jste obsah databáze. Nezapomeňte ji uložit."**
+
+### Varování při zavření okna
+Pokud se pokusíte zavřít okno nebo kartu prohlížeče s neuloženými změnami, prohlížeč zobrazí potvrzovací dialog, zda opravdu chcete stránku opustit.
+
+### Kdy zmizí upozornění
+Upozornění automaticky zmizí po:
+- Uložení databáze do souboru (tlačítko **💾 Uložit**)
+- Uložení na wiki (tlačítko **📤 Uložit na wiki** v DokuWiki verzi)
 
 ---
 
@@ -390,6 +464,7 @@ Databáze se ukládá ve formátu JSON s příponou `.jsondb`. Soubor obsahuje:
 - Všechny záznamy
 - Kolekce, tagy a poznámky
 - Uložené pohledy
+- Historie změn záznamů
 
 ### Ukládání dat
 - **Standalone verze:** Data se automaticky ukládají do sessionStorage prohlížeče (izolovaně pro každou kartu)
@@ -407,7 +482,7 @@ Aplikace funguje ve všech moderních prohlížečích:
 
 ## Licence
 
-DataForge je open source software. Zdrojový kód je dostupný na [GitHubu](https://github.com/michalradacz/database-editor).
+JSONDB Editor je open source software. Zdrojový kód je dostupný na [GitHubu](https://github.com/michalradacz/database-editor).
 
 ---
 

@@ -1,6 +1,6 @@
-# DataForge – Database Editor
+# JSONDB Editor – Database Editor
 
-**DataForge** is a powerful database editor that runs entirely in your browser. It requires no server, installation, or internet connection. Your data stays on your computer.
+**JSONDB Editor** is a powerful database editor that runs entirely in your browser. It requires no server, installation, or internet connection. Your data stays on your computer.
 
 🌐 **Online version:** [mrt.site44.com/database-editor](https://mrt.site44.com/database-editor)  
 📦 **GitHub:** [github.com/michalradacz/database-editor](https://github.com/michalradacz/database-editor)
@@ -65,6 +65,28 @@ Numeric value. Allows sorting by numerical value.
 ### Date
 Date field. A calendar picker is displayed when editing. Today's date is automatically filled in when creating a new record.
 
+**Custom Display Format:** In field settings, you can define a custom date format using PHP-style placeholders:
+
+| Placeholder | Description | Example |
+|-------------|-------------|---------|
+| `d` | Day with zero | 01-31 |
+| `j` | Day without zero | 1-31 |
+| `D` | Short weekday | Mon, Tue |
+| `l` | Full weekday | Monday |
+| `N` | ISO weekday | 1-7 |
+| `m` | Month with zero | 01-12 |
+| `n` | Month without zero | 1-12 |
+| `M` | Short month | Jan, Feb |
+| `F` | Full month | January |
+| `Y` | Four-digit year | 2024 |
+| `y` | Two-digit year | 24 |
+
+**Format Examples:**
+- `j. n. Y` → 5. 1. 2024
+- `m/d/Y` → 01/05/2024
+- `D, M j, Y` → Fri, Jan 5, 2024
+- `l, F j, Y` → Friday, January 5, 2024
+
 ### URL Link
 Web address. Automatically displayed as a clickable link when viewing the record.
 
@@ -118,6 +140,7 @@ Click the **👁️** button next to a record to open the detailed view. In the 
 - Related records (parent and children)
 - Collections and tags assigned to the record
 - Notes
+- Change history
 
 ### Editing a Record
 Click the **✏️** button next to a record or in the record detail.
@@ -133,9 +156,42 @@ Click the **🗑️** button next to a record. You will be asked to confirm befo
 
 ---
 
+## Change History
+
+JSONDB Editor automatically records the history of all changes made to records. History is available in both simple and advanced modes.
+
+### Tracked Operations
+
+History records:
+- **Creation** – all field values when creating a record
+- **Edit** – only changed fields (difference from previous state)
+- **Bulk edit** – changes made through bulk operations
+
+### Viewing History
+1. Open the record detail by clicking **👁️**
+2. Click the **📜 History** button
+3. A modal window will appear with a chronological list of changes (newest first)
+
+### Information in History
+Each history entry contains:
+- **Date and time** of the change
+- **Operation type** (Created / Edited / Bulk edit)
+- **List of changed fields** with their values
+
+### Managing History (Advanced Mode)
+In advanced mode, you can modify history:
+- **🗑️ Delete entry** – Deletes the entire history entry (button in the entry header)
+- **✕ Delete field** – Deletes a single field from a history entry (button next to the field)
+
+If you delete all fields from a history entry, the entire entry is automatically removed.
+
+**Note:** Deleting history is irreversible. Use with caution.
+
+---
+
 ## Hierarchical Structure
 
-DataForge supports hierarchical relationships between records using **Parent Record** and **Child Records** field types.
+JSONDB Editor supports hierarchical relationships between records using **Parent Record** and **Child Records** field types.
 
 ### Viewing Structure
 In the record detail, click **🌳 Show Structure** to open a tree view of all the record's descendants.
@@ -303,7 +359,7 @@ Email: {Email}
 
 ## Simple and Advanced Mode
 
-DataForge offers two display modes:
+JSONDB Editor offers two display modes:
 
 ### Simple Mode (Default)
 Designed for basic users. Hides advanced features:
@@ -312,6 +368,7 @@ Designed for basic users. Hides advanced features:
 - Field filters (only search remains)
 - View management buttons
 - Management tab
+- History entry deletion
 
 ### Advanced Mode
 Activate by checking **All Features** in the header. Enables all application features.
@@ -351,7 +408,7 @@ Keyboard shortcuts use the browser modifier:
 
 ## DokuWiki Integration
 
-DataForge can be integrated into DokuWiki as a plugin.
+JSONDB Editor can be integrated into DokuWiki as a plugin.
 
 ### Installation
 1. Download the `jsondbeditor` folder from GitHub
@@ -372,12 +429,29 @@ The editor opens in a new window and changes are automatically reflected back to
 
 ## Accessibility
 
-DataForge is designed with accessibility in mind:
+JSONDB Editor is designed with accessibility in mind:
 - Full keyboard navigation support
 - ARIA attributes for screen readers
 - Semantic HTML5 elements
 - Sufficient color contrast
 - Responsive design for various screen sizes
+
+---
+
+## Unsaved Changes Protection
+
+JSONDB Editor protects your work from being lost:
+
+### Unsaved Changes Warning
+If you make any changes to the database (adding/editing/deleting records, modifying structure, etc.), a yellow banner will appear at the top of the window with a warning: **"⚠️ You have made changes to the database. Don't forget to save."**
+
+### Close Window Warning
+If you try to close the browser window or tab with unsaved changes, the browser will display a confirmation dialog asking if you really want to leave the page.
+
+### When the Warning Disappears
+The warning automatically disappears after:
+- Saving the database to a file (**💾 Save** button)
+- Saving to wiki (**📤 Save to Wiki** button in DokuWiki version)
 
 ---
 
@@ -390,6 +464,7 @@ The database is saved in JSON format with a `.jsondb` extension. The file contai
 - All records
 - Collections, tags, and notes
 - Saved views
+- Record change history
 
 ### Data Storage
 - **Standalone version:** Data is automatically saved to browser sessionStorage (isolated for each tab)
@@ -407,7 +482,7 @@ The application works in all modern browsers:
 
 ## License
 
-DataForge is open source software. Source code is available on [GitHub](https://github.com/michalradacz/database-editor).
+JSONDB Editor is open source software. Source code is available on [GitHub](https://github.com/michalradacz/database-editor).
 
 ---
 

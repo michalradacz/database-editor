@@ -1,6 +1,6 @@
 # JSONDB File Format Specification
 
-JSONDB is a JSON-based database format designed for simplicity, portability, and human readability. This document describes the format as implemented in DataForge, including standard features and DataForge-specific extensions.
+JSONDB is a JSON-based database format designed for simplicity, portability, and human readability. This document describes the format as implemented in JSONDB Editor, including standard features and JSONDB Editor-specific extensions.
 
 ## Overview
 
@@ -8,7 +8,7 @@ A JSONDB file is a valid JSON document with the `.jsondb` extension. It contains
 - Database metadata
 - Table definitions with field schemas
 - Records (data rows)
-- Optional: Collections, tags, notes, and views (DataForge extensions)
+- Optional: Collections, tags, notes, views, and record history (JSONDB Editor extensions)
 
 ## Basic Structure
 
@@ -21,7 +21,8 @@ A JSONDB file is a valid JSON document with the `.jsondb` extension. It contains
     "collections": [],
     "tags": [],
     "views": {},
-    "notes": []
+    "notes": [],
+    "recordHistory": {}
   },
   "tables": []
 }
@@ -36,10 +37,11 @@ The `meta` object contains database-level settings:
 | `name` | string | Yes | Database display name |
 | `columnVisibility` | object | No | Per-table column visibility settings |
 | `groupStates` | object | No | Per-table group expansion states |
-| `collections` | array | No | DataForge extension: Collections |
-| `tags` | array | No | DataForge extension: Tags |
-| `views` | object | No | DataForge extension: Saved views |
-| `notes` | array | No | DataForge extension: Record notes |
+| `collections` | array | No | JSONDB Editor extension: Collections |
+| `tags` | array | No | JSONDB Editor extension: Tags |
+| `views` | object | No | JSONDB Editor extension: Saved views |
+| `notes` | array | No | JSONDB Editor extension: Record notes |
+| `recordHistory` | object | No | JSONDB Editor extension: Change history |
 
 ## Tables
 
@@ -59,7 +61,7 @@ Each table is an object with the following structure:
 |----------|------|----------|-------------|
 | `id` | string | Yes | Unique identifier (format: `id_[a-z0-9]+`) |
 | `name` | string | Yes | Table display name |
-| `showInSimpleMode` | boolean | No | DataForge extension: Visibility in simple mode |
+| `showInSimpleMode` | boolean | No | JSONDB Editor extension: Visibility in simple mode |
 | `fields` | array | Yes | Field definitions |
 | `records` | array | Yes | Data records |
 
@@ -89,9 +91,33 @@ Fields define the schema for table records:
 | `filter` | boolean | No | Enable filtering by this field |
 | `group` | boolean | No | Enable grouping by this field |
 | `options` | string | No | Comma-separated options (for `select` type) |
+| `dateFormat` | string | No | PHP-style date format (for `date` type) |
 | `template` | string | No | Template string (for `composite` type) |
 | `targetTableId` | string | No | Target table ID (for `parent`/`children` types) |
 | `parentFieldId` | string | No | Parent field ID (for `children` type) |
+
+### Date Format Placeholders
+
+For `date` type fields, you can specify a custom display format using PHP-style placeholders:
+
+| Placeholder | Description | Example |
+|-------------|-------------|---------|
+| `d` | Day with leading zero | 01-31 |
+| `j` | Day without leading zero | 1-31 |
+| `D` | Short weekday name | Mon, Tue |
+| `l` | Full weekday name | Monday |
+| `N` | ISO weekday number | 1 (Mon) - 7 (Sun) |
+| `m` | Month with leading zero | 01-12 |
+| `n` | Month without leading zero | 1-12 |
+| `M` | Short month name | Jan, Feb |
+| `F` | Full month name | January |
+| `Y` | Four-digit year | 2024 |
+| `y` | Two-digit year | 24 |
+
+**Examples:**
+- `j. n. Y` → 5. 1. 2024
+- `m/d/Y` → 01/05/2024
+- `D, M j, Y` → Fri, Jan 5, 2024
 
 ### Field Types
 
@@ -137,13 +163,13 @@ Records contain the actual data:
 |----------|------|----------|-------------|
 | `id` | string | Yes | Unique record identifier |
 | `values` | object | Yes | Field values keyed by field ID |
-| `locked` | boolean | No | DataForge extension: Record lock status |
+| `locked` | boolean | No | JSONDB Editor extension: Record lock status |
 
 ---
 
-## DataForge Extensions
+## JSONDB Editor Extensions
 
-The following features are DataForge-specific extensions to the JSONDB format. They are fully backward-compatible – databases without these features will work correctly, and other JSONDB-compatible tools can safely ignore them.
+The following features are JSONDB Editor-specific extensions to the JSONDB format. They are fully backward-compatible – databases without these features will work correctly, and other JSONDB-compatible tools can safely ignore them.
 
 ### Collections
 
@@ -260,6 +286,54 @@ Records can be locked to prevent editing:
 
 When `locked` is `true`, the record cannot be edited or deleted until unlocked.
 
+### Record History
+
+Record history tracks all changes made to records:
+
+```json
+{
+  "id_t1_id_r1": [
+    {
+      "id": "id_h1",
+      "timestamp": "2024-01-15T10:30:00Z",
+      "type": "create",
+      "fields": {
+        "id_f1": "John Doe",
+        "id_f2": "john@example.com"
+      }
+    },
+    {
+      "id": "id_h2",
+      "timestamp": "2024-01-16T14:20:00Z",
+      "type": "edit",
+      "fields": {
+        "id_f2": "johndoe@example.com"
+      }
+    }
+  ]
+}
+```
+
+History is stored in `meta.recordHistory` object, keyed by `{tableId}_{recordId}`.
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | string | Yes | Unique history entry identifier |
+| `timestamp` | string | Yes | ISO timestamp of the change |
+| `type` | string | Yes | Type of operation: `create`, `edit`, or `bulk` |
+| `fields` | object | Yes | Changed fields with their new values |
+
+**History entry types:**
+- `create` – Record was created (all initial field values)
+- `edit` – Record was edited (only changed fields)
+- `bulk` – Record was modified via bulk operation (only changed fields)
+
+**Notes:**
+- For `create` entries, `fields` contains all non-empty field values at creation time
+- For `edit` and `bulk` entries, `fields` contains only the fields that changed
+- Empty values are not stored in history
+- History entries can be deleted by users in advanced mode
+
 ---
 
 ## ID Format
@@ -279,7 +353,7 @@ IDs are generated automatically and should be treated as opaque strings.
 - Unknown properties are preserved but ignored
 
 ### Extension Compatibility
-- DataForge extensions are stored in standard JSON format
+- JSONDB Editor extensions are stored in standard JSON format
 - Other JSONDB tools can safely ignore extension properties
 - Extensions don't affect core table/record functionality
 
@@ -308,7 +382,21 @@ IDs are generated automatically and should be treated as opaque strings.
       }
     ],
     "views": {},
-    "notes": []
+    "notes": [],
+    "recordHistory": {
+      "id_t1_id_r1": [
+        {
+          "id": "id_h1",
+          "timestamp": "2024-01-15T10:30:00Z",
+          "type": "create",
+          "fields": {
+            "id_f1": "Write documentation",
+            "id_f2": "In Progress",
+            "id_f3": "2024-01-20"
+          }
+        }
+      ]
+    }
   },
   "tables": [
     {

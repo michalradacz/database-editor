@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/michalradacz/database-editor/jsondb-schema.json",
   "title": "JSONDB Database Schema",
-  "description": "Schema for JSONDB database format used by DataForge editor. Includes DataForge extensions for collections, notes, views, and record locking.",
+  "description": "Schema for JSONDB database format used by JSONDB Editor. Includes JSONDB Editor extensions for collections, notes, views, record locking, and change history.",
   "type": "object",
   "required": ["meta", "tables"],
   "properties": {
@@ -37,21 +37,21 @@
         },
         "collections": {
           "type": "array",
-          "description": "DataForge extension: Collections for organizing records across tables",
+          "description": "JSONDB Editor extension: Collections for organizing records across tables",
           "items": {
             "$ref": "#/definitions/collection"
           }
         },
         "tags": {
           "type": "array",
-          "description": "DataForge extension: Tags for labeling records",
+          "description": "JSONDB Editor extension: Tags for labeling records",
           "items": {
             "$ref": "#/definitions/tag"
           }
         },
         "views": {
           "type": "object",
-          "description": "DataForge extension: Saved filter views per table",
+          "description": "JSONDB Editor extension: Saved filter views per table",
           "additionalProperties": {
             "type": "array",
             "items": {
@@ -61,9 +61,19 @@
         },
         "notes": {
           "type": "array",
-          "description": "DataForge extension: Notes attached to records",
+          "description": "JSONDB Editor extension: Notes attached to records",
           "items": {
             "$ref": "#/definitions/note"
+          }
+        },
+        "recordHistory": {
+          "type": "object",
+          "description": "JSONDB Editor extension: Change history for records, keyed by {tableId}_{recordId}",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/historyEntry"
+            }
           }
         }
       }
@@ -92,7 +102,7 @@
         },
         "showInSimpleMode": {
           "type": "boolean",
-          "description": "DataForge extension: Whether table is visible in simple mode",
+          "description": "JSONDB Editor extension: Whether table is visible in simple mode",
           "default": true
         },
         "fields": {
@@ -148,6 +158,10 @@
           "type": "string",
           "description": "Comma-separated options for select field type"
         },
+        "dateFormat": {
+          "type": "string",
+          "description": "PHP-style date format string for date field type (e.g. 'j. n. Y' for '5. 1. 2024')"
+        },
         "template": {
           "type": "string",
           "description": "Template string for composite field type using {FieldName} placeholders"
@@ -178,14 +192,14 @@
         },
         "locked": {
           "type": "boolean",
-          "description": "DataForge extension: Whether record is locked for editing",
+          "description": "JSONDB Editor extension: Whether record is locked for editing",
           "default": false
         }
       }
     },
     "collection": {
       "type": "object",
-      "description": "DataForge extension: Collection for grouping records",
+      "description": "JSONDB Editor extension: Collection for grouping records",
       "required": ["id", "name"],
       "properties": {
         "id": {
@@ -226,7 +240,7 @@
     },
     "tag": {
       "type": "object",
-      "description": "DataForge extension: Tag for labeling records",
+      "description": "JSONDB Editor extension: Tag for labeling records",
       "required": ["id", "name"],
       "properties": {
         "id": {
@@ -263,7 +277,7 @@
     },
     "view": {
       "type": "object",
-      "description": "DataForge extension: Saved filter view",
+      "description": "JSONDB Editor extension: Saved filter view",
       "required": ["id", "name"],
       "properties": {
         "id": {
@@ -294,7 +308,7 @@
     },
     "note": {
       "type": "object",
-      "description": "DataForge extension: Note attached to a record",
+      "description": "JSONDB Editor extension: Note attached to a record",
       "required": ["id", "tableId", "recordId", "text"],
       "properties": {
         "id": {
@@ -323,6 +337,33 @@
           "type": "string",
           "format": "date-time",
           "description": "Note creation timestamp"
+        }
+      }
+    },
+    "historyEntry": {
+      "type": "object",
+      "description": "JSONDB Editor extension: Single entry in record change history",
+      "required": ["id", "timestamp", "type", "fields"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique history entry identifier",
+          "pattern": "^id_[a-z0-9]+$"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO timestamp of when the change occurred"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of change operation",
+          "enum": ["create", "edit", "bulk"]
+        },
+        "fields": {
+          "type": "object",
+          "description": "Changed field values keyed by field ID. For 'create' type contains all initial values, for 'edit' and 'bulk' contains only changed fields.",
+          "additionalProperties": true
         }
       }
     }

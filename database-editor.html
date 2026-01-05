@@ -28,6 +28,8 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
         .skip-link { position: absolute; top: -40px; left: 0; background: var(--primary); color: white; padding: 8px 16px; z-index: 1000; text-decoration: none; }
         .skip-link:focus { top: 0; }
+        .unsaved-banner { background: #fff3cd; color: #856404; padding: 0.75rem 1.5rem; text-align: center; border-bottom: 1px solid #ffc107; font-weight: 500; }
+        .unsaved-banner[hidden] { display: none; }
         header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 1rem 2rem; }
         nav { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); padding: 0 2rem 0.5rem 2rem; }
         .header-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
@@ -84,6 +86,25 @@
         .notes-table .note-preview { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .notes-filter-bar { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
         .notes-badge { background: var(--danger); color: white; padding: 0.1rem 0.4rem; border-radius: 10px; font-size: 0.75rem; margin-left: 0.3rem; }
+        
+        /* History styles */
+        .history-list { display: flex; flex-direction: column; gap: 1rem; max-height: 60vh; overflow-y: auto; }
+        .history-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .history-header { display: flex; align-items: center; padding: 0.75rem 1rem; background: linear-gradient(to right, rgba(0,0,0,0.03), transparent); border-bottom: 1px solid var(--border); gap: 1rem; }
+        .history-delete-btn { padding: 0.25rem 0.5rem; font-size: 0.75rem; margin-left: auto; }
+        .history-timestamp { font-weight: 600; color: var(--primary); font-size: 0.9rem; }
+        .history-type { font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 4px; background: var(--primary-light); color: white; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+        .history-type.create { background: var(--success); }
+        .history-type.edit { background: var(--accent); }
+        .history-type.bulk { background: #9b59b6; }
+        .history-changes { padding: 1rem; }
+        .history-changes-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; font-weight: 600; }
+        .history-fields-list { list-style: none; padding: 0; margin: 0; }
+        .history-fields-list li { padding: 0.5rem 0.75rem; margin: 0.25rem 0; background: var(--bg); border-radius: 4px; border-left: 3px solid var(--primary); }
+        .history-field-name { font-weight: 600; color: var(--primary); display: block; font-size: 0.85rem; margin-bottom: 0.2rem; }
+        .history-field-value { color: var(--text); word-break: break-word; }
+        .history-empty { color: var(--text-muted); font-style: italic; padding: 2rem; text-align: center; }
+        .history-count-badge { background: var(--primary); color: white; padding: 0.1rem 0.4rem; border-radius: 10px; font-size: 0.75rem; margin-left: 0.3rem; }
         
         /* Simple mode - hide advanced features */
         .advanced-mode-toggle { display: flex; align-items: center; gap: 0.4rem; color: white; font-size: 0.85rem; margin-right: 0.5rem; }
@@ -264,9 +285,17 @@
         .related-table-name { font-size: 0.8rem; color: var(--text-muted); }
         .collection-view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .filters-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; }
-        .date-input-group { display: flex; gap: 0.5rem; }
+        .date-input-group { display: flex; gap: 0.5rem; align-items: center; }
         .date-input-group .date-picker { flex: 1; min-width: 140px; }
         .date-input-group .date-text { width: 110px; font-family: monospace; text-align: center; }
+        .date-input-group .date-clear-btn { padding: 0.4rem 0.6rem; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 1rem; line-height: 1; }
+        .date-input-group .date-clear-btn:hover { background: #fee; border-color: #e74c3c; }
+        .date-format-help { margin-top: 0.5rem; font-size: 0.85rem; }
+        .date-format-help summary { cursor: pointer; color: var(--primary); }
+        .format-help-content { background: var(--bg); padding: 0.75rem; border-radius: 6px; margin-top: 0.5rem; }
+        .format-help-content p { margin: 0.25rem 0; }
+        .format-help-content ul { margin: 0.25rem 0 0 1.5rem; padding: 0; }
+        .format-help-content code { background: var(--border); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
         
         /* Collections and Tags grid */
         .collections-grid, .tags-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
@@ -466,6 +495,10 @@
 </head>
 <body>
     <a href="#main-content" class="skip-link" data-i18n="skipToContent">Přeskočit na hlavní obsah</a>
+    
+    <div id="unsavedBanner" class="unsaved-banner" hidden role="alert">
+        <span data-i18n="unsavedChanges">⚠️ Změnili jste obsah databáze. Nezapomeňte ji uložit.</span>
+    </div>
 
     <header>
         <div class="header-top">
@@ -473,7 +506,7 @@
                 <span data-i18n="appName">Editor databáze</span>
             </div>
             <div class="header-actions">
-                <button type="button" class="btn btn-success" id="btnSaveWiki" style="display:none;" accesskey="s"><span aria-hidden="true">📤</span> <span data-i18n="saveToWiki">Uložit na wiki</span></button>
+                <button type="button" class="btn btn-primary" id="btnSaveWiki" style="display:none;" accesskey="s"><span aria-hidden="true">📤</span> <span data-i18n="saveToWiki">Uložit na wiki</span></button>
                 <button type="button" class="btn btn-secondary advanced-only" id="btnNew"><span aria-hidden="true">📄</span> <span data-i18n="newDb">Nová</span></button>
                 <button type="button" class="btn btn-secondary advanced-only" id="btnLoad"><span aria-hidden="true">📂</span> <span data-i18n="load">Načíst</span></button>
                 <button type="button" class="btn btn-primary" id="btnSave" accesskey="s"><span aria-hidden="true">💾</span> <span data-i18n="save">Uložit</span></button>
@@ -759,6 +792,26 @@
                     <label for="fieldOptions" data-i18n="selectOptions">Hodnoty (oddělené čárkou)</label>
                     <input type="text" id="fieldOptions">
                 </div>
+                <div class="form-group" id="dateFormatGroup" hidden>
+                    <label for="dateFormat" data-i18n="dateFormat">Formát data</label>
+                    <input type="text" id="dateFormat" placeholder="j. n. Y">
+                    <details class="date-format-help">
+                        <summary data-i18n="dateFormatHelp">Nápověda k formátu</summary>
+                        <div class="format-help-content">
+                            <p><strong data-i18n="dateFormatDay">Den:</strong> <code>d</code> (01-31), <code>j</code> (1-31)</p>
+                            <p><strong data-i18n="dateFormatMonth">Měsíc:</strong> <code>m</code> (01-12), <code>n</code> (1-12), <code>M</code> (Led), <code>F</code> (Leden)</p>
+                            <p><strong data-i18n="dateFormatYear">Rok:</strong> <code>Y</code> (2024), <code>y</code> (24)</p>
+                            <p><strong data-i18n="dateFormatWeekday">Den v týdnu:</strong> <code>D</code> (Po), <code>l</code> (Pondělí), <code>N</code> (1-7)</p>
+                            <p><strong data-i18n="dateFormatExamples">Příklady:</strong></p>
+                            <ul>
+                                <li><code>j. n. Y</code> → 5. 1. 2024</li>
+                                <li><code>d.m.Y</code> → 05.01.2024</li>
+                                <li><code>D j. F Y</code> → Pá 5. Ledna 2024</li>
+                                <li><code>Y-m-d</code> → 2024-01-05</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
                 <div class="form-group" id="compositeTemplateGroup" hidden>
                     <label data-i18n="compositeFields">Vložit pole:</label>
                     <div class="field-buttons" id="compositeFieldButtons"></div>
@@ -824,6 +877,7 @@
                 <button type="button" class="btn btn-secondary" data-modal-close data-i18n="close">Zavřít</button>
                 <button type="button" class="btn btn-secondary" id="btnRefreshView" title="Obnovit obsah"><span aria-hidden="true">🔄</span> <span data-i18n="refresh">Obnovit</span></button>
                 <button type="button" class="btn btn-secondary" id="btnStructureFromView"><span aria-hidden="true">🌳</span> <span data-i18n="structure">Struktura</span></button>
+                <button type="button" class="btn btn-secondary" id="btnHistoryView"><span aria-hidden="true">📜</span> <span data-i18n="history">Historie</span></button>
                 <button type="button" class="btn btn-secondary" id="btnDuplicateRecord"><span aria-hidden="true">📋</span> <span data-i18n="duplicate">Duplikovat</span></button>
                 <button type="button" class="btn btn-secondary" id="btnToggleLock"><span aria-hidden="true">🔒</span> <span data-i18n="lockRecord">Zamknout</span></button>
                 <button type="button" class="btn btn-primary" id="btnEditFromView" data-i18n="edit">Upravit</button>
@@ -1044,6 +1098,22 @@
     </div>
 
     <!-- Structure Modal -->
+    <!-- History Modal -->
+    <div class="modal-backdrop" id="historyModal" hidden>
+        <div class="modal" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2 id="historyModalTitle">📜 <span data-i18n="history">Historie změn</span></h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="historyContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="close">Zavřít</button>
+            </div>
+        </div>
+    </div>
+
     <div class="modal-backdrop" id="structureModal" hidden>
         <div class="modal structure-modal">
             <div class="modal-header">
@@ -1175,7 +1245,7 @@
             cs: {
                 skipToContent: "Přeskočit na obsah", appName: "Editor databáze", dbName: "Název databáze", newDb: "Nová", load: "Načíst", save: "Uložit",
                 copyJson: "Kopírovat JSON", pasteJson: "Vložit JSON", pasteJsonHere: "Vložte JSON databáze:", jsonCopied: "JSON zkopírován do schránky.", jsonPasted: "JSON načten.",
-                saveToWiki: "Uložit na wiki", wikiSaved: "Uloženo na wiki.", wikiSaveError: "Chyba při ukládání:", wikiSaving: "Ukládám...",
+                saveToWiki: "Uložit na wiki", wikiSaved: "Uloženo na wiki.", wikiSaveError: "Chyba při ukládání:", wikiSaving: "Ukládám...", unsavedChanges: "⚠️ Změnili jste obsah databáze. Nezapomeňte ji uložit.", confirmUnsavedClose: "Máte neuložené změny. Opravdu chcete zavřít okno?",
                 export: "Export", import: "Import", database: "Databáze", tables: "Tabulky", tools: "Nástroje",
                 databaseSettings: "Nastavení databáze", tablesList: "Seznam tabulek", addTable: "Přidat tabulku",
                 noTables: "Zatím nemáte žádné tabulky.", fieldsFor: "Pole pro tabulku:", addField: "Přidat pole",
@@ -1183,7 +1253,7 @@
                 selectTable: "Vyberte tabulku", insertField: "Vložit pole:", template: "Šablona (použijte {název_pole})",
                 recordsToGenerate: "Záznamy:", allRecords: "Všechny", filteredRecords: "Filtrované", generate: "Generovat",
                 copy: "Kopírovat", tableName: "Název tabulky", cancel: "Zrušit", fieldName: "Název pole", fieldType: "Typ pole",
-                selectOptions: "Hodnoty (oddělené čárkou)", targetTable: "Cílová tabulka", parentFieldSelect: "Pole odkazující zpět",
+                selectOptions: "Hodnoty (oddělené čárkou)", dateFormat: "Formát data", dateFormatHelp: "Nápověda k formátu", dateFormatDay: "Den:", dateFormatMonth: "Měsíc:", dateFormatYear: "Rok:", dateFormatWeekday: "Den v týdnu:", dateFormatExamples: "Příklady:", clearDate: "Vymazat datum", targetTable: "Cílová tabulka", parentFieldSelect: "Pole odkazující zpět",
                 fieldPrimary: "Primární (název záznamu)", fieldFilter: "Povolit filtrování", addRecord: "Přidat záznam",
                 close: "Zavřít", edit: "Upravit", confirm: "Potvrzení", delete: "Smazat", format: "Formát:",
                 exportData: "Data k exportu:", saveFile: "Uložit soubor", loadFile: "Načíst soubor:",
@@ -1200,12 +1270,12 @@
                 typeNumber: "Číslo", typeDate: "Datum", typeBoolean: "Ano/Ne", typeSelect: "Výběr ze seznamu",
                 typeParent: "Nadřazený záznam", typeChildren: "Podřízené záznamy", typeComposite: "Složený", typeUrl: "URL odkaz", editTable: "Upravit", editField: "Upravit pole",
                 compositeFields: "Vložit pole:", compositeTemplate: "Šablona složeného pole", createNew: "Vytvořit nový", fieldGroup: "Seskupovat záznamy", groupCollapsed: "sbaleno", groupExpanded: "rozbaleno", addChild: "Přidat podřízený", copyField: "Kopírovat", copiedToClipboard: "Zkopírováno do schránky",
-                collections: "Kolekce", tags: "Tagy", addCollection: "Přidat kolekci", addTag: "Přidat tag", collectionName: "Název kolekce", tagName: "Název tagu", color: "Barva", noCollections: "Zatím nemáte žádné kolekce.", noTags: "Zatím nemáte žádné tagy.", collectionMembers: "záznamů", confirmDeleteCollection: "Smazat tuto kolekci?", confirmDeleteTag: "Smazat tento tag?", addToCollection: "Přidat do kolekce", removeFromCollection: "Odebrat z kolekce", assignTags: "Přiřadit tagy", relatedRecords: "Související záznamy", inCollection: "V kolekci", withTag: "S tagem", allCollections: "Všechny kolekce", allTags: "Všechny tagy", viewCollection: "Zobrazit kolekci", collectionContents: "Obsah kolekce", backToTables: "Zpět na tabulky", recordsInCollection: "Záznamy v kolekci", noRecordsInCollection: "Kolekce neobsahuje žádné záznamy.", fromTable: "z tabulky", manageCollections: "Spravovat kolekce", manageTags: "Spravovat tagy", classification: "Zatřídění", description: "Popis", collectionDescription: "Popis kolekce", selectCollection: "Vyberte kolekci", selectTag: "Vyberte tag", createNewCollection: "Vytvořit novou kolekci", createNewTag: "Vytvořit nový tag", removeFromThisCollection: "Odebrat z této kolekce", removeThisTag: "Odebrat tento tag", collectionDetails: "Podrobnosti kolekce", tagDetails: "Podrobnosti tagu", editCollection: "Upravit kolekci", editTag: "Upravit tag", recordsWithTag: "Záznamy s tagem", quickCreate: "➕ Nový záznam...", structure: "Struktura", textView: "Textový pohled", graphView: "Grafický pohled", showStructure: "Zobrazit strukturu", noDescendants: "Tento záznam nemá žádné podřízené záznamy.", loadMore: "Načíst více...", loadAll: "Načíst všechny", descendants: "potomků", selectedRecords: "vybráno", bulkEditField: "Upravit pole", clearSelection: "Zrušit výběr", selectAll: "Vybrat vše", newValue: "Nová hodnota", apply: "Použít", confirmBulkDelete: "Opravdu smazat {count} záznamů?", addedToCollection: "Přidáno {count} záznamů do kolekce.", addedTag: "Tag přidán k {count} záznamům.", recordFields: "Pole záznamu", bulkEditFields: "Hromadná úprava polí", addAnotherField: "Přidat další pole", openAfterSave: "Otevřít zobrazení", ancestors: "Předci", showStructureFrom: "Zobrazit strukturu od tohoto záznamu", order: "Pořadí", tableName: "Název tabulky", fields: "Pole", records: "Záznamy", manageFields: "Spravovat pole", moveUp: "Posunout nahoru", moveDown: "Posunout dolů", fieldName: "Název pole", type: "Typ", options: "Možnosti", primary: "Primární", filter: "Filtr", group: "Seskupit", duplicate: "Duplikovat", saveAndAddAnother: "Uložit a přidat další", searchResults: "Výsledky hledání", noSearchResults: "Žádné výsledky nebyly nalezeny.", globalSearchPlaceholder: "🔍 Hledat...", refresh: "Obnovit", previewImport: "Zobrazit náhled mapování", columnMapping: "Mapování sloupců", targetField: "Cílové pole", unmapped: "Nenamapováno", column: "Sloupec", sampleData: "Ukázka dat", rows: "řádků", noDataToPreview: "Vložte data pro zobrazení náhledu", allRecords: "Všechny záznamy", saveView: "Uložit pohled", viewName: "Název pohledu", newView: "Nový pohled", updateView: "Aktualizovat pohled", renameView: "Přejmenovat pohled", confirmDeleteView: "Opravdu smazat tento pohled?", lockRecord: "Zamknout záznam", unlockRecord: "Odemknout záznam", recordLocked: "Tento záznam je zamčený a nelze ho upravovat.", savedViews: "Uložené pohledy", notes: "Poznámky", addNote: "Přidat poznámku", editNote: "Upravit poznámku", deleteNote: "Smazat poznámku", noNotes: "Žádné poznámky", noteText: "Text poznámky", noteResolved: "Vyřízeno", noteUnresolved: "Nevyřízeno", markResolved: "Označit jako vyřízené", markUnresolved: "Označit jako nevyřízené", confirmDeleteNote: "Opravdu smazat tuto poznámku?", allNotes: "Všechny poznámky", unresolvedNotes: "Nevyřízené", resolvedNotes: "Vyřízené", noNotesInDatabase: "V databázi nejsou žádné poznámky.", noteFor: "Poznámka k", notesCount: "poznámek", allFeatures: "Všechny funkce", showInSimpleMode: "Zobrazit v základním režimu", keyboardShortcuts: "Klávesové zkratky", shortcutSave: "Uložit databázi", shortcutToggleMode: "Přepnout režim (základní/pokročilý)", shortcutNewRecord: "Nový záznam v aktuální tabulce", shortcutQuickCreate: "Rychlé vytvoření záznamu", shortcutSaveRecord: "Uložit záznam (v modálu)", shortcutCollections: "Přejít do kolekcí", shortcutTags: "Přejít do tagů", shortcutNotes: "Přejít do poznámek", shortcutClassification: "Přejít do zatřídění", shortcutEdit: "Upravit vybraný záznam", shortcutView: "Zobrazit vybraný záznam", shortcutArrows: "Navigace v tabulce", shortcutDescription: "Klávesové zkratky používají modifikátor prohlížeče (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifikátor + klávesa", directShortcuts: "Přímé zkratky (bez modifikátoru)", key: "Klávesa"
+                collections: "Kolekce", tags: "Tagy", addCollection: "Přidat kolekci", addTag: "Přidat tag", collectionName: "Název kolekce", tagName: "Název tagu", color: "Barva", noCollections: "Zatím nemáte žádné kolekce.", noTags: "Zatím nemáte žádné tagy.", collectionMembers: "záznamů", confirmDeleteCollection: "Smazat tuto kolekci?", confirmDeleteTag: "Smazat tento tag?", addToCollection: "Přidat do kolekce", removeFromCollection: "Odebrat z kolekce", assignTags: "Přiřadit tagy", relatedRecords: "Související záznamy", inCollection: "V kolekci", withTag: "S tagem", allCollections: "Všechny kolekce", allTags: "Všechny tagy", viewCollection: "Zobrazit kolekci", collectionContents: "Obsah kolekce", backToTables: "Zpět na tabulky", recordsInCollection: "Záznamy v kolekci", noRecordsInCollection: "Kolekce neobsahuje žádné záznamy.", fromTable: "z tabulky", manageCollections: "Spravovat kolekce", manageTags: "Spravovat tagy", classification: "Zatřídění", description: "Popis", collectionDescription: "Popis kolekce", selectCollection: "Vyberte kolekci", selectTag: "Vyberte tag", createNewCollection: "Vytvořit novou kolekci", createNewTag: "Vytvořit nový tag", removeFromThisCollection: "Odebrat z této kolekce", removeThisTag: "Odebrat tento tag", collectionDetails: "Podrobnosti kolekce", tagDetails: "Podrobnosti tagu", editCollection: "Upravit kolekci", editTag: "Upravit tag", recordsWithTag: "Záznamy s tagem", quickCreate: "➕ Nový záznam...", structure: "Struktura", textView: "Textový pohled", graphView: "Grafický pohled", showStructure: "Zobrazit strukturu", noDescendants: "Tento záznam nemá žádné podřízené záznamy.", loadMore: "Načíst více...", loadAll: "Načíst všechny", descendants: "potomků", selectedRecords: "vybráno", bulkEditField: "Upravit pole", clearSelection: "Zrušit výběr", selectAll: "Vybrat vše", newValue: "Nová hodnota", apply: "Použít", confirmBulkDelete: "Opravdu smazat {count} záznamů?", addedToCollection: "Přidáno {count} záznamů do kolekce.", addedTag: "Tag přidán k {count} záznamům.", recordFields: "Pole záznamu", bulkEditFields: "Hromadná úprava polí", addAnotherField: "Přidat další pole", openAfterSave: "Otevřít zobrazení", ancestors: "Předci", showStructureFrom: "Zobrazit strukturu od tohoto záznamu", order: "Pořadí", tableName: "Název tabulky", fields: "Pole", records: "Záznamy", manageFields: "Spravovat pole", moveUp: "Posunout nahoru", moveDown: "Posunout dolů", fieldName: "Název pole", type: "Typ", options: "Možnosti", primary: "Primární", filter: "Filtr", group: "Seskupit", duplicate: "Duplikovat", saveAndAddAnother: "Uložit a přidat další", searchResults: "Výsledky hledání", noSearchResults: "Žádné výsledky nebyly nalezeny.", globalSearchPlaceholder: "🔍 Hledat...", refresh: "Obnovit", previewImport: "Zobrazit náhled mapování", columnMapping: "Mapování sloupců", targetField: "Cílové pole", unmapped: "Nenamapováno", column: "Sloupec", sampleData: "Ukázka dat", rows: "řádků", noDataToPreview: "Vložte data pro zobrazení náhledu", allRecords: "Všechny záznamy", saveView: "Uložit pohled", viewName: "Název pohledu", newView: "Nový pohled", updateView: "Aktualizovat pohled", renameView: "Přejmenovat pohled", confirmDeleteView: "Opravdu smazat tento pohled?", lockRecord: "Zamknout záznam", unlockRecord: "Odemknout záznam", recordLocked: "Tento záznam je zamčený a nelze ho upravovat.", savedViews: "Uložené pohledy", notes: "Poznámky", addNote: "Přidat poznámku", editNote: "Upravit poznámku", deleteNote: "Smazat poznámku", noNotes: "Žádné poznámky", noteText: "Text poznámky", noteResolved: "Vyřízeno", noteUnresolved: "Nevyřízeno", markResolved: "Označit jako vyřízené", markUnresolved: "Označit jako nevyřízené", confirmDeleteNote: "Opravdu smazat tuto poznámku?", allNotes: "Všechny poznámky", unresolvedNotes: "Nevyřízené", resolvedNotes: "Vyřízené", noNotesInDatabase: "V databázi nejsou žádné poznámky.", noteFor: "Poznámka k", notesCount: "poznámek", allFeatures: "Všechny funkce", showInSimpleMode: "Zobrazit v základním režimu", keyboardShortcuts: "Klávesové zkratky", shortcutSave: "Uložit databázi", shortcutToggleMode: "Přepnout režim (základní/pokročilý)", shortcutNewRecord: "Nový záznam v aktuální tabulce", shortcutQuickCreate: "Rychlé vytvoření záznamu", shortcutSaveRecord: "Uložit záznam (v modálu)", shortcutCollections: "Přejít do kolekcí", shortcutTags: "Přejít do tagů", shortcutNotes: "Přejít do poznámek", shortcutClassification: "Přejít do zatřídění", shortcutEdit: "Upravit vybraný záznam", shortcutView: "Zobrazit vybraný záznam", shortcutArrows: "Navigace v tabulce", shortcutDescription: "Klávesové zkratky používají modifikátor prohlížeče (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifikátor + klávesa", directShortcuts: "Přímé zkratky (bez modifikátoru)", key: "Klávesa", history: "Historie změn", historyCreate: "Vytvoření", historyEdit: "Úprava", historyBulk: "Hromadná úprava", noHistory: "Zatím nejsou k dispozici žádné záznamy o změnách.", confirmDeleteHistory: "Opravdu chcete smazat tento záznam z historie?"
             },
             en: {
                 skipToContent: "Skip to content", appName: "Database Editor", dbName: "Database name", newDb: "New", load: "Load", save: "Save",
                 copyJson: "Copy JSON", pasteJson: "Paste JSON", pasteJsonHere: "Paste database JSON:", jsonCopied: "JSON copied to clipboard.", jsonPasted: "JSON loaded.",
-                saveToWiki: "Save to Wiki", wikiSaved: "Saved to wiki.", wikiSaveError: "Error saving:", wikiSaving: "Saving...",
+                saveToWiki: "Save to Wiki", wikiSaved: "Saved to wiki.", wikiSaveError: "Error saving:", wikiSaving: "Saving...", unsavedChanges: "⚠️ You have made changes to the database. Don't forget to save.", confirmUnsavedClose: "You have unsaved changes. Are you sure you want to close?",
                 export: "Export", import: "Import", database: "Database", tables: "Tables", tools: "Tools",
                 databaseSettings: "Database Settings", tablesList: "Tables List", addTable: "Add Table",
                 noTables: "No tables yet.", fieldsFor: "Fields for table:", addField: "Add Field",
@@ -1213,7 +1283,7 @@
                 selectTable: "Select table", insertField: "Insert field:", template: "Template (use {field_name})",
                 recordsToGenerate: "Records:", allRecords: "All", filteredRecords: "Filtered", generate: "Generate",
                 copy: "Copy", tableName: "Table Name", cancel: "Cancel", fieldName: "Field Name", fieldType: "Field Type",
-                selectOptions: "Values (comma-separated)", targetTable: "Target Table", parentFieldSelect: "Back-reference field",
+                selectOptions: "Values (comma-separated)", dateFormat: "Date format", dateFormatHelp: "Format help", dateFormatDay: "Day:", dateFormatMonth: "Month:", dateFormatYear: "Year:", dateFormatWeekday: "Weekday:", dateFormatExamples: "Examples:", clearDate: "Clear date", targetTable: "Target Table", parentFieldSelect: "Back-reference field",
                 fieldPrimary: "Primary (record name)", fieldFilter: "Enable filtering", addRecord: "Add Record",
                 close: "Close", edit: "Edit", confirm: "Confirmation", delete: "Delete", format: "Format:",
                 exportData: "Export data:", saveFile: "Save File", loadFile: "Load file:",
@@ -1230,7 +1300,7 @@
                 typeNumber: "Number", typeDate: "Date", typeBoolean: "Yes/No", typeSelect: "Select from list",
                 typeParent: "Parent record", typeChildren: "Child records", typeComposite: "Composite", typeUrl: "URL link", editTable: "Edit", editField: "Edit field",
                 compositeFields: "Insert field:", compositeTemplate: "Composite field template", createNew: "Create new", fieldGroup: "Group records", groupCollapsed: "collapsed", groupExpanded: "expanded", addChild: "Add child", copyField: "Copy", copiedToClipboard: "Copied to clipboard",
-                collections: "Collections", tags: "Tags", addCollection: "Add collection", addTag: "Add tag", collectionName: "Collection name", tagName: "Tag name", color: "Color", noCollections: "You have no collections yet.", noTags: "You have no tags yet.", collectionMembers: "records", confirmDeleteCollection: "Delete this collection?", confirmDeleteTag: "Delete this tag?", addToCollection: "Add to collection", removeFromCollection: "Remove from collection", assignTags: "Assign tags", relatedRecords: "Related records", inCollection: "In collection", withTag: "With tag", allCollections: "All collections", allTags: "All tags", viewCollection: "View collection", collectionContents: "Collection contents", backToTables: "Back to tables", recordsInCollection: "Records in collection", noRecordsInCollection: "Collection contains no records.", fromTable: "from table", manageCollections: "Manage collections", manageTags: "Manage tags", classification: "Classification", description: "Description", collectionDescription: "Collection description", selectCollection: "Select collection", selectTag: "Select tag", createNewCollection: "Create new collection", createNewTag: "Create new tag", removeFromThisCollection: "Remove from this collection", removeThisTag: "Remove this tag", collectionDetails: "Collection details", tagDetails: "Tag details", editCollection: "Edit collection", editTag: "Edit tag", recordsWithTag: "Records with tag", quickCreate: "➕ New record...", structure: "Structure", textView: "Text view", graphView: "Graph view", showStructure: "Show structure", noDescendants: "This record has no child records.", loadMore: "Load more...", loadAll: "Load all", descendants: "descendants", selectedRecords: "selected", bulkEditField: "Edit field", clearSelection: "Clear selection", selectAll: "Select all", newValue: "New value", apply: "Apply", confirmBulkDelete: "Delete {count} records?", addedToCollection: "Added {count} records to collection.", addedTag: "Tag added to {count} records.", recordFields: "Record fields", bulkEditFields: "Bulk edit fields", addAnotherField: "Add another field", openAfterSave: "Open after save", ancestors: "Ancestors", showStructureFrom: "Show structure from this record", order: "Order", tableName: "Table name", fields: "Fields", records: "Records", manageFields: "Manage fields", moveUp: "Move up", moveDown: "Move down", fieldName: "Field name", type: "Type", options: "Options", primary: "Primary", filter: "Filter", group: "Group", duplicate: "Duplicate", saveAndAddAnother: "Save and add another", searchResults: "Search results", noSearchResults: "No results found.", globalSearchPlaceholder: "🔍 Search...", refresh: "Refresh", previewImport: "Preview mapping", columnMapping: "Column mapping", targetField: "Target field", unmapped: "Unmapped", column: "Column", sampleData: "Sample data", rows: "rows", noDataToPreview: "Paste data to see preview", allRecords: "All records", saveView: "Save view", viewName: "View name", newView: "New view", updateView: "Update view", renameView: "Rename view", confirmDeleteView: "Delete this view?", lockRecord: "Lock record", unlockRecord: "Unlock record", recordLocked: "This record is locked and cannot be edited.", savedViews: "Saved views", notes: "Notes", addNote: "Add note", editNote: "Edit note", deleteNote: "Delete note", noNotes: "No notes", noteText: "Note text", noteResolved: "Resolved", noteUnresolved: "Unresolved", markResolved: "Mark as resolved", markUnresolved: "Mark as unresolved", confirmDeleteNote: "Delete this note?", allNotes: "All notes", unresolvedNotes: "Unresolved", resolvedNotes: "Resolved", noNotesInDatabase: "No notes in database.", noteFor: "Note for", notesCount: "notes", allFeatures: "All features", showInSimpleMode: "Show in simple mode", keyboardShortcuts: "Keyboard shortcuts", shortcutSave: "Save database", shortcutToggleMode: "Toggle mode (simple/advanced)", shortcutNewRecord: "New record in current table", shortcutQuickCreate: "Quick create record", shortcutSaveRecord: "Save record (in modal)", shortcutCollections: "Go to collections", shortcutTags: "Go to tags", shortcutNotes: "Go to notes", shortcutClassification: "Go to classification", shortcutEdit: "Edit selected record", shortcutView: "View selected record", shortcutArrows: "Navigate in table", shortcutDescription: "Keyboard shortcuts use browser modifier (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifier + key", directShortcuts: "Direct shortcuts (no modifier)", key: "Key"
+                collections: "Collections", tags: "Tags", addCollection: "Add collection", addTag: "Add tag", collectionName: "Collection name", tagName: "Tag name", color: "Color", noCollections: "You have no collections yet.", noTags: "You have no tags yet.", collectionMembers: "records", confirmDeleteCollection: "Delete this collection?", confirmDeleteTag: "Delete this tag?", addToCollection: "Add to collection", removeFromCollection: "Remove from collection", assignTags: "Assign tags", relatedRecords: "Related records", inCollection: "In collection", withTag: "With tag", allCollections: "All collections", allTags: "All tags", viewCollection: "View collection", collectionContents: "Collection contents", backToTables: "Back to tables", recordsInCollection: "Records in collection", noRecordsInCollection: "Collection contains no records.", fromTable: "from table", manageCollections: "Manage collections", manageTags: "Manage tags", classification: "Classification", description: "Description", collectionDescription: "Collection description", selectCollection: "Select collection", selectTag: "Select tag", createNewCollection: "Create new collection", createNewTag: "Create new tag", removeFromThisCollection: "Remove from this collection", removeThisTag: "Remove this tag", collectionDetails: "Collection details", tagDetails: "Tag details", editCollection: "Edit collection", editTag: "Edit tag", recordsWithTag: "Records with tag", quickCreate: "➕ New record...", structure: "Structure", textView: "Text view", graphView: "Graph view", showStructure: "Show structure", noDescendants: "This record has no child records.", loadMore: "Load more...", loadAll: "Load all", descendants: "descendants", selectedRecords: "selected", bulkEditField: "Edit field", clearSelection: "Clear selection", selectAll: "Select all", newValue: "New value", apply: "Apply", confirmBulkDelete: "Delete {count} records?", addedToCollection: "Added {count} records to collection.", addedTag: "Tag added to {count} records.", recordFields: "Record fields", bulkEditFields: "Bulk edit fields", addAnotherField: "Add another field", openAfterSave: "Open after save", ancestors: "Ancestors", showStructureFrom: "Show structure from this record", order: "Order", tableName: "Table name", fields: "Fields", records: "Records", manageFields: "Manage fields", moveUp: "Move up", moveDown: "Move down", fieldName: "Field name", type: "Type", options: "Options", primary: "Primary", filter: "Filter", group: "Group", duplicate: "Duplicate", saveAndAddAnother: "Save and add another", searchResults: "Search results", noSearchResults: "No results found.", globalSearchPlaceholder: "🔍 Search...", refresh: "Refresh", previewImport: "Preview mapping", columnMapping: "Column mapping", targetField: "Target field", unmapped: "Unmapped", column: "Column", sampleData: "Sample data", rows: "rows", noDataToPreview: "Paste data to see preview", allRecords: "All records", saveView: "Save view", viewName: "View name", newView: "New view", updateView: "Update view", renameView: "Rename view", confirmDeleteView: "Delete this view?", lockRecord: "Lock record", unlockRecord: "Unlock record", recordLocked: "This record is locked and cannot be edited.", savedViews: "Saved views", notes: "Notes", addNote: "Add note", editNote: "Edit note", deleteNote: "Delete note", noNotes: "No notes", noteText: "Note text", noteResolved: "Resolved", noteUnresolved: "Unresolved", markResolved: "Mark as resolved", markUnresolved: "Mark as unresolved", confirmDeleteNote: "Delete this note?", allNotes: "All notes", unresolvedNotes: "Unresolved", resolvedNotes: "Resolved", noNotesInDatabase: "No notes in database.", noteFor: "Note for", notesCount: "notes", allFeatures: "All features", showInSimpleMode: "Show in simple mode", keyboardShortcuts: "Keyboard shortcuts", shortcutSave: "Save database", shortcutToggleMode: "Toggle mode (simple/advanced)", shortcutNewRecord: "New record in current table", shortcutQuickCreate: "Quick create record", shortcutSaveRecord: "Save record (in modal)", shortcutCollections: "Go to collections", shortcutTags: "Go to tags", shortcutNotes: "Go to notes", shortcutClassification: "Go to classification", shortcutEdit: "Edit selected record", shortcutView: "View selected record", shortcutArrows: "Navigate in table", shortcutDescription: "Keyboard shortcuts use browser modifier (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifier + key", directShortcuts: "Direct shortcuts (no modifier)", key: "Key", history: "Change history", historyCreate: "Created", historyEdit: "Edited", historyBulk: "Bulk edit", noHistory: "No change history available yet.", confirmDeleteHistory: "Are you sure you want to delete this history entry?"
             }
         };
 
@@ -1247,6 +1317,8 @@
         let tagFilter = null;
         let activeViewId = null;
         let advancedMode = false; // Simple mode is default
+        let hasUnsavedChanges = false;
+        let initialLoadComplete = false;
         let selectedRowIndex = -1; // Keyboard navigation in table
         let selectedRecords = {}; // { tableId: Set of recordIds }
         let editingFieldTableId = null;
@@ -1261,6 +1333,67 @@
         const escapeHtml = s => s == null ? '' : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         // Safe attribute escape - handles all special chars including backticks and template literal syntax
         const escapeAttr = s => s == null ? '' : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/`/g, '&#96;').replace(/\$/g, '&#36;');
+        
+        // PHP-style date formatting
+        const dateLocales = {
+            cs: {
+                months: ['Ledna', 'Února', 'Března', 'Dubna', 'Května', 'Června', 'Července', 'Srpna', 'Září', 'Října', 'Listopadu', 'Prosince'],
+                monthsShort: ['Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čvn', 'Čvc', 'Srp', 'Zář', 'Říj', 'Lis', 'Pro'],
+                days: ['Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota'],
+                daysShort: ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So']
+            },
+            en: {
+                months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+            }
+        };
+        
+        function formatDate(dateStr, format) {
+            if (!dateStr) return '';
+            try {
+                const d = new Date(dateStr + 'T00:00:00'); // Ensure consistent parsing
+                if (isNaN(d.getTime())) return dateStr;
+                
+                // Default format if none specified
+                if (!format) return d.toLocaleDateString(currentLang);
+                
+                const locale = dateLocales[currentLang] || dateLocales.en;
+                const pad = n => n < 10 ? '0' + n : String(n);
+                
+                const replacements = {
+                    'd': pad(d.getDate()),                    // 01-31
+                    'j': String(d.getDate()),                 // 1-31
+                    'D': locale.daysShort[d.getDay()],        // Mon, Po
+                    'l': locale.days[d.getDay()],             // Monday, Pondělí
+                    'N': d.getDay() === 0 ? '7' : String(d.getDay()), // 1-7 (ISO)
+                    'w': String(d.getDay()),                  // 0-6
+                    'm': pad(d.getMonth() + 1),               // 01-12
+                    'n': String(d.getMonth() + 1),            // 1-12
+                    'M': locale.monthsShort[d.getMonth()],    // Jan, Led
+                    'F': locale.months[d.getMonth()],         // January, Ledna
+                    'Y': String(d.getFullYear()),             // 2024
+                    'y': String(d.getFullYear()).slice(-2)    // 24
+                };
+                
+                // Replace format characters (escape backslash-prefixed chars)
+                let result = '';
+                for (let i = 0; i < format.length; i++) {
+                    const char = format[i];
+                    if (char === '\\' && i + 1 < format.length) {
+                        result += format[++i]; // Escaped character
+                    } else if (replacements[char] !== undefined) {
+                        result += replacements[char];
+                    } else {
+                        result += char;
+                    }
+                }
+                return result;
+            } catch (e) {
+                return dateStr;
+            }
+        }
         const getTableById = id => database.tables.find(tb => tb.id === id);
         const getRecordById = (tId, rId) => getTableById(tId)?.records.find(r => r.id === rId);
         function getPrimaryFieldValue(table, record) { 
@@ -1290,8 +1423,25 @@
                 // Use sessionStorage so each tab has its own database
                 sessionStorage.setItem('db-editor-autosave', JSON.stringify(database));
                 sessionStorage.setItem('db-editor-autosave-tab', activeTab);
+                // Mark as having unsaved changes (after initial load)
+                if (initialLoadComplete) {
+                    hasUnsavedChanges = true;
+                    updateUnsavedBanner();
+                }
             } catch (e) {
                 console.warn('Auto-save failed:', e);
+            }
+        }
+        
+        function markAsSaved() {
+            hasUnsavedChanges = false;
+            updateUnsavedBanner();
+        }
+        
+        function updateUnsavedBanner() {
+            const banner = document.getElementById('unsavedBanner');
+            if (banner) {
+                banner.hidden = !hasUnsavedChanges;
             }
         }
 
@@ -1339,7 +1489,7 @@
             document.getElementById(id).hidden = false; 
             document.body.style.overflow = 'hidden';
             // Autofocus on first input/textarea (skip view modals)
-            const noFocusModals = ['viewRecordModal', 'viewCollectionModal', 'viewTagModal', 'confirmModal', 'structureModal', 'searchResultsModal'];
+            const noFocusModals = ['viewRecordModal', 'viewCollectionModal', 'viewTagModal', 'confirmModal', 'structureModal', 'searchResultsModal', 'historyModal'];
             if (!noFocusModals.includes(id)) {
                 setTimeout(() => {
                     const modal = document.getElementById(id);
@@ -1831,6 +1981,10 @@
 
         function renderTableContent(tableId) {
             const container = document.getElementById('tableContents');
+            // Ensure management and classification are hidden when showing table content
+            document.getElementById('management-content').classList.remove('active');
+            document.getElementById('classification-content').classList.remove('active');
+            
             const table = getTableById(tableId);
             if (!table) { container.innerHTML = ''; return; }
 
@@ -2129,7 +2283,7 @@
             }
             switch (field.type) {
                 case 'boolean': return value ? t('yes') : t('no');
-                case 'date': try { return new Date(value).toLocaleDateString(currentLang); } catch { return escapeHtml(value); }
+                case 'date': return formatDate(value, field.dateFormat);
                 case 'textarea': return `<span title="${escapeHtml(value)}">${escapeHtml(value.length > 50 ? value.substr(0, 50) + '...' : value)}</span>`;
                 case 'url': 
                     const urlText = value.length > 40 ? value.substr(0, 40) + '...' : value;
@@ -2164,7 +2318,7 @@
                 if (f.id === field.id) return; // skip self
                 let val = record.values[f.id] ?? '';
                 if (f.type === 'boolean') val = val ? t('yes') : t('no');
-                else if (f.type === 'date' && val) try { val = new Date(val).toLocaleDateString(currentLang); } catch {}
+                else if (f.type === 'date' && val) val = formatDate(val, f.dateFormat);
                 else if (f.type === 'parent' && val) {
                     const tt = getTableById(f.targetTableId);
                     const pr = tt ? getRecordById(f.targetTableId, val) : null;
@@ -2176,8 +2330,10 @@
         }
 
         function renderManagement() {
-            document.getElementById('management-content').classList.add('active');
+            // Ensure classification and table contents are hidden when showing management
+            document.getElementById('classification-content').classList.remove('active');
             document.getElementById('tableContents').innerHTML = '';
+            document.getElementById('management-content').classList.add('active');
             renderTablesList();
             renderStats();
             renderGeneratorTable();
@@ -2515,7 +2671,7 @@
                 table.fields.forEach(f => {
                     let val = r.values[f.id] ?? '';
                     if (f.type === 'boolean') val = val ? t('yes') : t('no');
-                    else if (f.type === 'date' && val) try { val = new Date(val).toLocaleDateString(currentLang); } catch {}
+                    else if (f.type === 'date' && val) val = formatDate(val, f.dateFormat);
                     else if (f.type === 'parent' && val) {
                         const tt = getTableById(f.targetTableId);
                         const pr = tt ? getRecordById(f.targetTableId, val) : null;
@@ -2641,6 +2797,9 @@
         }
         
         function renderClassification() {
+            // Ensure management and table contents are hidden when showing classification
+            document.getElementById('management-content').classList.remove('active');
+            document.getElementById('tableContents').innerHTML = '';
             document.getElementById('classification-content').classList.add('active');
             renderCollectionsList();
             renderTagsList();
@@ -3426,12 +3585,14 @@
             document.getElementById('fieldType').value = 'text';
             document.getElementById('fieldOptions').value = '';
             document.getElementById('compositeTemplate').value = '';
+            document.getElementById('dateFormat').value = '';
             document.getElementById('fieldPrimary').checked = false;
             document.getElementById('fieldFilter').checked = false;
             document.getElementById('fieldGroup').checked = false;
             document.getElementById('fieldId').value = '';
             document.getElementById('fieldTableId').value = editingFieldTableId;
             document.getElementById('fieldOptionsGroup').hidden = true;
+            document.getElementById('dateFormatGroup').hidden = true;
             document.getElementById('compositeTemplateGroup').hidden = true;
             document.getElementById('targetTableGroup').hidden = true;
             document.getElementById('parentFieldGroup').hidden = true;
@@ -3445,10 +3606,12 @@
                     document.getElementById('fieldType').value = f.type;
                     document.getElementById('fieldOptions').value = f.options || '';
                     document.getElementById('compositeTemplate').value = f.compositeTemplate || '';
+                    document.getElementById('dateFormat').value = f.dateFormat || '';
                     document.getElementById('fieldPrimary').checked = f.primary;
                     document.getElementById('fieldFilter').checked = f.filter;
                     document.getElementById('fieldGroup').checked = f.group;
                     if (f.type === 'select') document.getElementById('fieldOptionsGroup').hidden = false;
+                    if (f.type === 'date') document.getElementById('dateFormatGroup').hidden = false;
                     if (f.type === 'composite') {
                         document.getElementById('compositeTemplateGroup').hidden = false;
                         populateCompositeFieldButtons();
@@ -3496,6 +3659,7 @@
             const type = document.getElementById('fieldType').value;
             const options = document.getElementById('fieldOptions').value.trim();
             const compositeTemplate = document.getElementById('compositeTemplate').value;
+            const dateFormat = document.getElementById('dateFormat').value.trim();
             const primary = document.getElementById('fieldPrimary').checked;
             const filter = document.getElementById('fieldFilter').checked;
             const group = document.getElementById('fieldGroup').checked;
@@ -3506,9 +3670,9 @@
             if (group) table.fields.forEach(f => f.group = false); // jen jedno pole může být pro seskupování
             if (id) {
                 const f = table.fields.find(x => x.id === id);
-                if (f) { f.name = name; f.type = type; f.options = options; f.compositeTemplate = compositeTemplate; f.primary = primary; f.filter = filter; f.group = group; f.targetTableId = targetTableId; f.parentFieldId = parentFieldId; }
+                if (f) { f.name = name; f.type = type; f.options = options; f.compositeTemplate = compositeTemplate; f.dateFormat = dateFormat; f.primary = primary; f.filter = filter; f.group = group; f.targetTableId = targetTableId; f.parentFieldId = parentFieldId; }
             } else {
-                table.fields.push({ id: generateId(), name, type, options, compositeTemplate, primary, filter, group, targetTableId, parentFieldId });
+                table.fields.push({ id: generateId(), name, type, options, compositeTemplate, dateFormat, primary, filter, group, targetTableId, parentFieldId });
             }
             closeModal('fieldModal');
             renderFieldList();
@@ -3545,7 +3709,7 @@
                 case 'date': 
                     // Default to today's date for new records
                     const dateValue = (isNewRecord && !value) ? new Date().toISOString().split('T')[0] : value;
-                    input = `<div class="date-input-group"><input type="date" id="${id}" value="${escapeAttr(dateValue)}" class="date-picker"><input type="text" id="${id}_text" value="${escapeAttr(dateValue)}" placeholder="yyyy-mm-dd" pattern="\\d{4}-\\d{2}-\\d{2}" class="date-text" title="Formát: yyyy-mm-dd"></div>`; 
+                    input = `<div class="date-input-group"><input type="date" id="${id}" value="${escapeAttr(dateValue)}" class="date-picker"><input type="text" id="${id}_text" value="${escapeAttr(dateValue)}" placeholder="yyyy-mm-dd" pattern="\\d{4}-\\d{2}-\\d{2}" class="date-text" title="Formát: yyyy-mm-dd"><button type="button" class="date-clear-btn" data-date-field="${id}" title="${t('clearDate')}">✕</button></div>`; 
                     break;
                 case 'url': input = `<input type="url" id="${id}" value="${escapeAttr(value)}" placeholder="https://">`; break;
                 case 'boolean': return `<div class="form-group"><div class="checkbox-group"><input type="checkbox" id="${id}" ${value ? 'checked' : ''}><label for="${id}">${escapeHtml(field.name)}</label></div></div>`;
@@ -3669,6 +3833,191 @@
             setTimeout(() => { modal.style.boxShadow = ''; }, 300);
         }
 
+        // History functions
+        function addHistoryEntry(tableId, recordId, type, changedFields) {
+            if (!database.meta.recordHistory) database.meta.recordHistory = {};
+            var key = tableId + '_' + recordId;
+            if (!database.meta.recordHistory[key]) database.meta.recordHistory[key] = [];
+            
+            // Only save non-empty fields
+            var fields = {};
+            for (var fieldId in changedFields) {
+                var value = changedFields[fieldId];
+                if (value !== null && value !== '' && value !== undefined) {
+                    fields[fieldId] = value;
+                }
+            }
+            
+            // Only add entry if there are any fields
+            if (Object.keys(fields).length > 0 || type === 'create') {
+                database.meta.recordHistory[key].push({
+                    id: generateId(),
+                    timestamp: new Date().toISOString(),
+                    type: type,
+                    fields: fields
+                });
+            }
+        }
+        
+        function getRecordHistory(tableId, recordId) {
+            if (!database.meta.recordHistory) return [];
+            var key = tableId + '_' + recordId;
+            return database.meta.recordHistory[key] || [];
+        }
+        
+        function renderHistoryModal(tableId, recordId) {
+            var table = getTableById(tableId);
+            var record = getRecordById(tableId, recordId);
+            if (!table || !record) return;
+            
+            var history = getRecordHistory(tableId, recordId);
+            var container = document.getElementById('historyContent');
+            
+            container.dataset.tableId = tableId;
+            container.dataset.recordId = recordId;
+            
+            document.getElementById('historyModalTitle').innerHTML = '📜 ' + t('history') + ': ' + escapeHtml(getPrimaryFieldValue(table, record));
+            
+            if (history.length === 0) {
+                container.innerHTML = '<div class="history-empty">' + t('noHistory') + '</div>';
+                openModal('historyModal');
+                return;
+            }
+            
+            var sorted = history.slice().sort(function(a, b) { 
+                return new Date(b.timestamp) - new Date(a.timestamp); 
+            });
+            
+            var html = '<div class="history-list">';
+            for (var i = 0; i < sorted.length; i++) {
+                var entry = sorted[i];
+                var date = new Date(entry.timestamp);
+                var dateStr = date.toLocaleString(currentLang === 'cs' ? 'cs-CZ' : 'en-US');
+                var typeLabel = entry.type === 'create' ? t('historyCreate') : 
+                                entry.type === 'bulk' ? t('historyBulk') : t('historyEdit');
+                var typeClass = entry.type;
+                
+                html += '<div class="history-item">';
+                html += '<div class="history-header">';
+                html += '<span class="history-timestamp">📅 ' + escapeHtml(dateStr) + '</span>';
+                html += '<span class="history-type ' + typeClass + '">' + escapeHtml(typeLabel) + '</span>';
+                if (advancedMode) {
+                    html += '<button type="button" class="btn btn-danger btn-small history-delete-btn" data-history-id="' + entry.id + '" title="' + t('delete') + '">🗑️</button>';
+                }
+                html += '</div>';
+                html += '<div class="history-changes">';
+                
+                var fieldIds = Object.keys(entry.fields || {});
+                if (fieldIds.length === 0) {
+                    html += '<div class="history-empty" style="padding: 0.5rem;">—</div>';
+                } else {
+                    html += '<ul class="history-fields-list">';
+                    for (var j = 0; j < fieldIds.length; j++) {
+                        var fieldId = fieldIds[j];
+                        var field = table.fields.find(function(f) { return f.id === fieldId; });
+                        var fieldName = field ? field.name : fieldId;
+                        var value = entry.fields[fieldId];
+                        
+                        if (field) {
+                            if (field.type === 'boolean') {
+                                value = value ? t('yes') : t('no');
+                            } else if (field.type === 'date' && value) {
+                                value = formatDate(value, field.dateFormat);
+                            } else if (field.type === 'parent' && value) {
+                                var targetTable = getTableById(field.targetTableId);
+                                var targetRecord = targetTable ? getRecordById(field.targetTableId, value) : null;
+                                value = targetRecord && targetTable ? getPrimaryFieldValue(targetTable, targetRecord) : value;
+                            }
+                        }
+                        
+                        // Zkrátit dlouhé hodnoty
+                        var displayValue = String(value);
+                        if (displayValue.length > 200) {
+                            displayValue = displayValue.substring(0, 200) + '...';
+                        }
+                        
+                        html += '<li>';
+                        html += '<span class="history-field-name">' + escapeHtml(fieldName) + ':</span>';
+                        html += '<span class="history-field-value">' + escapeHtml(displayValue) + '</span>';
+                        if (advancedMode) {
+                            html += '<button type="button" class="btn btn-danger btn-small history-delete-field-btn" data-history-id="' + entry.id + '" data-field-id="' + fieldId + '" title="' + t('delete') + '" style="float:right;margin-top:-1.5rem;">✕</button>';
+                        }
+                        html += '</li>';
+                    }
+                    html += '</ul>';
+                }
+                
+                html += '</div></div>';
+            }
+            html += '</div>';
+            
+            container.innerHTML = html;
+            
+            // Delete buttons event listeners
+            var deleteButtons = container.querySelectorAll('.history-delete-btn');
+            for (var k = 0; k < deleteButtons.length; k++) {
+                deleteButtons[k].addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    var historyId = this.dataset.historyId;
+                    if (confirm(t('confirmDeleteHistory'))) {
+                        deleteHistoryEntry(container.dataset.tableId, container.dataset.recordId, historyId);
+                        renderHistoryModal(container.dataset.tableId, container.dataset.recordId);
+                    }
+                });
+            }
+            
+            // Delete field buttons event listeners
+            var deleteFieldButtons = container.querySelectorAll('.history-delete-field-btn');
+            for (var m = 0; m < deleteFieldButtons.length; m++) {
+                deleteFieldButtons[m].addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    var historyId = this.dataset.historyId;
+                    var fieldId = this.dataset.fieldId;
+                    deleteHistoryField(container.dataset.tableId, container.dataset.recordId, historyId, fieldId);
+                    renderHistoryModal(container.dataset.tableId, container.dataset.recordId);
+                });
+            }
+            
+            openModal('historyModal');
+        }
+        
+        function deleteHistoryEntry(tableId, recordId, historyId) {
+            var key = tableId + '_' + recordId;
+            if (!database.meta.recordHistory[key]) return;
+            
+            database.meta.recordHistory[key] = database.meta.recordHistory[key].filter(function(e) { 
+                return e.id !== historyId; 
+            });
+            
+            if (database.meta.recordHistory[key].length === 0) {
+                delete database.meta.recordHistory[key];
+            }
+            
+            autoSave();
+        }
+        
+        function deleteHistoryField(tableId, recordId, historyId, fieldId) {
+            var key = tableId + '_' + recordId;
+            if (!database.meta.recordHistory[key]) return;
+            
+            for (var i = 0; i < database.meta.recordHistory[key].length; i++) {
+                var entry = database.meta.recordHistory[key][i];
+                if (entry.id === historyId) {
+                    delete entry.fields[fieldId];
+                    // Pokud nezbyly žádná pole, smazat celý záznam
+                    if (Object.keys(entry.fields).length === 0) {
+                        database.meta.recordHistory[key].splice(i, 1);
+                        if (database.meta.recordHistory[key].length === 0) {
+                            delete database.meta.recordHistory[key];
+                        }
+                    }
+                    break;
+                }
+            }
+            
+            autoSave();
+        }
+
         function saveRecord() {
             const table = getTableById(currentRecordTableId);
             if (!table) return;
@@ -3684,10 +4033,30 @@
             let newRecordId = null;
             if (currentRecordId) { 
                 const r = getRecordById(currentRecordTableId, currentRecordId); 
-                if (r) r.values = values; 
+                if (r) {
+                    // Uložit jen změněná pole
+                    var changedFields = {};
+                    for (var fieldId in values) {
+                        var oldVal = r.values[fieldId];
+                        var newVal = values[fieldId];
+                        // Normalizovat pro porovnání
+                        if (oldVal === undefined) oldVal = '';
+                        if (oldVal === null) oldVal = '';
+                        if (newVal === undefined) newVal = '';
+                        if (newVal === null) newVal = '';
+                        if (String(oldVal) !== String(newVal)) {
+                            changedFields[fieldId] = newVal;
+                        }
+                    }
+                    if (Object.keys(changedFields).length > 0) {
+                        addHistoryEntry(currentRecordTableId, currentRecordId, 'edit', changedFields);
+                    }
+                    r.values = values;
+                }
             } else {
                 newRecordId = generateId();
                 table.records.push({ id: newRecordId, values });
+                addHistoryEntry(currentRecordTableId, newRecordId, 'create', values);
             }
             const savedTableId = currentRecordTableId;
             const savedRecordId = currentRecordId || newRecordId;
@@ -3767,7 +4136,7 @@
                         break;
                     case 'date': 
                         if (v) {
-                            dv = new Date(v).toLocaleDateString(currentLang);
+                            dv = formatDate(v, f.dateFormat);
                             rawValue = dv;
                         } else {
                             isEmpty = true;
@@ -4250,7 +4619,8 @@
             updateDocumentTitle();
             const content = JSON.stringify(database, null, 2);
             const filename = (database.meta.name || 'database') + '.jsondb';
-            await saveFileWithDialog(content, filename, 'application/json', ['.jsondb', '.json']);
+            const saved = await saveFileWithDialog(content, filename, 'application/json', ['.jsondb', '.json']);
+            if (saved) markAsSaved();
         }
 
         async function copyJsonToClipboard() {
@@ -4434,6 +4804,11 @@
                 openStructureModal(modal.dataset.tableId, modal.dataset.recordId); 
             });
             
+            document.getElementById('btnHistoryView').addEventListener('click', () => {
+                const modal = document.getElementById('viewRecordModal');
+                renderHistoryModal(modal.dataset.tableId, modal.dataset.recordId);
+            });
+            
             // Notes event handlers in viewRecordModal
             document.getElementById('viewRecordContent').addEventListener('click', e => {
                 const modal = document.getElementById('viewRecordModal');
@@ -4537,6 +4912,7 @@
             document.getElementById('fieldType').addEventListener('change', e => {
                 const t = e.target.value;
                 document.getElementById('fieldOptionsGroup').hidden = t !== 'select';
+                document.getElementById('dateFormatGroup').hidden = t !== 'date';
                 document.getElementById('compositeTemplateGroup').hidden = t !== 'composite';
                 document.getElementById('targetTableGroup').hidden = t !== 'parent' && t !== 'children';
                 document.getElementById('parentFieldGroup').hidden = t !== 'children';
@@ -5047,6 +5423,19 @@
                     }
                 }
             });
+            
+            // Clear date button handler
+            document.addEventListener('click', e => {
+                if (e.target.classList.contains('date-clear-btn')) {
+                    const fieldId = e.target.dataset.dateField;
+                    if (fieldId) {
+                        const dateInput = document.getElementById(fieldId);
+                        const textInput = document.getElementById(fieldId + '_text');
+                        if (dateInput) dateInput.value = '';
+                        if (textInput) textInput.value = '';
+                    }
+                }
+            });
 
             document.getElementById('tableContents').addEventListener('click', e => {
                 // Sort by column header
@@ -5247,7 +5636,8 @@
                 }
                 
                 if (event.data.type === 'saveSuccess') {
-                    // Success - just close the window without alert
+                    // Success - mark as saved and close the window
+                    markAsSaved();
                     window.close();
                 }
                 
@@ -5362,6 +5752,18 @@
 
             loadAutoSave();
             renderAll();
+            
+            // Mark initial load complete (changes after this will be tracked)
+            initialLoadComplete = true;
+            
+            // Warn before closing with unsaved changes
+            window.addEventListener('beforeunload', e => {
+                if (hasUnsavedChanges) {
+                    e.preventDefault();
+                    e.returnValue = t('confirmUnsavedClose');
+                    return e.returnValue;
+                }
+            });
         });
     </script>
 </body>
