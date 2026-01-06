@@ -1757,7 +1757,8 @@
                 case 'parent':
                     const tt = getTableById(field.targetTableId);
                     if (tt) {
-                        inputHtml = `<select id="${inputId}" class="bulk-edit-value" data-row="${rowId}"><option value="">${t('noParent')}</option>${tt.records.map(r => `<option value="${r.id}">${escapeHtml(getPrimaryFieldValue(tt, r))}</option>`).join('')}</select>`;
+                        const sortedRecs = tt.records.map(r => ({ id: r.id, name: getPrimaryFieldValue(tt, r) })).sort((a, b) => a.name.localeCompare(b.name, currentLang));
+                        inputHtml = `<select id="${inputId}" class="bulk-edit-value" data-row="${rowId}"><option value="">${t('noParent')}</option>${sortedRecs.map(o => `<option value="${o.id}">${escapeHtml(o.name)}</option>`).join('')}</select>`;
                     }
                     break;
                 default:
@@ -1824,7 +1825,8 @@
             }
             
             let optionsHtml = `<option value="">${t('selectCollection')}</option>`;
-            database.meta.collections.forEach(col => {
+            const sortedCols = [...database.meta.collections].sort((a, b) => a.name.localeCompare(b.name, currentLang));
+            sortedCols.forEach(col => {
                 optionsHtml += `<option value="${col.id}">${escapeHtml(col.name)}</option>`;
             });
             
@@ -1866,7 +1868,8 @@
             }
             
             let optionsHtml = `<option value="">${t('selectTag')}</option>`;
-            database.meta.tags.forEach(tag => {
+            const sortedTags = [...database.meta.tags].sort((a, b) => a.name.localeCompare(b.name, currentLang));
+            sortedTags.forEach(tag => {
                 optionsHtml += `<option value="${tag.id}">${escapeHtml(tag.name)}</option>`;
             });
             
@@ -2079,13 +2082,15 @@
             // Collection filter
             if (database.meta.collections?.length > 0) {
                 const colFilterVal = collectionFilter || '';
-                selectFiltersHtml += `<div class="filter-item"><label>${t('inCollection')}</label><select class="collection-filter" data-table="${tableId}"><option value="">${t('allCollections')}</option>${database.meta.collections.map(col => `<option value="${col.id}" ${colFilterVal === col.id ? 'selected' : ''}>${escapeHtml(col.name)}</option>`).join('')}</select></div>`;
+                const sortedCols = [...database.meta.collections].sort((a, b) => a.name.localeCompare(b.name, currentLang));
+                selectFiltersHtml += `<div class="filter-item"><label>${t('inCollection')}</label><select class="collection-filter" data-table="${tableId}"><option value="">${t('allCollections')}</option>${sortedCols.map(col => `<option value="${col.id}" ${colFilterVal === col.id ? 'selected' : ''}>${escapeHtml(col.name)}</option>`).join('')}</select></div>`;
             }
             
             // Tag filter
             if (database.meta.tags?.length > 0) {
                 const tagFilterVal = tagFilter || '';
-                selectFiltersHtml += `<div class="filter-item"><label>${t('withTag')}</label><select class="tag-filter" data-table="${tableId}"><option value="">${t('allTags')}</option>${database.meta.tags.map(tag => `<option value="${tag.id}" ${tagFilterVal === tag.id ? 'selected' : ''}>${escapeHtml(tag.name)}</option>`).join('')}</select></div>`;
+                const sortedTags = [...database.meta.tags].sort((a, b) => a.name.localeCompare(b.name, currentLang));
+                selectFiltersHtml += `<div class="filter-item"><label>${t('withTag')}</label><select class="tag-filter" data-table="${tableId}"><option value="">${t('allTags')}</option>${sortedTags.map(tag => `<option value="${tag.id}" ${tagFilterVal === tag.id ? 'selected' : ''}>${escapeHtml(tag.name)}</option>`).join('')}</select></div>`;
             }
             
             // Combine: search always, select filters only in advanced mode
@@ -2390,7 +2395,8 @@
             const empty = document.getElementById('emptyCollections');
             if (database.meta.collections.length === 0) { container.innerHTML = ''; empty.hidden = false; return; }
             empty.hidden = true;
-            container.innerHTML = database.meta.collections.map(col => {
+            const sortedCols = [...database.meta.collections].sort((a, b) => a.name.localeCompare(b.name, currentLang));
+            container.innerHTML = sortedCols.map(col => {
                 const count = col.members?.length || 0;
                 const descPreview = col.description ? escapeHtml(col.description.substring(0, 100)) + (col.description.length > 100 ? '...' : '') : '';
                 return `
@@ -2411,7 +2417,8 @@
             const empty = document.getElementById('emptyTags');
             if (database.meta.tags.length === 0) { container.innerHTML = ''; empty.hidden = false; return; }
             empty.hidden = true;
-            container.innerHTML = database.meta.tags.map(tag => {
+            const sortedTags = [...database.meta.tags].sort((a, b) => a.name.localeCompare(b.name, currentLang));
+            container.innerHTML = sortedTags.map(tag => {
                 // Count records with this tag
                 let count = 0;
                 database.tables.forEach(tb => {
@@ -3077,8 +3084,8 @@
             const existingCollections = getRecordCollections(tableId, recordId);
             const existingIds = existingCollections.map(c => c.id);
             
-            // Filter out collections the record is already in
-            const availableCollections = (database.meta.collections || []).filter(c => !existingIds.includes(c.id));
+            // Filter out collections the record is already in, then sort
+            const availableCollections = (database.meta.collections || []).filter(c => !existingIds.includes(c.id)).sort((a, b) => a.name.localeCompare(b.name, currentLang));
             
             if (availableCollections.length === 0) {
                 select.innerHTML = `<option value="">${t('noCollections')}</option>`;
@@ -3116,8 +3123,8 @@
             const existingTags = getRecordTags(tableId, recordId);
             const existingIds = existingTags.map(t => t.id);
             
-            // Filter out tags the record already has
-            const availableTags = (database.meta.tags || []).filter(t => !existingIds.includes(t.id));
+            // Filter out tags the record already has, then sort
+            const availableTags = (database.meta.tags || []).filter(t => !existingIds.includes(t.id)).sort((a, b) => a.name.localeCompare(b.name, currentLang));
             
             if (availableTags.length === 0) {
                 select.innerHTML = `<option value="">${t('noTags')}</option>`;
@@ -3765,7 +3772,7 @@
                     break;
                 case 'parent':
                     const tt = getTableById(field.targetTableId);
-                    const ros = tt ? tt.records.filter(r => r.id !== currentRecordId).map(r => ({ id: r.id, name: getPrimaryFieldValue(tt, r) })) : [];
+                    const ros = tt ? tt.records.filter(r => r.id !== currentRecordId).map(r => ({ id: r.id, name: getPrimaryFieldValue(tt, r) })).sort((a, b) => a.name.localeCompare(b.name, currentLang)) : [];
                     input = `<div style="display: flex; gap: 0.5rem;"><select id="${id}" style="flex: 1;"><option value="">${t('noParent')}</option>${ros.map(o => `<option value="${o.id}" ${value === o.id ? 'selected' : ''}>${escapeHtml(o.name)}</option>`).join('')}</select><button type="button" class="btn btn-sm btn-success create-parent-btn" data-field="${field.id}" data-target-table="${field.targetTableId}" title="${t('createNew')}">➕</button></div>`;
                     break;
             }
