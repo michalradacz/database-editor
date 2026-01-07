@@ -495,7 +495,28 @@
             .modal { max-height: 95vh; }
             .table-tabs { flex-wrap: nowrap; overflow-x: auto; }
         }
+
+        /* JSON Viewer styles */
+        .json-viewer { font-family: 'Consolas', 'Monaco', monospace; font-size: 0.9rem; line-height: 1.5; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; overflow-x: auto; max-height: 400px; overflow-y: auto; }
+        .json-key { color: #881391; font-weight: 500; }
+        .json-string { color: #0b7500; }
+        .json-number { color: #1750eb; }
+        .json-boolean { color: #d97706; font-weight: 600; }
+        .json-null { color: #6b7280; font-style: italic; }
+        .json-array-label { color: #6b7280; font-size: 0.85em; margin-left: 0.25em; }
+        .json-index { color: #6b7280; font-size: 0.9em; }
+        .json-line { padding: 0.1rem 0; }
+        .json-indent { display: inline-block; width: 1.5em; }
+        .json-children { margin-left: 0.5rem; border-left: 1px dashed var(--border); padding-left: 0.5rem; }
+        .json-collapsible { cursor: pointer; user-select: none; }
+        .json-collapsible:hover { opacity: 0.7; }
+        .json-collapsible::before { content: '▼'; display: inline-block; width: 1em; font-size: 0.7em; transition: transform 0.15s; }
+        .json-collapsible.collapsed::before { transform: rotate(-90deg); }
+        .json-collapsible.collapsed + .json-children { display: none; }
+        .json-error { color: #dc2626; font-style: italic; }
+        .json-input { font-family: 'Consolas', 'Monaco', monospace; font-size: 0.9rem; }
     </style>
+    <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link" data-i18n="skipToContent">Přeskočit na hlavní obsah</a>
@@ -787,6 +808,7 @@
                         <option value="url">URL odkaz</option>
                         <option value="boolean">Ano/Ne</option>
                         <option value="select">Výběr ze seznamu</option>
+                        <option value="json">JSON</option>
                         <option value="composite">Složený</option>
                         <option value="parent">Nadřazený záznam</option>
                         <option value="children">Podřízené záznamy</option>
@@ -1148,6 +1170,7 @@
                 <div class="export-actions">
                     <button type="button" class="btn btn-primary" id="btnCopyMarkdown"><span aria-hidden="true">📋</span> <span data-i18n="copyMarkdown">Kopírovat do schránky</span></button>
                     <button type="button" class="btn btn-secondary" id="btnSaveMarkdown"><span aria-hidden="true">💾</span> <span data-i18n="saveMarkdown">Uložit jako .md</span></button>
+                    <button type="button" class="btn btn-secondary" id="btnSaveDocx"><span aria-hidden="true">📄</span> <span data-i18n="saveDocx">Uložit jako .docx</span></button>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1310,9 +1333,9 @@
                 management: "Správa", rowsPreview: "Náhled ({count} řádků)", selectField: "-- Vyberte --",
                 recordsShowing: "Zobrazeno: {filtered} / {total}", typeText: "Text", typeTextarea: "Víceřádkový text / Markdown",
                 typeNumber: "Číslo", typeDate: "Datum", typeBoolean: "Ano/Ne", typeSelect: "Výběr ze seznamu",
-                typeParent: "Nadřazený záznam", typeChildren: "Podřízené záznamy", typeComposite: "Složený", typeUrl: "URL odkaz", editTable: "Upravit", editField: "Upravit pole",
+                typeParent: "Nadřazený záznam", typeChildren: "Podřízené záznamy", typeComposite: "Složený", typeUrl: "URL odkaz", typeJson: "JSON", jsonItems: "položek", jsonProperties: "vlastností", jsonInvalidFormat: "Neplatný formát JSON", jsonEmpty: "prázdné", editTable: "Upravit", editField: "Upravit pole",
                 compositeFields: "Vložit pole:", compositeTemplate: "Šablona složeného pole", createNew: "Vytvořit nový", fieldGroup: "Seskupovat záznamy", groupCollapsed: "sbaleno", groupExpanded: "rozbaleno", addChild: "Přidat podřízený", copyField: "Kopírovat", copiedToClipboard: "Zkopírováno do schránky",
-                collections: "Kolekce", tags: "Tagy", addCollection: "Přidat kolekci", addTag: "Přidat tag", collectionName: "Název kolekce", tagName: "Název tagu", color: "Barva", noCollections: "Zatím nemáte žádné kolekce.", noTags: "Zatím nemáte žádné tagy.", collectionMembers: "záznamů", confirmDeleteCollection: "Smazat tuto kolekci?", confirmDeleteTag: "Smazat tento tag?", addToCollection: "Přidat do kolekce", removeFromCollection: "Odebrat z kolekce", assignTags: "Přiřadit tagy", relatedRecords: "Související záznamy", inCollection: "V kolekci", withTag: "S tagem", allCollections: "Všechny kolekce", allTags: "Všechny tagy", viewCollection: "Zobrazit kolekci", collectionContents: "Obsah kolekce", backToTables: "Zpět na tabulky", recordsInCollection: "Záznamy v kolekci", noRecordsInCollection: "Kolekce neobsahuje žádné záznamy.", fromTable: "z tabulky", manageCollections: "Spravovat kolekce", manageTags: "Spravovat tagy", classification: "Zatřídění", description: "Popis", collectionDescription: "Popis kolekce", selectCollection: "Vyberte kolekci", selectTag: "Vyberte tag", createNewCollection: "Vytvořit novou kolekci", createNewTag: "Vytvořit nový tag", removeFromThisCollection: "Odebrat z této kolekce", removeThisTag: "Odebrat tento tag", collectionDetails: "Podrobnosti kolekce", tagDetails: "Podrobnosti tagu", editCollection: "Upravit kolekci", editTag: "Upravit tag", recordsWithTag: "Záznamy s tagem", quickCreate: "➕ Nový záznam...", structure: "Struktura", textView: "Textový pohled", graphView: "Grafický pohled", showStructure: "Zobrazit strukturu", noDescendants: "Tento záznam nemá žádné podřízené záznamy.", loadMore: "Načíst více...", loadAll: "Načíst všechny", descendants: "potomků", selectedRecords: "vybráno", bulkEditField: "Upravit pole", clearSelection: "Zrušit výběr", selectAll: "Vybrat vše", newValue: "Nová hodnota", apply: "Použít", confirmBulkDelete: "Opravdu smazat {count} záznamů?", addedToCollection: "Přidáno {count} záznamů do kolekce.", addedTag: "Tag přidán k {count} záznamům.", recordFields: "Pole záznamu", bulkEditFields: "Hromadná úprava polí", addAnotherField: "Přidat další pole", openAfterSave: "Otevřít zobrazení", ancestors: "Předci", showStructureFrom: "Zobrazit strukturu od tohoto záznamu", order: "Pořadí", tableName: "Název tabulky", fields: "Pole", records: "Záznamy", manageFields: "Spravovat pole", moveUp: "Posunout nahoru", moveDown: "Posunout dolů", fieldName: "Název pole", type: "Typ", options: "Možnosti", primary: "Primární", filter: "Filtr", group: "Seskupit", duplicate: "Duplikovat", saveAndAddAnother: "Uložit a přidat další", searchResults: "Výsledky hledání", noSearchResults: "Žádné výsledky nebyly nalezeny.", globalSearchPlaceholder: "🔍 Hledat...", refresh: "Obnovit", previewImport: "Zobrazit náhled mapování", columnMapping: "Mapování sloupců", targetField: "Cílové pole", unmapped: "Nenamapováno", column: "Sloupec", sampleData: "Ukázka dat", rows: "řádků", noDataToPreview: "Vložte data pro zobrazení náhledu", allRecords: "Všechny záznamy", saveView: "Uložit pohled", viewName: "Název pohledu", newView: "Nový pohled", updateView: "Aktualizovat pohled", renameView: "Přejmenovat pohled", confirmDeleteView: "Opravdu smazat tento pohled?", lockRecord: "Zamknout záznam", unlockRecord: "Odemknout záznam", recordLocked: "Tento záznam je zamčený a nelze ho upravovat.", savedViews: "Uložené pohledy", notes: "Poznámky", addNote: "Přidat poznámku", editNote: "Upravit poznámku", deleteNote: "Smazat poznámku", noNotes: "Žádné poznámky", noteText: "Text poznámky", noteResolved: "Vyřízeno", noteUnresolved: "Nevyřízeno", markResolved: "Označit jako vyřízené", markUnresolved: "Označit jako nevyřízené", confirmDeleteNote: "Opravdu smazat tuto poznámku?", allNotes: "Všechny poznámky", unresolvedNotes: "Nevyřízené", resolvedNotes: "Vyřízené", noNotesInDatabase: "V databázi nejsou žádné poznámky.", noteFor: "Poznámka k", notesCount: "poznámek", allFeatures: "Všechny funkce", showInSimpleMode: "Zobrazit v základním režimu", keyboardShortcuts: "Klávesové zkratky", shortcutSave: "Uložit databázi", shortcutToggleMode: "Přepnout režim (základní/pokročilý)", shortcutNewRecord: "Nový záznam v aktuální tabulce", shortcutQuickCreate: "Rychlé vytvoření záznamu", shortcutSaveRecord: "Uložit záznam (v modálu)", shortcutCollections: "Přejít do kolekcí", shortcutTags: "Přejít do tagů", shortcutNotes: "Přejít do poznámek", shortcutClassification: "Přejít do zatřídění", shortcutEdit: "Upravit vybraný záznam", shortcutView: "Zobrazit vybraný záznam", shortcutArrows: "Navigace v tabulce", shortcutDescription: "Klávesové zkratky používají modifikátor prohlížeče (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifikátor + klávesa", directShortcuts: "Přímé zkratky (bez modifikátoru)", key: "Klávesa", history: "Historie změn", historyCreate: "Vytvoření", historyEdit: "Úprava", historyBulk: "Hromadná úprava", noHistory: "Zatím nejsou k dispozici žádné záznamy o změnách.", confirmDeleteHistory: "Opravdu chcete smazat tento záznam z historie?", exportMarkdown: "Export do Markdown", exportMarkdownTitle: "Export záznamu do Markdown", copyMarkdown: "Kopírovat do schránky", saveMarkdown: "Uložit jako .md", markdownCopied: "Markdown zkopírován do schránky.", includeHistory: "Zahrnout historii změn", includeNotes: "Zahrnout poznámky", selectFields: "Vyberte pole k exportu", preview: "Náhled"
+                collections: "Kolekce", tags: "Tagy", addCollection: "Přidat kolekci", addTag: "Přidat tag", collectionName: "Název kolekce", tagName: "Název tagu", color: "Barva", noCollections: "Zatím nemáte žádné kolekce.", noTags: "Zatím nemáte žádné tagy.", collectionMembers: "záznamů", confirmDeleteCollection: "Smazat tuto kolekci?", confirmDeleteTag: "Smazat tento tag?", addToCollection: "Přidat do kolekce", removeFromCollection: "Odebrat z kolekce", assignTags: "Přiřadit tagy", relatedRecords: "Související záznamy", inCollection: "V kolekci", withTag: "S tagem", allCollections: "Všechny kolekce", allTags: "Všechny tagy", viewCollection: "Zobrazit kolekci", collectionContents: "Obsah kolekce", backToTables: "Zpět na tabulky", recordsInCollection: "Záznamy v kolekci", noRecordsInCollection: "Kolekce neobsahuje žádné záznamy.", fromTable: "z tabulky", manageCollections: "Spravovat kolekce", manageTags: "Spravovat tagy", classification: "Zatřídění", description: "Popis", collectionDescription: "Popis kolekce", selectCollection: "Vyberte kolekci", selectTag: "Vyberte tag", createNewCollection: "Vytvořit novou kolekci", createNewTag: "Vytvořit nový tag", removeFromThisCollection: "Odebrat z této kolekce", removeThisTag: "Odebrat tento tag", collectionDetails: "Podrobnosti kolekce", tagDetails: "Podrobnosti tagu", editCollection: "Upravit kolekci", editTag: "Upravit tag", recordsWithTag: "Záznamy s tagem", quickCreate: "➕ Nový záznam...", structure: "Struktura", textView: "Textový pohled", graphView: "Grafický pohled", showStructure: "Zobrazit strukturu", noDescendants: "Tento záznam nemá žádné podřízené záznamy.", loadMore: "Načíst více...", loadAll: "Načíst všechny", descendants: "potomků", selectedRecords: "vybráno", bulkEditField: "Upravit pole", clearSelection: "Zrušit výběr", selectAll: "Vybrat vše", newValue: "Nová hodnota", apply: "Použít", confirmBulkDelete: "Opravdu smazat {count} záznamů?", addedToCollection: "Přidáno {count} záznamů do kolekce.", addedTag: "Tag přidán k {count} záznamům.", recordFields: "Pole záznamu", bulkEditFields: "Hromadná úprava polí", addAnotherField: "Přidat další pole", openAfterSave: "Otevřít zobrazení", ancestors: "Předci", showStructureFrom: "Zobrazit strukturu od tohoto záznamu", order: "Pořadí", tableName: "Název tabulky", fields: "Pole", records: "Záznamy", manageFields: "Spravovat pole", moveUp: "Posunout nahoru", moveDown: "Posunout dolů", fieldName: "Název pole", type: "Typ", options: "Možnosti", primary: "Primární", filter: "Filtr", group: "Seskupit", duplicate: "Duplikovat", saveAndAddAnother: "Uložit a přidat další", searchResults: "Výsledky hledání", noSearchResults: "Žádné výsledky nebyly nalezeny.", globalSearchPlaceholder: "🔍 Hledat...", refresh: "Obnovit", previewImport: "Zobrazit náhled mapování", columnMapping: "Mapování sloupců", targetField: "Cílové pole", unmapped: "Nenamapováno", column: "Sloupec", sampleData: "Ukázka dat", rows: "řádků", noDataToPreview: "Vložte data pro zobrazení náhledu", allRecords: "Všechny záznamy", saveView: "Uložit pohled", viewName: "Název pohledu", newView: "Nový pohled", updateView: "Aktualizovat pohled", renameView: "Přejmenovat pohled", confirmDeleteView: "Opravdu smazat tento pohled?", lockRecord: "Zamknout záznam", unlockRecord: "Odemknout záznam", recordLocked: "Tento záznam je zamčený a nelze ho upravovat.", savedViews: "Uložené pohledy", notes: "Poznámky", addNote: "Přidat poznámku", editNote: "Upravit poznámku", deleteNote: "Smazat poznámku", noNotes: "Žádné poznámky", noteText: "Text poznámky", noteResolved: "Vyřízeno", noteUnresolved: "Nevyřízeno", markResolved: "Označit jako vyřízené", markUnresolved: "Označit jako nevyřízené", confirmDeleteNote: "Opravdu smazat tuto poznámku?", allNotes: "Všechny poznámky", unresolvedNotes: "Nevyřízené", resolvedNotes: "Vyřízené", noNotesInDatabase: "V databázi nejsou žádné poznámky.", noteFor: "Poznámka k", notesCount: "poznámek", allFeatures: "Všechny funkce", showInSimpleMode: "Zobrazit v základním režimu", keyboardShortcuts: "Klávesové zkratky", shortcutSave: "Uložit databázi", shortcutToggleMode: "Přepnout režim (základní/pokročilý)", shortcutNewRecord: "Nový záznam v aktuální tabulce", shortcutQuickCreate: "Rychlé vytvoření záznamu", shortcutSaveRecord: "Uložit záznam (v modálu)", shortcutCollections: "Přejít do kolekcí", shortcutTags: "Přejít do tagů", shortcutNotes: "Přejít do poznámek", shortcutClassification: "Přejít do zatřídění", shortcutEdit: "Upravit vybraný záznam", shortcutView: "Zobrazit vybraný záznam", shortcutArrows: "Navigace v tabulce", shortcutDescription: "Klávesové zkratky používají modifikátor prohlížeče (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifikátor + klávesa", directShortcuts: "Přímé zkratky (bez modifikátoru)", key: "Klávesa", history: "Historie změn", historyCreate: "Vytvoření", historyEdit: "Úprava", historyBulk: "Hromadná úprava", noHistory: "Zatím nejsou k dispozici žádné záznamy o změnách.", confirmDeleteHistory: "Opravdu chcete smazat tento záznam z historie?", exportMarkdown: "Export do Markdown", exportMarkdownTitle: "Export záznamu do Markdown", copyMarkdown: "Kopírovat do schránky", saveMarkdown: "Uložit jako .md", markdownCopied: "Markdown zkopírován do schránky.", includeHistory: "Zahrnout historii změn", includeNotes: "Zahrnout poznámky", selectFields: "Vyberte pole k exportu", preview: "Náhled", saveDocx: "Uložit jako .docx"
             },
             en: {
                 skipToContent: "Skip to content", appName: "Database Editor", dbName: "Database name", newDb: "New", load: "Load", save: "Save",
@@ -1340,14 +1363,14 @@
                 management: "Správa", rowsPreview: "Preview ({count} rows)", selectField: "-- Select --",
                 recordsShowing: "Showing: {filtered} / {total}", typeText: "Text", typeTextarea: "Multi-line text / Markdown",
                 typeNumber: "Number", typeDate: "Date", typeBoolean: "Yes/No", typeSelect: "Select from list",
-                typeParent: "Parent record", typeChildren: "Child records", typeComposite: "Composite", typeUrl: "URL link", editTable: "Edit", editField: "Edit field",
+                typeParent: "Parent record", typeChildren: "Child records", typeComposite: "Composite", typeUrl: "URL link", typeJson: "JSON", jsonItems: "items", jsonProperties: "properties", jsonInvalidFormat: "Invalid JSON format", jsonEmpty: "empty", editTable: "Edit", editField: "Edit field",
                 compositeFields: "Insert field:", compositeTemplate: "Composite field template", createNew: "Create new", fieldGroup: "Group records", groupCollapsed: "collapsed", groupExpanded: "expanded", addChild: "Add child", copyField: "Copy", copiedToClipboard: "Copied to clipboard",
-                collections: "Collections", tags: "Tags", addCollection: "Add collection", addTag: "Add tag", collectionName: "Collection name", tagName: "Tag name", color: "Color", noCollections: "You have no collections yet.", noTags: "You have no tags yet.", collectionMembers: "records", confirmDeleteCollection: "Delete this collection?", confirmDeleteTag: "Delete this tag?", addToCollection: "Add to collection", removeFromCollection: "Remove from collection", assignTags: "Assign tags", relatedRecords: "Related records", inCollection: "In collection", withTag: "With tag", allCollections: "All collections", allTags: "All tags", viewCollection: "View collection", collectionContents: "Collection contents", backToTables: "Back to tables", recordsInCollection: "Records in collection", noRecordsInCollection: "Collection contains no records.", fromTable: "from table", manageCollections: "Manage collections", manageTags: "Manage tags", classification: "Classification", description: "Description", collectionDescription: "Collection description", selectCollection: "Select collection", selectTag: "Select tag", createNewCollection: "Create new collection", createNewTag: "Create new tag", removeFromThisCollection: "Remove from this collection", removeThisTag: "Remove this tag", collectionDetails: "Collection details", tagDetails: "Tag details", editCollection: "Edit collection", editTag: "Edit tag", recordsWithTag: "Records with tag", quickCreate: "➕ New record...", structure: "Structure", textView: "Text view", graphView: "Graph view", showStructure: "Show structure", noDescendants: "This record has no child records.", loadMore: "Load more...", loadAll: "Load all", descendants: "descendants", selectedRecords: "selected", bulkEditField: "Edit field", clearSelection: "Clear selection", selectAll: "Select all", newValue: "New value", apply: "Apply", confirmBulkDelete: "Delete {count} records?", addedToCollection: "Added {count} records to collection.", addedTag: "Tag added to {count} records.", recordFields: "Record fields", bulkEditFields: "Bulk edit fields", addAnotherField: "Add another field", openAfterSave: "Open after save", ancestors: "Ancestors", showStructureFrom: "Show structure from this record", order: "Order", tableName: "Table name", fields: "Fields", records: "Records", manageFields: "Manage fields", moveUp: "Move up", moveDown: "Move down", fieldName: "Field name", type: "Type", options: "Options", primary: "Primary", filter: "Filter", group: "Group", duplicate: "Duplicate", saveAndAddAnother: "Save and add another", searchResults: "Search results", noSearchResults: "No results found.", globalSearchPlaceholder: "🔍 Search...", refresh: "Refresh", previewImport: "Preview mapping", columnMapping: "Column mapping", targetField: "Target field", unmapped: "Unmapped", column: "Column", sampleData: "Sample data", rows: "rows", noDataToPreview: "Paste data to see preview", allRecords: "All records", saveView: "Save view", viewName: "View name", newView: "New view", updateView: "Update view", renameView: "Rename view", confirmDeleteView: "Delete this view?", lockRecord: "Lock record", unlockRecord: "Unlock record", recordLocked: "This record is locked and cannot be edited.", savedViews: "Saved views", notes: "Notes", addNote: "Add note", editNote: "Edit note", deleteNote: "Delete note", noNotes: "No notes", noteText: "Note text", noteResolved: "Resolved", noteUnresolved: "Unresolved", markResolved: "Mark as resolved", markUnresolved: "Mark as unresolved", confirmDeleteNote: "Delete this note?", allNotes: "All notes", unresolvedNotes: "Unresolved", resolvedNotes: "Resolved", noNotesInDatabase: "No notes in database.", noteFor: "Note for", notesCount: "notes", allFeatures: "All features", showInSimpleMode: "Show in simple mode", keyboardShortcuts: "Keyboard shortcuts", shortcutSave: "Save database", shortcutToggleMode: "Toggle mode (simple/advanced)", shortcutNewRecord: "New record in current table", shortcutQuickCreate: "Quick create record", shortcutSaveRecord: "Save record (in modal)", shortcutCollections: "Go to collections", shortcutTags: "Go to tags", shortcutNotes: "Go to notes", shortcutClassification: "Go to classification", shortcutEdit: "Edit selected record", shortcutView: "View selected record", shortcutArrows: "Navigate in table", shortcutDescription: "Keyboard shortcuts use browser modifier (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifier + key", directShortcuts: "Direct shortcuts (no modifier)", key: "Key", history: "Change history", historyCreate: "Created", historyEdit: "Edited", historyBulk: "Bulk edit", noHistory: "No change history available yet.", confirmDeleteHistory: "Are you sure you want to delete this history entry?", exportMarkdown: "Export to Markdown", exportMarkdownTitle: "Export record to Markdown", copyMarkdown: "Copy to clipboard", saveMarkdown: "Save as .md", markdownCopied: "Markdown copied to clipboard.", includeHistory: "Include change history", includeNotes: "Include notes", selectFields: "Select fields to export", preview: "Preview"
+                collections: "Collections", tags: "Tags", addCollection: "Add collection", addTag: "Add tag", collectionName: "Collection name", tagName: "Tag name", color: "Color", noCollections: "You have no collections yet.", noTags: "You have no tags yet.", collectionMembers: "records", confirmDeleteCollection: "Delete this collection?", confirmDeleteTag: "Delete this tag?", addToCollection: "Add to collection", removeFromCollection: "Remove from collection", assignTags: "Assign tags", relatedRecords: "Related records", inCollection: "In collection", withTag: "With tag", allCollections: "All collections", allTags: "All tags", viewCollection: "View collection", collectionContents: "Collection contents", backToTables: "Back to tables", recordsInCollection: "Records in collection", noRecordsInCollection: "Collection contains no records.", fromTable: "from table", manageCollections: "Manage collections", manageTags: "Manage tags", classification: "Classification", description: "Description", collectionDescription: "Collection description", selectCollection: "Select collection", selectTag: "Select tag", createNewCollection: "Create new collection", createNewTag: "Create new tag", removeFromThisCollection: "Remove from this collection", removeThisTag: "Remove this tag", collectionDetails: "Collection details", tagDetails: "Tag details", editCollection: "Edit collection", editTag: "Edit tag", recordsWithTag: "Records with tag", quickCreate: "➕ New record...", structure: "Structure", textView: "Text view", graphView: "Graph view", showStructure: "Show structure", noDescendants: "This record has no child records.", loadMore: "Load more...", loadAll: "Load all", descendants: "descendants", selectedRecords: "selected", bulkEditField: "Edit field", clearSelection: "Clear selection", selectAll: "Select all", newValue: "New value", apply: "Apply", confirmBulkDelete: "Delete {count} records?", addedToCollection: "Added {count} records to collection.", addedTag: "Tag added to {count} records.", recordFields: "Record fields", bulkEditFields: "Bulk edit fields", addAnotherField: "Add another field", openAfterSave: "Open after save", ancestors: "Ancestors", showStructureFrom: "Show structure from this record", order: "Order", tableName: "Table name", fields: "Fields", records: "Records", manageFields: "Manage fields", moveUp: "Move up", moveDown: "Move down", fieldName: "Field name", type: "Type", options: "Options", primary: "Primary", filter: "Filter", group: "Group", duplicate: "Duplicate", saveAndAddAnother: "Save and add another", searchResults: "Search results", noSearchResults: "No results found.", globalSearchPlaceholder: "🔍 Search...", refresh: "Refresh", previewImport: "Preview mapping", columnMapping: "Column mapping", targetField: "Target field", unmapped: "Unmapped", column: "Column", sampleData: "Sample data", rows: "rows", noDataToPreview: "Paste data to see preview", allRecords: "All records", saveView: "Save view", viewName: "View name", newView: "New view", updateView: "Update view", renameView: "Rename view", confirmDeleteView: "Delete this view?", lockRecord: "Lock record", unlockRecord: "Unlock record", recordLocked: "This record is locked and cannot be edited.", savedViews: "Saved views", notes: "Notes", addNote: "Add note", editNote: "Edit note", deleteNote: "Delete note", noNotes: "No notes", noteText: "Note text", noteResolved: "Resolved", noteUnresolved: "Unresolved", markResolved: "Mark as resolved", markUnresolved: "Mark as unresolved", confirmDeleteNote: "Delete this note?", allNotes: "All notes", unresolvedNotes: "Unresolved", resolvedNotes: "Resolved", noNotesInDatabase: "No notes in database.", noteFor: "Note for", notesCount: "notes", allFeatures: "All features", showInSimpleMode: "Show in simple mode", keyboardShortcuts: "Keyboard shortcuts", shortcutSave: "Save database", shortcutToggleMode: "Toggle mode (simple/advanced)", shortcutNewRecord: "New record in current table", shortcutQuickCreate: "Quick create record", shortcutSaveRecord: "Save record (in modal)", shortcutCollections: "Go to collections", shortcutTags: "Go to tags", shortcutNotes: "Go to notes", shortcutClassification: "Go to classification", shortcutEdit: "Edit selected record", shortcutView: "View selected record", shortcutArrows: "Navigate in table", shortcutDescription: "Keyboard shortcuts use browser modifier (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifier + key", directShortcuts: "Direct shortcuts (no modifier)", key: "Key", history: "Change history", historyCreate: "Created", historyEdit: "Edited", historyBulk: "Bulk edit", noHistory: "No change history available yet.", confirmDeleteHistory: "Are you sure you want to delete this history entry?", exportMarkdown: "Export to Markdown", exportMarkdownTitle: "Export record to Markdown", copyMarkdown: "Copy to clipboard", saveMarkdown: "Save as .md", markdownCopied: "Markdown copied to clipboard.", includeHistory: "Include change history", includeNotes: "Include notes", selectFields: "Select fields to export", preview: "Preview", saveDocx: "Save as .docx"
             }
         };
 
         let currentLang = localStorage.getItem('db-editor-lang') || 'cs';
-        let database = { meta: { name: 'Nová databáze', columnVisibility: {}, groupStates: {}, collections: [], tags: [], views: {}, notes: [] }, tables: [] };
+        let database = { meta: { name: 'Nová databáze', columnVisibility: {}, groupStates: {}, collections: [], tags: [], views: {}, notes: [], recordHistory: {} }, tables: [] };
         let activeTableId = null;
         let activeTab = 'management';
         let quickCreateMode = false;
@@ -1445,6 +1468,49 @@
             return record.values[pf.id] ? record.values[pf.id] : `#${record.id.substr(0, 6)}`; 
         }
         const getChildRecords = (tableId, recordId) => { const ch = []; database.tables.forEach(tb => { tb.fields.filter(f => f.type === 'parent' && f.targetTableId === tableId).forEach(field => { tb.records.forEach(rec => { if (rec.values[field.id] === recordId) ch.push({ table: tb, record: rec, field }); }); }); }); return ch; };
+
+        // JSON Viewer - renders JSON as a pretty tree
+        function renderJsonViewer(value, indent = 0) {
+            if (value === null) return '<span class="json-null">null</span>';
+            if (typeof value === 'boolean') return `<span class="json-boolean">${value}</span>`;
+            if (typeof value === 'number') return `<span class="json-number">${value}</span>`;
+            if (typeof value === 'string') return `<span class="json-string">${escapeHtml(value)}</span>`;
+            
+            if (Array.isArray(value)) {
+                if (value.length === 0) return `<span class="json-null">(${t('jsonEmpty')})</span>`;
+                const id = generateId();
+                let html = `<span class="json-collapsible" data-json-toggle="${id}"><span class="json-array-label">[${value.length} ${t('jsonItems')}]</span></span>`;
+                html += `<div class="json-children" id="${id}">`;
+                value.forEach((item, i) => {
+                    html += `<div class="json-line">`;
+                    html += `<span class="json-indent"></span>`.repeat(indent + 1);
+                    html += `<span class="json-index">${i}:</span> `;
+                    html += renderJsonViewer(item, indent + 1);
+                    html += '</div>';
+                });
+                html += '</div>';
+                return html;
+            }
+            
+            if (typeof value === 'object') {
+                const keys = Object.keys(value);
+                if (keys.length === 0) return `<span class="json-null">(${t('jsonEmpty')})</span>`;
+                const id = generateId();
+                let html = `<span class="json-collapsible" data-json-toggle="${id}"></span>`;
+                html += `<div class="json-children" id="${id}">`;
+                keys.forEach((key) => {
+                    html += `<div class="json-line">`;
+                    html += `<span class="json-indent"></span>`.repeat(indent + 1);
+                    html += `<span class="json-key">${escapeHtml(key)}:</span> `;
+                    html += renderJsonViewer(value[key], indent + 1);
+                    html += '</div>';
+                });
+                html += '</div>';
+                return html;
+            }
+            
+            return escapeHtml(String(value));
+        }
 
         function updateDocumentTitle() {
             const dbName = database.meta.name;
@@ -1761,6 +1827,9 @@
                         inputHtml = `<select id="${inputId}" class="bulk-edit-value" data-row="${rowId}"><option value="">${t('noParent')}</option>${sortedRecs.map(o => `<option value="${o.id}">${escapeHtml(o.name)}</option>`).join('')}</select>`;
                     }
                     break;
+                case 'json':
+                    inputHtml = `<textarea id="${inputId}" class="bulk-edit-value json-input" data-row="${rowId}" rows="3" placeholder='{"key": "value"}'></textarea>`;
+                    break;
                 default:
                     inputHtml = `<input type="text" id="${inputId}" class="bulk-edit-value" data-row="${rowId}">`;
             }
@@ -1805,9 +1874,14 @@
             selected.forEach(recordId => {
                 const record = getRecordById(bulkEditTableId, recordId);
                 if (record) {
+                    // Build changed fields object for history
+                    const changedFields = {};
                     changes.forEach(({ fieldId, value }) => {
+                        changedFields[fieldId] = value;
                         record.values[fieldId] = value;
                     });
+                    // Add history entry for bulk edit
+                    addHistoryEntry(bulkEditTableId, recordId, 'bulk', changedFields);
                 }
             });
             
@@ -1918,6 +1992,19 @@
                         if (col.members) {
                             col.members = col.members.filter(m => !(m.tableId === tableId && selected.has(m.recordId)));
                         }
+                    });
+                }
+                
+                // Remove notes for deleted records
+                if (database.meta.notes) {
+                    database.meta.notes = database.meta.notes.filter(n => !(n.tableId === tableId && selected.has(n.recordId)));
+                }
+                
+                // Remove history for deleted records
+                if (database.meta.recordHistory) {
+                    selected.forEach(recordId => {
+                        const key = tableId + '_' + recordId;
+                        delete database.meta.recordHistory[key];
                     });
                 }
                 
@@ -2352,6 +2439,18 @@
                     const compVal = evaluateCompositeField(table, field, record);
                     if (field.primary) return `<a href="#" class="record-link" data-action="view" data-table="${table.id}" data-record="${record.id}">${escapeHtml(compVal)}</a>`;
                     return escapeHtml(compVal);
+                case 'json':
+                    try {
+                        const parsed = JSON.parse(value);
+                        if (Array.isArray(parsed)) {
+                            return `<code title="${escapeAttr(value)}">[${parsed.length} ${t('jsonItems')}]</code>`;
+                        } else if (typeof parsed === 'object' && parsed !== null) {
+                            return `<code title="${escapeAttr(value)}">{${Object.keys(parsed).length} ${t('jsonProperties')}}</code>`;
+                        }
+                        return `<code>${escapeHtml(JSON.stringify(parsed))}</code>`;
+                    } catch {
+                        return `<code class="json-error" title="${escapeAttr(value)}">${t('jsonInvalidFormat')}</code>`;
+                    }
                 default:
                     if (field.primary) return `<a href="#" class="record-link" data-action="view" data-table="${table.id}" data-record="${record.id}">${escapeHtml(String(value))}</a>`;
                     return escapeHtml(String(value));
@@ -2637,7 +2736,7 @@
             const empty = document.getElementById('emptyFields');
             if (!table || table.fields.length === 0) { container.innerHTML = ''; empty.hidden = false; return; }
             empty.hidden = true;
-            const typeNames = { text: t('typeText'), textarea: t('typeTextarea'), number: t('typeNumber'), date: t('typeDate'), url: t('typeUrl'), boolean: t('typeBoolean'), select: t('typeSelect'), composite: t('typeComposite'), parent: t('typeParent'), children: t('typeChildren') };
+            const typeNames = { text: t('typeText'), textarea: t('typeTextarea'), number: t('typeNumber'), date: t('typeDate'), url: t('typeUrl'), boolean: t('typeBoolean'), select: t('typeSelect'), json: t('typeJson'), composite: t('typeComposite'), parent: t('typeParent'), children: t('typeChildren') };
             
             let html = `<table class="management-table">
                 <thead><tr>
@@ -3766,6 +3865,9 @@
                     const opts = (field.options || '').split(',').map(o => o.trim()).filter(o => o);
                     input = `<select id="${id}"><option value="">-- ${t('selectField')} --</option>${opts.map(o => `<option value="${escapeAttr(o)}" ${value === o ? 'selected' : ''}>${escapeHtml(o)}</option>`).join('')}</select>`;
                     break;
+                case 'json':
+                    input = `<textarea id="${id}" rows="8" class="json-input" placeholder='{"key": "value"}'>${escapeAttr(value)}</textarea>`;
+                    break;
                 case 'composite':
                     const compVal = record ? evaluateCompositeField(table, field, record) : '';
                     input = `<input type="text" id="${id}" value="${escapeAttr(compVal)}" readonly disabled style="background: var(--bg); cursor: not-allowed;">`;
@@ -4213,7 +4315,7 @@
                 if (!markdownSelectedFields[f.id]) return;
                 if (f.type === 'children') {
                     childrenFields.push(f);
-                } else if (f.type === 'textarea') {
+                } else if (f.type === 'textarea' || f.type === 'json') {
                     multilineFields.push(f);
                 } else {
                     simpleFields.push(f);
@@ -4277,7 +4379,16 @@
                 if (!v) return;
                 
                 md += '### ' + f.name + '\n\n';
-                md += v + '\n\n';
+                if (f.type === 'json') {
+                    try {
+                        var parsed = JSON.parse(v);
+                        md += '```json\n' + JSON.stringify(parsed, null, 2) + '\n```\n\n';
+                    } catch (e) {
+                        md += '```\n' + v + '\n```\n\n';
+                    }
+                } else {
+                    md += v + '\n\n';
+                }
             });
             
             // Collections and tags
@@ -4360,6 +4471,312 @@
             }
             
             return md;
+        }
+
+        function generateRecordDocx(tableId, recordId, includeHistory, includeNotes) {
+            var table = getTableById(tableId);
+            var record = getRecordById(tableId, recordId);
+            if (!table || !record) return;
+            
+            var recordName = getPrimaryFieldValue(table, record);
+            var docx = window.docx;
+            
+            // Numbering config for bullet lists
+            var numberingConfig = {
+                config: [{
+                    reference: "bullet-list",
+                    levels: [{
+                        level: 0,
+                        format: docx.LevelFormat.BULLET,
+                        text: "•",
+                        alignment: docx.AlignmentType.LEFT,
+                        style: { paragraph: { indent: { left: 720, hanging: 360 } } }
+                    }]
+                }]
+            };
+            
+            var children = [];
+            
+            // Title - record name
+            children.push(new docx.Paragraph({
+                heading: docx.HeadingLevel.HEADING_1,
+                children: [new docx.TextRun({ text: recordName, bold: true, size: 32 })]
+            }));
+            
+            // Table name
+            children.push(new docx.Paragraph({
+                children: [
+                    new docx.TextRun({ text: t('tableName') + ': ', bold: true }),
+                    new docx.TextRun({ text: table.name })
+                ],
+                spacing: { after: 200 }
+            }));
+            
+            // Section: Record fields
+            children.push(new docx.Paragraph({
+                heading: docx.HeadingLevel.HEADING_2,
+                children: [new docx.TextRun({ text: t('recordFields'), bold: true, size: 28 })],
+                spacing: { before: 300, after: 200 }
+            }));
+            
+            // Separate fields into simple and multiline
+            var simpleFields = [];
+            var multilineFields = [];
+            var childrenFields = [];
+            
+            table.fields.forEach(function(f) {
+                if (!markdownSelectedFields[f.id]) return;
+                if (f.type === 'children') {
+                    childrenFields.push(f);
+                } else if (f.type === 'textarea') {
+                    multilineFields.push(f);
+                } else {
+                    simpleFields.push(f);
+                }
+            });
+            
+            // Simple fields
+            simpleFields.forEach(function(f) {
+                var v = record.values[f.id];
+                var displayValue = '';
+                
+                switch (f.type) {
+                    case 'boolean':
+                        displayValue = v ? t('yes') : t('no');
+                        break;
+                    case 'date':
+                        displayValue = v ? formatDate(v, f.dateFormat) : '';
+                        break;
+                    case 'url':
+                        displayValue = v || '';
+                        break;
+                    case 'composite':
+                        displayValue = evaluateCompositeField(table, f, record) || '';
+                        break;
+                    case 'parent':
+                        if (v) {
+                            var targetTable = getTableById(f.targetTableId);
+                            var targetRecord = targetTable ? getRecordById(f.targetTableId, v) : null;
+                            displayValue = targetRecord && targetTable ? getPrimaryFieldValue(targetTable, targetRecord) : v;
+                        }
+                        break;
+                    case 'json':
+                        if (v) {
+                            try {
+                                var parsed = JSON.parse(v);
+                                displayValue = JSON.stringify(parsed, null, 2);
+                            } catch (e) {
+                                displayValue = v;
+                            }
+                        }
+                        break;
+                    default:
+                        displayValue = v != null ? String(v) : '';
+                }
+                
+                if (displayValue) {
+                    children.push(new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({ text: f.name + ': ', bold: true }),
+                            new docx.TextRun({ text: displayValue })
+                        ],
+                        spacing: { after: 120 }
+                    }));
+                }
+            });
+            
+            // Children fields as bullet lists
+            childrenFields.forEach(function(f) {
+                var ch = getChildRecords(tableId, recordId).filter(function(c) {
+                    if (f.targetTableId && c.table.id !== f.targetTableId) return false;
+                    if (f.parentFieldId && c.field.id !== f.parentFieldId) return false;
+                    return true;
+                });
+                
+                if (ch.length > 0) {
+                    children.push(new docx.Paragraph({
+                        children: [new docx.TextRun({ text: f.name + ':', bold: true })],
+                        spacing: { before: 120, after: 60 }
+                    }));
+                    
+                    ch.forEach(function(c) {
+                        children.push(new docx.Paragraph({
+                            numbering: { reference: "bullet-list", level: 0 },
+                            children: [new docx.TextRun({ text: getPrimaryFieldValue(c.table, c.record) })]
+                        }));
+                    });
+                }
+            });
+            
+            // Multiline fields
+            multilineFields.forEach(function(f) {
+                var v = record.values[f.id];
+                if (!v) return;
+                
+                children.push(new docx.Paragraph({
+                    heading: docx.HeadingLevel.HEADING_3,
+                    children: [new docx.TextRun({ text: f.name, bold: true, size: 24 })],
+                    spacing: { before: 200, after: 100 }
+                }));
+                
+                // Split by lines
+                var lines = v.split('\n');
+                lines.forEach(function(line) {
+                    children.push(new docx.Paragraph({
+                        children: [new docx.TextRun({ text: line })],
+                        spacing: { after: 60 }
+                    }));
+                });
+            });
+            
+            // Collections and tags
+            var collections = getRecordCollections(tableId, recordId);
+            var tags = getRecordTags(tableId, recordId);
+            
+            if (collections.length > 0 || tags.length > 0) {
+                children.push(new docx.Paragraph({
+                    heading: docx.HeadingLevel.HEADING_2,
+                    children: [new docx.TextRun({ text: t('classification'), bold: true, size: 28 })],
+                    spacing: { before: 300, after: 200 }
+                }));
+                
+                if (collections.length > 0) {
+                    children.push(new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({ text: t('collections') + ': ', bold: true }),
+                            new docx.TextRun({ text: collections.map(function(c) { return c.name; }).join(', ') })
+                        ],
+                        spacing: { after: 120 }
+                    }));
+                }
+                
+                if (tags.length > 0) {
+                    children.push(new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({ text: t('tags') + ': ', bold: true }),
+                            new docx.TextRun({ text: tags.map(function(tg) { return tg.name; }).join(', ') })
+                        ],
+                        spacing: { after: 120 }
+                    }));
+                }
+            }
+            
+            // Notes section
+            if (includeNotes) {
+                var notes = getRecordNotes(tableId, recordId);
+                if (notes.length > 0) {
+                    children.push(new docx.Paragraph({
+                        heading: docx.HeadingLevel.HEADING_2,
+                        children: [new docx.TextRun({ text: t('notes'), bold: true, size: 28 })],
+                        spacing: { before: 300, after: 200 }
+                    }));
+                    
+                    notes.forEach(function(note) {
+                        var date = new Date(note.createdAt);
+                        var dateStr = date.toLocaleString(currentLang === 'cs' ? 'cs-CZ' : 'en-US');
+                        var statusIcon = note.resolved ? '✓' : '○';
+                        var statusText = note.resolved ? t('noteResolved') : t('noteUnresolved');
+                        
+                        children.push(new docx.Paragraph({
+                            numbering: { reference: "bullet-list", level: 0 },
+                            children: [
+                                new docx.TextRun({ text: statusIcon + ' [' + statusText + '] ', bold: true }),
+                                new docx.TextRun({ text: '[' + dateStr + '] ' + note.text })
+                            ]
+                        }));
+                    });
+                }
+            }
+            
+            // History section
+            if (includeHistory) {
+                var history = getRecordHistory(tableId, recordId);
+                if (history.length > 0) {
+                    children.push(new docx.Paragraph({
+                        heading: docx.HeadingLevel.HEADING_2,
+                        children: [new docx.TextRun({ text: t('history'), bold: true, size: 28 })],
+                        spacing: { before: 300, after: 200 }
+                    }));
+                    
+                    var sorted = history.slice().sort(function(a, b) { 
+                        return new Date(b.timestamp) - new Date(a.timestamp); 
+                    });
+                    
+                    sorted.forEach(function(entry) {
+                        var date = new Date(entry.timestamp);
+                        var dateStr = date.toLocaleString(currentLang === 'cs' ? 'cs-CZ' : 'en-US');
+                        var typeLabel = entry.type === 'create' ? t('historyCreate') : 
+                                        entry.type === 'bulk' ? t('historyBulk') : t('historyEdit');
+                        
+                        children.push(new docx.Paragraph({
+                            heading: docx.HeadingLevel.HEADING_3,
+                            children: [new docx.TextRun({ text: dateStr + ' (' + typeLabel + ')', bold: true, size: 24 })],
+                            spacing: { before: 200, after: 100 }
+                        }));
+                        
+                        var fieldIds = Object.keys(entry.fields);
+                        fieldIds.forEach(function(fieldId) {
+                            var field = table.fields.find(function(f) { return f.id === fieldId; });
+                            var fieldName = field ? field.name : fieldId;
+                            var value = entry.fields[fieldId];
+                            
+                            if (field) {
+                                if (field.type === 'boolean') {
+                                    value = value ? t('yes') : t('no');
+                                } else if (field.type === 'date' && value) {
+                                    value = formatDate(value, field.dateFormat);
+                                } else if (field.type === 'parent' && value) {
+                                    var tgtTable = getTableById(field.targetTableId);
+                                    var tgtRecord = tgtTable ? getRecordById(field.targetTableId, value) : null;
+                                    value = tgtRecord && tgtTable ? getPrimaryFieldValue(tgtTable, tgtRecord) : value;
+                                }
+                            }
+                            
+                            children.push(new docx.Paragraph({
+                                numbering: { reference: "bullet-list", level: 0 },
+                                children: [
+                                    new docx.TextRun({ text: fieldName + ': ', bold: true }),
+                                    new docx.TextRun({ text: String(value) })
+                                ]
+                            }));
+                        });
+                    });
+                }
+            }
+            
+            // Create document
+            var doc = new docx.Document({
+                numbering: numberingConfig,
+                styles: {
+                    default: {
+                        document: {
+                            run: { font: "Arial", size: 24 }
+                        }
+                    }
+                },
+                sections: [{
+                    properties: {
+                        page: {
+                            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+                        }
+                    },
+                    children: children
+                }]
+            });
+            
+            // Generate and download
+            var filename = recordName.replace(/[^a-z0-9]/gi, '_') + '.docx';
+            
+            docx.Packer.toBlob(doc).then(function(blob) {
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
         }
 
         function duplicateRecord(tableId, recordId) {
@@ -4459,6 +4876,20 @@
                             if (isEmpty) dv = '';
                             dv += `<button type="button" class="btn btn-sm btn-success create-child-btn" data-target-table="${f.targetTableId}" data-parent-field="${f.parentFieldId}" data-parent-record="${recordId}" style="margin-top: 0.5rem;"><span aria-hidden="true">➕</span> ${t('addChild')}</button>`;
                             isEmpty = false; // Vždy zobrazit kvůli tlačítku
+                        }
+                        break;
+                    case 'json':
+                        if (v) {
+                            try {
+                                const parsed = JSON.parse(v);
+                                dv = `<div class="json-viewer">${renderJsonViewer(parsed, 0)}</div>`;
+                                rawValue = v;
+                            } catch (e) {
+                                dv = `<div class="json-viewer"><span class="json-error">${t('jsonInvalidFormat')}: ${escapeHtml(e.message)}</span><pre>${escapeHtml(v)}</pre></div>`;
+                                rawValue = v;
+                            }
+                        } else {
+                            isEmpty = true;
                         }
                         break;
                     default: 
@@ -4834,7 +5265,8 @@
                     collections: data.meta?.collections || [],
                     tags: data.meta?.tags || [],
                     views: data.meta?.views || {},
-                    notes: data.meta?.notes || []
+                    notes: data.meta?.notes || [],
+                    recordHistory: data.meta?.recordHistory || {}
                 }, 
                 tables: data.tables || [] 
             };
@@ -5124,6 +5556,12 @@
                 URL.revokeObjectURL(url);
             });
             
+            document.getElementById('btnSaveDocx').addEventListener('click', function() {
+                var includeHistory = document.getElementById('markdownIncludeHistory').checked;
+                var includeNotes = document.getElementById('markdownIncludeNotes').checked;
+                generateRecordDocx(markdownExportTableId, markdownExportRecordId, includeHistory, includeNotes);
+            });
+            
             // Notes event handlers in viewRecordModal
             document.getElementById('viewRecordContent').addEventListener('click', e => {
                 const modal = document.getElementById('viewRecordModal');
@@ -5409,6 +5847,11 @@
                         if (database.meta.notes) {
                             database.meta.notes = database.meta.notes.filter(n => !(n.tableId === tableId && n.recordId === recordId));
                         }
+                        // Remove history for this record
+                        if (database.meta.recordHistory) {
+                            const key = tableId + '_' + recordId;
+                            delete database.meta.recordHistory[key];
+                        }
                     }
                     renderTableContent(tableId); 
                     });
@@ -5465,6 +5908,15 @@
                         activeTab = 'management';
                         renderAll();
                     }
+                }
+            });
+            
+            // Event delegation for JSON viewer collapse/expand
+            document.addEventListener('click', e => {
+                const toggle = e.target.closest('[data-json-toggle]');
+                if (toggle) {
+                    toggle.classList.toggle('collapsed');
+                    e.preventDefault();
                 }
             });
             
