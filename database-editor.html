@@ -354,6 +354,18 @@
         .markdown-content em { font-style: italic; }
         .markdown-content hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
 
+        /* CriticMarkup styles */
+        .critic-addition { background-color: #d4edda; color: #155724; text-decoration: none; padding: 1px 2px; border-radius: 2px; }
+        .critic-deletion { background-color: #f8d7da; color: #721c24; text-decoration: line-through; padding: 1px 2px; border-radius: 2px; }
+        .critic-highlight { background-color: #fff3cd; color: #856404; padding: 1px 2px; border-radius: 2px; }
+        .critic-comment { background-color: #d1ecf1; color: #0c5460; padding: 2px 6px; border-radius: 4px; font-style: italic; cursor: help; border: 1px solid #bee5eb; font-size: 0.9em; }
+        @media (prefers-color-scheme: dark) {
+            .critic-addition { background-color: #1e4620; color: #a3d9a5; }
+            .critic-deletion { background-color: #4a1a1a; color: #f5a9a9; }
+            .critic-highlight { background-color: #4a4000; color: #ffe066; }
+            .critic-comment { background-color: #1a3a4a; color: #7ec8e3; border-color: #2d5a6a; }
+        }
+
         /* Stats */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
         .stat-card { background: var(--bg); padding: 1.5rem; border-radius: var(--radius); text-align: center; }
@@ -1336,7 +1348,7 @@
             cs: {
                 skipToContent: "Přeskočit na obsah", appName: "Editor databáze", dbName: "Název databáze", newDb: "Nová", load: "Načíst", save: "Uložit",
                 copyJson: "Kopírovat JSON", pasteJson: "Vložit JSON", pasteJsonHere: "Vložte JSON databáze:", jsonCopied: "JSON zkopírován do schránky.", jsonPasted: "JSON načten.",
-                saveToWiki: "Uložit na wiki", wikiSaved: "Uloženo na wiki.", wikiSaveError: "Chyba při ukládání:", wikiSaving: "Ukládám...", unsavedChanges: "⚠️ Změnili jste obsah databáze. Nezapomeňte ji uložit.", confirmUnsavedClose: "Máte neuložené změny. Opravdu chcete zavřít okno?",
+                saveToWiki: "Zapsat všechny změny", wikiSaved: "Uloženo na wiki.", wikiSaveError: "Chyba při ukládání:", wikiSaving: "Ukládám...", unsavedChanges: "⚠️ Změnili jste obsah databáze. Nezapomeňte ji uložit.", confirmUnsavedClose: "Máte neuložené změny. Opravdu chcete zavřít okno?",
                 export: "Export", import: "Import", database: "Databáze", tables: "Tabulky", tools: "Nástroje",
                 databaseSettings: "Nastavení databáze", tablesList: "Seznam tabulek", addTable: "Přidat tabulku",
                 noTables: "Zatím nemáte žádné tabulky.", fieldsFor: "Pole pro tabulku:", addField: "Přidat pole",
@@ -1361,7 +1373,7 @@
                 typeNumber: "Číslo", typeDate: "Datum", typeBoolean: "Ano/Ne", typeSelect: "Výběr ze seznamu",
                 typeParent: "Nadřazený záznam", typeChildren: "Podřízené záznamy", typeComposite: "Složený", typeUrl: "URL odkaz", typeJson: "JSON", jsonItems: "položek", jsonProperties: "vlastností", jsonInvalidFormat: "Neplatný formát JSON", jsonEmpty: "prázdné", editTable: "Upravit", editField: "Upravit pole",
                 compositeFields: "Vložit pole:", compositeTemplate: "Šablona složeného pole", createNew: "Vytvořit nový", fieldGroup: "Seskupovat záznamy", groupCollapsed: "sbaleno", groupExpanded: "rozbaleno", addChild: "Přidat podřízený", copyField: "Kopírovat", copiedToClipboard: "Zkopírováno do schránky",
-                collections: "Kolekce", tags: "Tagy", addCollection: "Přidat kolekci", addTag: "Přidat tag", collectionName: "Název kolekce", tagName: "Název tagu", color: "Barva", noCollections: "Zatím nemáte žádné kolekce.", noTags: "Zatím nemáte žádné tagy.", collectionMembers: "záznamů", confirmDeleteCollection: "Smazat tuto kolekci?", confirmDeleteTag: "Smazat tento tag?", addToCollection: "Přidat do kolekce", removeFromCollection: "Odebrat z kolekce", assignTags: "Přiřadit tagy", relatedRecords: "Související záznamy", inCollection: "V kolekci", withTag: "S tagem", allCollections: "Všechny kolekce", allTags: "Všechny tagy", viewCollection: "Zobrazit kolekci", collectionContents: "Obsah kolekce", backToTables: "Zpět na tabulky", recordsInCollection: "Záznamy v kolekci", noRecordsInCollection: "Kolekce neobsahuje žádné záznamy.", fromTable: "z tabulky", manageCollections: "Spravovat kolekce", manageTags: "Spravovat tagy", classification: "Zatřídění", description: "Popis", collectionDescription: "Popis kolekce", selectCollection: "Vyberte kolekci", selectTag: "Vyberte tag", createNewCollection: "Vytvořit novou kolekci", createNewTag: "Vytvořit nový tag", removeFromThisCollection: "Odebrat z této kolekce", removeThisTag: "Odebrat tento tag", collectionDetails: "Podrobnosti kolekce", tagDetails: "Podrobnosti tagu", editCollection: "Upravit kolekci", editTag: "Upravit tag", recordsWithTag: "Záznamy s tagem", quickCreate: "➕ Nový záznam...", structure: "Struktura", textView: "Textový pohled", graphView: "Grafický pohled", showStructure: "Zobrazit strukturu", noDescendants: "Tento záznam nemá žádné podřízené záznamy.", loadMore: "Načíst více...", loadAll: "Načíst všechny", descendants: "potomků", selectedRecords: "vybráno", bulkEditField: "Upravit pole", clearSelection: "Zrušit výběr", selectAll: "Vybrat vše", newValue: "Nová hodnota", apply: "Použít", confirmBulkDelete: "Opravdu smazat {count} záznamů?", addedToCollection: "Přidáno {count} záznamů do kolekce.", addedTag: "Tag přidán k {count} záznamům.", recordFields: "Pole záznamu", bulkEditFields: "Hromadná úprava polí", addAnotherField: "Přidat další pole", openAfterSave: "Otevřít zobrazení", ancestors: "Předci", showStructureFrom: "Zobrazit strukturu od tohoto záznamu", order: "Pořadí", tableName: "Název tabulky", fields: "Pole", records: "Záznamy", manageFields: "Spravovat pole", moveUp: "Posunout nahoru", moveDown: "Posunout dolů", fieldName: "Název pole", type: "Typ", options: "Možnosti", primary: "Primární", filter: "Filtr", group: "Seskupit", duplicate: "Duplikovat", saveAndAddAnother: "Uložit a přidat další", searchResults: "Výsledky hledání", noSearchResults: "Žádné výsledky nebyly nalezeny.", globalSearchPlaceholder: "🔍 Hledat...", refresh: "Obnovit", previewImport: "Zobrazit náhled mapování", columnMapping: "Mapování sloupců", targetField: "Cílové pole", unmapped: "Nenamapováno", column: "Sloupec", sampleData: "Ukázka dat", rows: "řádků", noDataToPreview: "Vložte data pro zobrazení náhledu", allRecords: "Všechny záznamy", saveView: "Uložit pohled", viewName: "Název pohledu", newView: "Nový pohled", updateView: "Aktualizovat pohled", renameView: "Přejmenovat pohled", confirmDeleteView: "Opravdu smazat tento pohled?", lockRecord: "Zamknout záznam", unlockRecord: "Odemknout záznam", recordLocked: "Tento záznam je zamčený a nelze ho upravovat.", savedViews: "Uložené pohledy", notes: "Poznámky", addNote: "Přidat poznámku", editNote: "Upravit poznámku", deleteNote: "Smazat poznámku", noNotes: "Žádné poznámky", noteText: "Text poznámky", noteResolved: "Vyřízeno", noteUnresolved: "Nevyřízeno", markResolved: "Označit jako vyřízené", markUnresolved: "Označit jako nevyřízené", confirmDeleteNote: "Opravdu smazat tuto poznámku?", allNotes: "Všechny poznámky", unresolvedNotes: "Nevyřízené", resolvedNotes: "Vyřízené", noNotesInDatabase: "V databázi nejsou žádné poznámky.", noteFor: "Poznámka k", notesCount: "poznámek", allFeatures: "Všechny funkce", showInSimpleMode: "Zobrazit v základním režimu", keyboardShortcuts: "Klávesové zkratky", shortcutSave: "Uložit databázi", shortcutToggleMode: "Přepnout režim (základní/pokročilý)", shortcutNewRecord: "Nový záznam v aktuální tabulce", shortcutQuickCreate: "Rychlé vytvoření záznamu", shortcutSaveRecord: "Uložit záznam (v modálu)", shortcutCollections: "Přejít do kolekcí", shortcutTags: "Přejít do tagů", shortcutNotes: "Přejít do poznámek", shortcutClassification: "Přejít do zatřídění", shortcutEdit: "Upravit vybraný záznam", shortcutView: "Zobrazit vybraný záznam", shortcutArrows: "Navigace v tabulce", shortcutDescription: "Klávesové zkratky používají modifikátor prohlížeče (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifikátor + klávesa", directShortcuts: "Přímé zkratky (bez modifikátoru)", key: "Klávesa", history: "Historie změn", historyCreate: "Vytvoření", historyEdit: "Úprava", historyBulk: "Hromadná úprava", noHistory: "Zatím nejsou k dispozici žádné záznamy o změnách.", confirmDeleteHistory: "Opravdu chcete smazat tento záznam z historie?", exportMarkdown: "Export do Markdown", exportMarkdownTitle: "Export záznamu do Markdown", copyMarkdown: "Kopírovat do schránky", saveMarkdown: "Uložit jako .md", markdownCopied: "Markdown zkopírován do schránky.", includeHistory: "Zahrnout historii změn", includeNotes: "Zahrnout poznámky", includeClassification: "Zahrnout zatřídění", selectFields: "Vyberte pole k exportu", preview: "Náhled", saveDocx: "Uložit jako .docx"
+                collections: "Kolekce", tags: "Tagy", addCollection: "Přidat kolekci", addTag: "Přidat tag", collectionName: "Název kolekce", tagName: "Název tagu", color: "Barva", noCollections: "Zatím nemáte žádné kolekce.", noTags: "Zatím nemáte žádné tagy.", collectionMembers: "záznamů", confirmDeleteCollection: "Smazat tuto kolekci?", confirmDeleteTag: "Smazat tento tag?", addToCollection: "Přidat do kolekce", removeFromCollection: "Odebrat z kolekce", assignTags: "Přiřadit tagy", relatedRecords: "Související záznamy", inCollection: "V kolekci", withTag: "S tagem", allCollections: "Všechny kolekce", allTags: "Všechny tagy", viewCollection: "Zobrazit kolekci", collectionContents: "Obsah kolekce", backToTables: "Zpět na tabulky", recordsInCollection: "Záznamy v kolekci", noRecordsInCollection: "Kolekce neobsahuje žádné záznamy.", fromTable: "z tabulky", manageCollections: "Spravovat kolekce", manageTags: "Spravovat tagy", classification: "Zatřídění", description: "Popis", collectionDescription: "Popis kolekce", selectCollection: "Vyberte kolekci", selectTag: "Vyberte tag", createNewCollection: "Vytvořit novou kolekci", createNewTag: "Vytvořit nový tag", removeFromThisCollection: "Odebrat z této kolekce", removeThisTag: "Odebrat tento tag", collectionDetails: "Podrobnosti kolekce", tagDetails: "Podrobnosti tagu", editCollection: "Upravit kolekci", editTag: "Upravit tag", recordsWithTag: "Záznamy s tagem", quickCreate: "➕ Nový záznam...", structure: "Struktura", textView: "Textový pohled", graphView: "Grafický pohled", showStructure: "Zobrazit strukturu", noDescendants: "Tento záznam nemá žádné podřízené záznamy.", loadMore: "Načíst více...", loadAll: "Načíst všechny", descendants: "potomků", selectedRecords: "vybráno", bulkEditField: "Upravit pole", clearSelection: "Zrušit výběr", selectAll: "Vybrat vše", newValue: "Nová hodnota", apply: "Použít", confirmBulkDelete: "Opravdu smazat {count} záznamů?", addedToCollection: "Přidáno {count} záznamů do kolekce.", addedTag: "Tag přidán k {count} záznamům.", recordFields: "Pole záznamu", bulkEditFields: "Hromadná úprava polí", addAnotherField: "Přidat další pole", openAfterSave: "Otevřít zobrazení", ancestors: "Předci", showStructureFrom: "Zobrazit strukturu od tohoto záznamu", order: "Pořadí", tableName: "Název tabulky", fields: "Pole", records: "Záznamy", manageFields: "Spravovat pole", moveUp: "Posunout nahoru", moveDown: "Posunout dolů", fieldName: "Název pole", type: "Typ", options: "Možnosti", primary: "Primární", filter: "Filtr", group: "Seskupit", duplicate: "Duplikovat", saveAndAddAnother: "Uložit a přidat další", searchResults: "Výsledky hledání", noSearchResults: "Žádné výsledky nebyly nalezeny.", globalSearchPlaceholder: "🔍 Hledat...", refresh: "Obnovit", previewImport: "Zobrazit náhled mapování", columnMapping: "Mapování sloupců", targetField: "Cílové pole", unmapped: "Nenamapováno", column: "Sloupec", sampleData: "Ukázka dat", rows: "řádků", noDataToPreview: "Vložte data pro zobrazení náhledu", allRecords: "Všechny záznamy", saveView: "Uložit pohled", viewName: "Název pohledu", newView: "Nový pohled", updateView: "Aktualizovat pohled", renameView: "Přejmenovat pohled", confirmDeleteView: "Opravdu smazat tento pohled?", lockRecord: "Zamknout záznam", unlockRecord: "Odemknout záznam", recordLocked: "Tento záznam je zamčený a nelze ho upravovat.", savedViews: "Uložené pohledy", notes: "Poznámky", addNote: "Přidat poznámku", editNote: "Upravit poznámku", deleteNote: "Smazat poznámku", noNotes: "Žádné poznámky", noteText: "Text poznámky", noteResolved: "Vyřízeno", noteUnresolved: "Nevyřízeno", markResolved: "Označit jako vyřízené", markUnresolved: "Označit jako nevyřízené", confirmDeleteNote: "Opravdu smazat tuto poznámku?", allNotes: "Všechny poznámky", unresolvedNotes: "Nevyřízené", resolvedNotes: "Vyřízené", noNotesInDatabase: "V databázi nejsou žádné poznámky.", noteFor: "Poznámka k", notesCount: "poznámek", allFeatures: "Všechny funkce", showInSimpleMode: "Zobrazit v základním režimu", keyboardShortcuts: "Klávesové zkratky", shortcutSave: "Uložit databázi", shortcutToggleMode: "Přepnout režim (základní/pokročilý)", shortcutNewRecord: "Nový záznam v aktuální tabulce", shortcutQuickCreate: "Rychlé vytvoření záznamu", shortcutSaveRecord: "Uložit záznam (v modálu)", shortcutCollections: "Přejít do kolekcí", shortcutTags: "Přejít do tagů", shortcutNotes: "Přejít do poznámek", shortcutClassification: "Přejít do zatřídění", shortcutEdit: "Upravit vybraný záznam", shortcutView: "Zobrazit vybraný záznam", shortcutArrows: "Navigace v tabulce", shortcutDescription: "Klávesové zkratky používají modifikátor prohlížeče (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifikátor + klávesa", directShortcuts: "Přímé zkratky (bez modifikátoru)", key: "Klávesa", history: "Historie změn", historyCreate: "Vytvoření", historyEdit: "Úprava", historyBulk: "Hromadná úprava", noHistory: "Zatím nejsou k dispozici žádné záznamy o změnách.", confirmDeleteHistory: "Opravdu chcete smazat tento záznam z historie?", exportMarkdown: "Export do Markdown", exportMarkdownTitle: "Export záznamu do Markdown", copyMarkdown: "Kopírovat do schránky", saveMarkdown: "Uložit jako .md", markdownCopied: "Markdown zkopírován do schránky.", includeHistory: "Zahrnout historii změn", includeNotes: "Zahrnout poznámky", includeClassification: "Zahrnout zatřídění", selectFields: "Vyberte pole k exportu", preview: "Náhled", saveDocx: "Uložit jako .docx", childrenFields: "Podřízené záznamy"
             },
             en: {
                 skipToContent: "Skip to content", appName: "Database Editor", dbName: "Database name", newDb: "New", load: "Load", save: "Save",
@@ -1391,7 +1403,7 @@
                 typeNumber: "Number", typeDate: "Date", typeBoolean: "Yes/No", typeSelect: "Select from list",
                 typeParent: "Parent record", typeChildren: "Child records", typeComposite: "Composite", typeUrl: "URL link", typeJson: "JSON", jsonItems: "items", jsonProperties: "properties", jsonInvalidFormat: "Invalid JSON format", jsonEmpty: "empty", editTable: "Edit", editField: "Edit field",
                 compositeFields: "Insert field:", compositeTemplate: "Composite field template", createNew: "Create new", fieldGroup: "Group records", groupCollapsed: "collapsed", groupExpanded: "expanded", addChild: "Add child", copyField: "Copy", copiedToClipboard: "Copied to clipboard",
-                collections: "Collections", tags: "Tags", addCollection: "Add collection", addTag: "Add tag", collectionName: "Collection name", tagName: "Tag name", color: "Color", noCollections: "You have no collections yet.", noTags: "You have no tags yet.", collectionMembers: "records", confirmDeleteCollection: "Delete this collection?", confirmDeleteTag: "Delete this tag?", addToCollection: "Add to collection", removeFromCollection: "Remove from collection", assignTags: "Assign tags", relatedRecords: "Related records", inCollection: "In collection", withTag: "With tag", allCollections: "All collections", allTags: "All tags", viewCollection: "View collection", collectionContents: "Collection contents", backToTables: "Back to tables", recordsInCollection: "Records in collection", noRecordsInCollection: "Collection contains no records.", fromTable: "from table", manageCollections: "Manage collections", manageTags: "Manage tags", classification: "Classification", description: "Description", collectionDescription: "Collection description", selectCollection: "Select collection", selectTag: "Select tag", createNewCollection: "Create new collection", createNewTag: "Create new tag", removeFromThisCollection: "Remove from this collection", removeThisTag: "Remove this tag", collectionDetails: "Collection details", tagDetails: "Tag details", editCollection: "Edit collection", editTag: "Edit tag", recordsWithTag: "Records with tag", quickCreate: "➕ New record...", structure: "Structure", textView: "Text view", graphView: "Graph view", showStructure: "Show structure", noDescendants: "This record has no child records.", loadMore: "Load more...", loadAll: "Load all", descendants: "descendants", selectedRecords: "selected", bulkEditField: "Edit field", clearSelection: "Clear selection", selectAll: "Select all", newValue: "New value", apply: "Apply", confirmBulkDelete: "Delete {count} records?", addedToCollection: "Added {count} records to collection.", addedTag: "Tag added to {count} records.", recordFields: "Record fields", bulkEditFields: "Bulk edit fields", addAnotherField: "Add another field", openAfterSave: "Open after save", ancestors: "Ancestors", showStructureFrom: "Show structure from this record", order: "Order", tableName: "Table name", fields: "Fields", records: "Records", manageFields: "Manage fields", moveUp: "Move up", moveDown: "Move down", fieldName: "Field name", type: "Type", options: "Options", primary: "Primary", filter: "Filter", group: "Group", duplicate: "Duplicate", saveAndAddAnother: "Save and add another", searchResults: "Search results", noSearchResults: "No results found.", globalSearchPlaceholder: "🔍 Search...", refresh: "Refresh", previewImport: "Preview mapping", columnMapping: "Column mapping", targetField: "Target field", unmapped: "Unmapped", column: "Column", sampleData: "Sample data", rows: "rows", noDataToPreview: "Paste data to see preview", allRecords: "All records", saveView: "Save view", viewName: "View name", newView: "New view", updateView: "Update view", renameView: "Rename view", confirmDeleteView: "Delete this view?", lockRecord: "Lock record", unlockRecord: "Unlock record", recordLocked: "This record is locked and cannot be edited.", savedViews: "Saved views", notes: "Notes", addNote: "Add note", editNote: "Edit note", deleteNote: "Delete note", noNotes: "No notes", noteText: "Note text", noteResolved: "Resolved", noteUnresolved: "Unresolved", markResolved: "Mark as resolved", markUnresolved: "Mark as unresolved", confirmDeleteNote: "Delete this note?", allNotes: "All notes", unresolvedNotes: "Unresolved", resolvedNotes: "Resolved", noNotesInDatabase: "No notes in database.", noteFor: "Note for", notesCount: "notes", allFeatures: "All features", showInSimpleMode: "Show in simple mode", keyboardShortcuts: "Keyboard shortcuts", shortcutSave: "Save database", shortcutToggleMode: "Toggle mode (simple/advanced)", shortcutNewRecord: "New record in current table", shortcutQuickCreate: "Quick create record", shortcutSaveRecord: "Save record (in modal)", shortcutCollections: "Go to collections", shortcutTags: "Go to tags", shortcutNotes: "Go to notes", shortcutClassification: "Go to classification", shortcutEdit: "Edit selected record", shortcutView: "View selected record", shortcutArrows: "Navigate in table", shortcutDescription: "Keyboard shortcuts use browser modifier (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifier + key", directShortcuts: "Direct shortcuts (no modifier)", key: "Key", history: "Change history", historyCreate: "Created", historyEdit: "Edited", historyBulk: "Bulk edit", noHistory: "No change history available yet.", confirmDeleteHistory: "Are you sure you want to delete this history entry?", exportMarkdown: "Export to Markdown", exportMarkdownTitle: "Export record to Markdown", copyMarkdown: "Copy to clipboard", saveMarkdown: "Save as .md", markdownCopied: "Markdown copied to clipboard.", includeHistory: "Include change history", includeNotes: "Include notes", includeClassification: "Include classification", selectFields: "Select fields to export", preview: "Preview", saveDocx: "Save as .docx"
+                collections: "Collections", tags: "Tags", addCollection: "Add collection", addTag: "Add tag", collectionName: "Collection name", tagName: "Tag name", color: "Color", noCollections: "You have no collections yet.", noTags: "You have no tags yet.", collectionMembers: "records", confirmDeleteCollection: "Delete this collection?", confirmDeleteTag: "Delete this tag?", addToCollection: "Add to collection", removeFromCollection: "Remove from collection", assignTags: "Assign tags", relatedRecords: "Related records", inCollection: "In collection", withTag: "With tag", allCollections: "All collections", allTags: "All tags", viewCollection: "View collection", collectionContents: "Collection contents", backToTables: "Back to tables", recordsInCollection: "Records in collection", noRecordsInCollection: "Collection contains no records.", fromTable: "from table", manageCollections: "Manage collections", manageTags: "Manage tags", classification: "Classification", description: "Description", collectionDescription: "Collection description", selectCollection: "Select collection", selectTag: "Select tag", createNewCollection: "Create new collection", createNewTag: "Create new tag", removeFromThisCollection: "Remove from this collection", removeThisTag: "Remove this tag", collectionDetails: "Collection details", tagDetails: "Tag details", editCollection: "Edit collection", editTag: "Edit tag", recordsWithTag: "Records with tag", quickCreate: "➕ New record...", structure: "Structure", textView: "Text view", graphView: "Graph view", showStructure: "Show structure", noDescendants: "This record has no child records.", loadMore: "Load more...", loadAll: "Load all", descendants: "descendants", selectedRecords: "selected", bulkEditField: "Edit field", clearSelection: "Clear selection", selectAll: "Select all", newValue: "New value", apply: "Apply", confirmBulkDelete: "Delete {count} records?", addedToCollection: "Added {count} records to collection.", addedTag: "Tag added to {count} records.", recordFields: "Record fields", bulkEditFields: "Bulk edit fields", addAnotherField: "Add another field", openAfterSave: "Open after save", ancestors: "Ancestors", showStructureFrom: "Show structure from this record", order: "Order", tableName: "Table name", fields: "Fields", records: "Records", manageFields: "Manage fields", moveUp: "Move up", moveDown: "Move down", fieldName: "Field name", type: "Type", options: "Options", primary: "Primary", filter: "Filter", group: "Group", duplicate: "Duplicate", saveAndAddAnother: "Save and add another", searchResults: "Search results", noSearchResults: "No results found.", globalSearchPlaceholder: "🔍 Search...", refresh: "Refresh", previewImport: "Preview mapping", columnMapping: "Column mapping", targetField: "Target field", unmapped: "Unmapped", column: "Column", sampleData: "Sample data", rows: "rows", noDataToPreview: "Paste data to see preview", allRecords: "All records", saveView: "Save view", viewName: "View name", newView: "New view", updateView: "Update view", renameView: "Rename view", confirmDeleteView: "Delete this view?", lockRecord: "Lock record", unlockRecord: "Unlock record", recordLocked: "This record is locked and cannot be edited.", savedViews: "Saved views", notes: "Notes", addNote: "Add note", editNote: "Edit note", deleteNote: "Delete note", noNotes: "No notes", noteText: "Note text", noteResolved: "Resolved", noteUnresolved: "Unresolved", markResolved: "Mark as resolved", markUnresolved: "Mark as unresolved", confirmDeleteNote: "Delete this note?", allNotes: "All notes", unresolvedNotes: "Unresolved", resolvedNotes: "Resolved", noNotesInDatabase: "No notes in database.", noteFor: "Note for", notesCount: "notes", allFeatures: "All features", showInSimpleMode: "Show in simple mode", keyboardShortcuts: "Keyboard shortcuts", shortcutSave: "Save database", shortcutToggleMode: "Toggle mode (simple/advanced)", shortcutNewRecord: "New record in current table", shortcutQuickCreate: "Quick create record", shortcutSaveRecord: "Save record (in modal)", shortcutCollections: "Go to collections", shortcutTags: "Go to tags", shortcutNotes: "Go to notes", shortcutClassification: "Go to classification", shortcutEdit: "Edit selected record", shortcutView: "View selected record", shortcutArrows: "Navigate in table", shortcutDescription: "Keyboard shortcuts use browser modifier (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifier + key", directShortcuts: "Direct shortcuts (no modifier)", key: "Key", history: "Change history", historyCreate: "Created", historyEdit: "Edited", historyBulk: "Bulk edit", noHistory: "No change history available yet.", confirmDeleteHistory: "Are you sure you want to delete this history entry?", exportMarkdown: "Export to Markdown", exportMarkdownTitle: "Export record to Markdown", copyMarkdown: "Copy to clipboard", saveMarkdown: "Save as .md", markdownCopied: "Markdown copied to clipboard.", includeHistory: "Include change history", includeNotes: "Include notes", includeClassification: "Include classification", selectFields: "Select fields to export", preview: "Preview", saveDocx: "Save as .docx", childrenFields: "Child records"
             }
         };
 
@@ -1643,6 +1655,19 @@
         function parseMarkdown(text) {
             if (!text) return '';
             let html = escapeHtml(text);
+            
+            // CriticMarkup - must be processed before other formatting
+            // Substitution: {~~old~>new~~}
+            html = html.replace(/\{~~(.+?)~&gt;(.+?)~~\}/gs, '<del class="critic-deletion">$1</del><ins class="critic-addition">$2</ins>');
+            // Addition: {++text++}
+            html = html.replace(/\{\+\+(.+?)\+\+\}/gs, '<ins class="critic-addition">$1</ins>');
+            // Deletion: {--text--}
+            html = html.replace(/\{--(.+?)--\}/gs, '<del class="critic-deletion">$1</del>');
+            // Highlight: {==text==}
+            html = html.replace(/\{==(.+?)==\}/gs, '<mark class="critic-highlight">$1</mark>');
+            // Comment: {>>text<<}
+            html = html.replace(/\{&gt;&gt;(.+?)&lt;&lt;\}/gs, '<span class="critic-comment" title="$1">💬</span>');
+            
             // Code blocks
             html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
             // Inline code
@@ -1664,11 +1689,37 @@
             html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
             // Horizontal rule
             html = html.replace(/^---$/gm, '<hr>');
-            // Unordered lists
-            html = html.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
-            html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
-            // Ordered lists
-            html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+            
+            // Process lists line by line to separate ul and ol
+            const lines = html.split('\n');
+            let result = [];
+            let inUl = false;
+            let inOl = false;
+            
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i];
+                const ulMatch = line.match(/^[\-\*] (.+)$/);
+                const olMatch = line.match(/^\d+\. (.+)$/);
+                
+                if (ulMatch) {
+                    if (inOl) { result.push('</ol>'); inOl = false; }
+                    if (!inUl) { result.push('<ul>'); inUl = true; }
+                    result.push('<li>' + ulMatch[1] + '</li>');
+                } else if (olMatch) {
+                    if (inUl) { result.push('</ul>'); inUl = false; }
+                    if (!inOl) { result.push('<ol>'); inOl = true; }
+                    result.push('<li>' + olMatch[1] + '</li>');
+                } else {
+                    if (inUl) { result.push('</ul>'); inUl = false; }
+                    if (inOl) { result.push('</ol>'); inOl = false; }
+                    result.push(line);
+                }
+            }
+            if (inUl) result.push('</ul>');
+            if (inOl) result.push('</ol>');
+            
+            html = result.join('\n');
+            
             // Paragraphs
             html = html.replace(/\n\n/g, '</p><p>');
             html = html.replace(/\n/g, '<br>');
@@ -1678,11 +1729,16 @@
             html = html.replace(/(<\/h[123]>)<\/p>/g, '$1');
             html = html.replace(/<p>(<ul>)/g, '$1');
             html = html.replace(/(<\/ul>)<\/p>/g, '$1');
+            html = html.replace(/<p>(<ol>)/g, '$1');
+            html = html.replace(/(<\/ol>)<\/p>/g, '$1');
             html = html.replace(/<p>(<blockquote>)/g, '$1');
             html = html.replace(/(<\/blockquote>)<\/p>/g, '$1');
             html = html.replace(/<p>(<pre>)/g, '$1');
             html = html.replace(/(<\/pre>)<\/p>/g, '$1');
             html = html.replace(/<p>(<hr>)<\/p>/g, '$1');
+            // Clean up breaks around block elements
+            html = html.replace(/<br>(<\/?(ul|ol|li|h[123]|blockquote|pre|hr)>)/g, '$1');
+            html = html.replace(/(<\/?(ul|ol|li|h[123]|blockquote|pre|hr)>)<br>/g, '$1');
             return html;
         }
 
@@ -4453,6 +4509,9 @@
         var markdownExportRecordId = null;
         var markdownSelectedFields = {};
         
+        // Store selected fields for children tables
+        var markdownChildrenFields = {};
+        
         function openMarkdownExportModal(tableId, recordId) {
             markdownExportTableId = tableId;
             markdownExportRecordId = recordId;
@@ -4461,7 +4520,10 @@
             
             // Build field selection checkboxes
             markdownSelectedFields = {};
+            markdownChildrenFields = {};
             var html = '<div class="checkbox-group" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">';
+            
+            // Regular fields first
             table.fields.forEach(function(f) {
                 if (f.type === 'children') return;
                 markdownSelectedFields[f.id] = true;
@@ -4470,13 +4532,70 @@
                 html += escapeHtml(f.name) + '</label>';
             });
             html += '</div>';
+            
+            // Children fields with expandable field selection
+            var childrenFields = table.fields.filter(function(f) { return f.type === 'children'; });
+            if (childrenFields.length > 0) {
+                html += '<div style="margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid var(--border);">';
+                html += '<strong style="display: block; margin-bottom: 0.5rem;">👶 ' + t('childrenFields') + ':</strong>';
+                
+                childrenFields.forEach(function(f) {
+                    var targetTable = f.targetTableId ? getTableById(f.targetTableId) : null;
+                    markdownSelectedFields[f.id] = true;
+                    markdownChildrenFields[f.id] = {};
+                    
+                    html += '<div class="children-export-group" style="margin-bottom: 0.75rem; padding: 0.5rem; background: var(--bg); border-radius: var(--radius);">';
+                    html += '<label style="display: flex; align-items: center; gap: 0.25rem; font-weight: 500;">';
+                    html += '<input type="checkbox" class="markdown-field-checkbox" data-field-id="' + f.id + '" checked>';
+                    html += escapeHtml(f.name);
+                    if (targetTable) {
+                        html += ' <span style="color: var(--text-muted); font-weight: normal;">(' + escapeHtml(targetTable.name) + ')</span>';
+                    }
+                    html += '</label>';
+                    
+                    // Add field selection for target table
+                    if (targetTable && targetTable.fields.length > 0) {
+                        html += '<div class="children-fields-selection" data-children-field="' + f.id + '" style="margin-left: 1.5rem; margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">';
+                        targetTable.fields.forEach(function(tf) {
+                            if (tf.type === 'children' || tf.type === 'parent') return;
+                            markdownChildrenFields[f.id][tf.id] = tf.primary ? true : false; // Only primary field selected by default
+                            var checked = tf.primary ? 'checked' : '';
+                            html += '<label style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.9em;">';
+                            html += '<input type="checkbox" class="markdown-children-field-checkbox" data-children-field="' + f.id + '" data-target-field="' + tf.id + '" ' + checked + '>';
+                            html += escapeHtml(tf.name);
+                            if (tf.primary) html += ' <span style="color: var(--primary);">★</span>';
+                            html += '</label>';
+                        });
+                        html += '</div>';
+                    }
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+            
             document.getElementById('markdownFieldSelection').innerHTML = html;
             
-            // Add event listeners to checkboxes
+            // Add event listeners to main field checkboxes
             var checkboxes = document.querySelectorAll('.markdown-field-checkbox');
             for (var i = 0; i < checkboxes.length; i++) {
                 checkboxes[i].addEventListener('change', function() {
                     markdownSelectedFields[this.dataset.fieldId] = this.checked;
+                    // Toggle visibility of children fields selection
+                    var childrenDiv = document.querySelector('.children-fields-selection[data-children-field="' + this.dataset.fieldId + '"]');
+                    if (childrenDiv) {
+                        childrenDiv.style.opacity = this.checked ? '1' : '0.5';
+                    }
+                    updateMarkdownPreview();
+                });
+            }
+            
+            // Add event listeners to children field checkboxes
+            var childrenCheckboxes = document.querySelectorAll('.markdown-children-field-checkbox');
+            for (var i = 0; i < childrenCheckboxes.length; i++) {
+                childrenCheckboxes[i].addEventListener('change', function() {
+                    var childrenFieldId = this.dataset.childrenField;
+                    var targetFieldId = this.dataset.targetField;
+                    markdownChildrenFields[childrenFieldId][targetFieldId] = this.checked;
                     updateMarkdownPreview();
                 });
             }
@@ -4496,6 +4615,22 @@
             document.getElementById('markdownPreview').textContent = markdown;
         }
         
+        // Helper function to convert CriticMarkup to HTML tags for export
+        function criticMarkupToHtml(text) {
+            if (!text) return text;
+            return text
+                // Substitution: {~~old~>new~~} - must be first
+                .replace(/\{~~(.+?)~>(.+?)~~\}/gs, '<del>$1</del><ins>$2</ins>')
+                // Addition: {++text++}
+                .replace(/\{\+\+(.+?)\+\+\}/gs, '<ins>$1</ins>')
+                // Deletion: {--text--}
+                .replace(/\{--(.+?)--\}/gs, '<del>$1</del>')
+                // Highlight: {==text==}
+                .replace(/\{==(.+?)==\}/gs, '<mark>$1</mark>')
+                // Comment: {>>text<<}
+                .replace(/\{>>(.+?)<<\}/gs, '<span class="critic-comment">$1</span>');
+        }
+
         function generateRecordMarkdown(tableId, recordId, includeHistory, includeNotes, includeClassification) {
             var table = getTableById(tableId);
             var record = getRecordById(tableId, recordId);
@@ -4579,9 +4714,53 @@
                 }
                 
                 if (ch.length > 0) {
+                    var targetTable = f.targetTableId ? getTableById(f.targetTableId) : null;
+                    var selectedChildFields = markdownChildrenFields[f.id] || {};
+                    
+                    // Get list of selected fields
+                    var fieldsToShow = [];
+                    if (targetTable) {
+                        targetTable.fields.forEach(function(tf) {
+                            if (selectedChildFields[tf.id]) {
+                                fieldsToShow.push(tf);
+                            }
+                        });
+                    }
+                    
                     md += '**' + f.name + ':**\n\n';
                     ch.forEach(function(c) {
-                        md += '- ' + getPrimaryFieldValue(c.table, c.record) + '\n';
+                        if (fieldsToShow.length <= 1) {
+                            // Just primary field or one field
+                            md += '- ' + getPrimaryFieldValue(c.table, c.record) + '\n';
+                        } else {
+                            // Multiple fields - show as sub-list
+                            md += '- **' + getPrimaryFieldValue(c.table, c.record) + '**\n';
+                            fieldsToShow.forEach(function(tf) {
+                                if (tf.primary) return; // Skip primary, already shown
+                                var value = c.record.values[tf.id];
+                                if (value == null || value === '') return;
+                                
+                                var displayValue = '';
+                                switch (tf.type) {
+                                    case 'boolean':
+                                        displayValue = value ? t('yes') : t('no');
+                                        break;
+                                    case 'date':
+                                        displayValue = formatDate(value, tf.dateFormat);
+                                        break;
+                                    case 'parent':
+                                        var pTable = getTableById(tf.targetTableId);
+                                        var pRecord = pTable ? getRecordById(tf.targetTableId, value) : null;
+                                        displayValue = pRecord && pTable ? getPrimaryFieldValue(pTable, pRecord) : value;
+                                        break;
+                                    default:
+                                        displayValue = String(value);
+                                }
+                                if (displayValue) {
+                                    md += '  - *' + tf.name + ':* ' + displayValue + '\n';
+                                }
+                            });
+                        }
                     });
                     md += '\n';
                 }
@@ -4601,7 +4780,8 @@
                         md += '```\n' + v + '\n```\n\n';
                     }
                 } else {
-                    md += v + '\n\n';
+                    // Convert CriticMarkup to HTML tags for export
+                    md += criticMarkupToHtml(v) + '\n\n';
                 }
             });
             
@@ -4689,40 +4869,158 @@
             return md;
         }
 
-        // Helper function to parse markdown text into docx TextRun objects
+        // Helper function to parse markdown text into docx TextRun objects with track changes support
         function parseMarkdownToDocxRuns(text) {
             var docxLib = window.docx;
             var runs = [];
-            var remaining = text;
             
-            // Process inline formatting: **bold**, *italic*, `code`
-            var regex = /(\*\*(.+?)\*\*|\*(.+?)\*|_(.+?)_|`(.+?)`)/g;
+            // Check if track changes classes are available
+            var hasTrackChanges = typeof docxLib.InsertedTextRun === 'function' && typeof docxLib.DeletedTextRun === 'function';
+            
+            // Combined regex for all inline formatting including CriticMarkup
+            // Order matters: more specific patterns first
+            var patterns = [
+                { regex: /\{\+\+(.+?)\+\+\}/g, type: 'addition' },
+                { regex: /\{--(.+?)--\}/g, type: 'deletion' },
+                { regex: /\{~~(.+?)~>(.+?)~~\}/g, type: 'substitution' },
+                { regex: /\{==(.+?)==\}/g, type: 'highlight' },
+                { regex: /\{>>(.+?)<<\}/g, type: 'comment' },
+                { regex: /\*\*(.+?)\*\*/g, type: 'bold' },
+                { regex: /\*(.+?)\*/g, type: 'italic' },
+                { regex: /_(.+?)_/g, type: 'italic' },
+                { regex: /`(.+?)`/g, type: 'code' }
+            ];
+            
+            // Find all matches with their positions
+            var allMatches = [];
+            patterns.forEach(function(p) {
+                var match;
+                var regex = new RegExp(p.regex.source, 'g');
+                while ((match = regex.exec(text)) !== null) {
+                    allMatches.push({
+                        index: match.index,
+                        length: match[0].length,
+                        type: p.type,
+                        match: match
+                    });
+                }
+            });
+            
+            // Sort by position
+            allMatches.sort(function(a, b) { return a.index - b.index; });
+            
+            // Remove overlapping matches (keep first)
+            var filtered = [];
+            var lastEnd = 0;
+            allMatches.forEach(function(m) {
+                if (m.index >= lastEnd) {
+                    filtered.push(m);
+                    lastEnd = m.index + m.length;
+                }
+            });
+            
+            // Revision date for track changes
+            var revisionDate = new Date();
+            
+            // Build runs
             var lastIndex = 0;
-            var match;
-            
-            while ((match = regex.exec(text)) !== null) {
+            filtered.forEach(function(m) {
                 // Add text before the match
-                if (match.index > lastIndex) {
-                    runs.push(new docxLib.TextRun({ text: text.substring(lastIndex, match.index) }));
+                if (m.index > lastIndex) {
+                    runs.push(new docxLib.TextRun({ text: text.substring(lastIndex, m.index) }));
                 }
                 
-                // Add formatted text
-                if (match[2]) {
-                    // **bold**
-                    runs.push(new docxLib.TextRun({ text: match[2], bold: true }));
-                } else if (match[3]) {
-                    // *italic*
-                    runs.push(new docxLib.TextRun({ text: match[3], italics: true }));
-                } else if (match[4]) {
-                    // _italic_
-                    runs.push(new docxLib.TextRun({ text: match[4], italics: true }));
-                } else if (match[5]) {
-                    // `code`
-                    runs.push(new docxLib.TextRun({ text: match[5], font: 'Consolas' }));
+                // Add formatted text based on type
+                switch (m.type) {
+                    case 'addition':
+                        if (hasTrackChanges) {
+                            // Use InsertedTextRun for real track changes
+                            runs.push(new docxLib.InsertedTextRun({ 
+                                text: m.match[1],
+                                author: 'CriticMarkup',
+                                date: revisionDate
+                            }));
+                        } else {
+                            // Fallback: green underlined text
+                            runs.push(new docxLib.TextRun({ 
+                                text: m.match[1], 
+                                color: '155724',
+                                underline: { type: docxLib.UnderlineType.SINGLE }
+                            }));
+                        }
+                        break;
+                    case 'deletion':
+                        if (hasTrackChanges) {
+                            // Use DeletedTextRun for real track changes
+                            runs.push(new docxLib.DeletedTextRun({ 
+                                text: m.match[1],
+                                author: 'CriticMarkup',
+                                date: revisionDate
+                            }));
+                        } else {
+                            // Fallback: red strikethrough text
+                            runs.push(new docxLib.TextRun({ 
+                                text: m.match[1], 
+                                color: '721c24',
+                                strike: true
+                            }));
+                        }
+                        break;
+                    case 'substitution':
+                        if (hasTrackChanges) {
+                            // Deletion then addition with track changes
+                            runs.push(new docxLib.DeletedTextRun({ 
+                                text: m.match[1],
+                                author: 'CriticMarkup',
+                                date: revisionDate
+                            }));
+                            runs.push(new docxLib.InsertedTextRun({ 
+                                text: m.match[2],
+                                author: 'CriticMarkup',
+                                date: revisionDate
+                            }));
+                        } else {
+                            // Fallback: strikethrough then underlined
+                            runs.push(new docxLib.TextRun({ 
+                                text: m.match[1], 
+                                color: '721c24',
+                                strike: true
+                            }));
+                            runs.push(new docxLib.TextRun({ 
+                                text: m.match[2], 
+                                color: '155724',
+                                underline: { type: docxLib.UnderlineType.SINGLE }
+                            }));
+                        }
+                        break;
+                    case 'highlight':
+                        runs.push(new docxLib.TextRun({ 
+                            text: m.match[1], 
+                            highlight: 'yellow'
+                        }));
+                        break;
+                    case 'comment':
+                        // Comment as italic text in brackets with highlighting
+                        runs.push(new docxLib.TextRun({ 
+                            text: '[💬 ' + m.match[1] + ']', 
+                            color: '0c5460',
+                            italics: true,
+                            highlight: 'cyan'
+                        }));
+                        break;
+                    case 'bold':
+                        runs.push(new docxLib.TextRun({ text: m.match[1], bold: true }));
+                        break;
+                    case 'italic':
+                        runs.push(new docxLib.TextRun({ text: m.match[1], italics: true }));
+                        break;
+                    case 'code':
+                        runs.push(new docxLib.TextRun({ text: m.match[1], font: 'Consolas' }));
+                        break;
                 }
                 
-                lastIndex = regex.lastIndex;
-            }
+                lastIndex = m.index + m.length;
+            });
             
             // Add remaining text
             if (lastIndex < text.length) {
@@ -4852,6 +5150,12 @@
                         text: "•",
                         alignment: docx.AlignmentType.LEFT,
                         style: { paragraph: { indent: { left: 720, hanging: 360 } } }
+                    }, {
+                        level: 1,
+                        format: docx.LevelFormat.BULLET,
+                        text: "◦",
+                        alignment: docx.AlignmentType.LEFT,
+                        style: { paragraph: { indent: { left: 1440, hanging: 360 } } }
                     }]
                 }, {
                     reference: "numbered-list",
@@ -4973,16 +5277,72 @@
                 }
                 
                 if (ch.length > 0) {
+                    var targetTable = f.targetTableId ? getTableById(f.targetTableId) : null;
+                    var selectedChildFields = markdownChildrenFields[f.id] || {};
+                    
+                    // Get list of selected fields
+                    var fieldsToShow = [];
+                    if (targetTable) {
+                        targetTable.fields.forEach(function(tf) {
+                            if (selectedChildFields[tf.id]) {
+                                fieldsToShow.push(tf);
+                            }
+                        });
+                    }
+                    
                     children.push(new docx.Paragraph({
                         children: [new docx.TextRun({ text: f.name + ':', bold: true })],
                         spacing: { before: 120, after: 60 }
                     }));
                     
                     ch.forEach(function(c) {
-                        children.push(new docx.Paragraph({
-                            numbering: { reference: "bullet-list", level: 0 },
-                            children: [new docx.TextRun({ text: getPrimaryFieldValue(c.table, c.record) })]
-                        }));
+                        var primaryValue = getPrimaryFieldValue(c.table, c.record);
+                        
+                        if (fieldsToShow.length <= 1) {
+                            // Just primary field or one field
+                            children.push(new docx.Paragraph({
+                                numbering: { reference: "bullet-list", level: 0 },
+                                children: [new docx.TextRun({ text: primaryValue })]
+                            }));
+                        } else {
+                            // Multiple fields - show primary as bold, then sub-items
+                            children.push(new docx.Paragraph({
+                                numbering: { reference: "bullet-list", level: 0 },
+                                children: [new docx.TextRun({ text: primaryValue, bold: true })]
+                            }));
+                            
+                            fieldsToShow.forEach(function(tf) {
+                                if (tf.primary) return; // Skip primary, already shown
+                                var value = c.record.values[tf.id];
+                                if (value == null || value === '') return;
+                                
+                                var displayValue = '';
+                                switch (tf.type) {
+                                    case 'boolean':
+                                        displayValue = value ? t('yes') : t('no');
+                                        break;
+                                    case 'date':
+                                        displayValue = formatDate(value, tf.dateFormat);
+                                        break;
+                                    case 'parent':
+                                        var pTable = getTableById(tf.targetTableId);
+                                        var pRecord = pTable ? getRecordById(tf.targetTableId, value) : null;
+                                        displayValue = pRecord && pTable ? getPrimaryFieldValue(pTable, pRecord) : value;
+                                        break;
+                                    default:
+                                        displayValue = String(value);
+                                }
+                                if (displayValue) {
+                                    children.push(new docx.Paragraph({
+                                        numbering: { reference: "bullet-list", level: 1 },
+                                        children: [
+                                            new docx.TextRun({ text: tf.name + ': ', italics: true }),
+                                            new docx.TextRun({ text: displayValue })
+                                        ]
+                                    }));
+                                }
+                            });
+                        }
                     });
                 }
             });
@@ -5143,9 +5503,12 @@
                 }
             }
             
-            // Create document
+            // Create document with track revisions enabled
             var doc = new docx.Document({
                 numbering: numberingConfig,
+                features: {
+                    trackRevisions: true
+                },
                 styles: {
                     default: {
                         document: {
