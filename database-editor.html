@@ -189,6 +189,26 @@
         .management-table .col-actions { width: 150px; white-space: nowrap; }
         .management-table .col-order button { margin-right: 0.25rem; }
         .management-table .badge { margin-left: 0.5rem; }
+        
+        /* Conditional formatting colors */
+        .cond-color-red { background-color: #ffcdd2 !important; }
+        .cond-color-pink { background-color: #f8bbd0 !important; }
+        .cond-color-purple { background-color: #e1bee7 !important; }
+        .cond-color-blue { background-color: #bbdefb !important; }
+        .cond-color-cyan { background-color: #b2ebf2 !important; }
+        .cond-color-teal { background-color: #b2dfdb !important; }
+        .cond-color-green { background-color: #c8e6c9 !important; }
+        .cond-color-lime { background-color: #dcedc8 !important; }
+        .cond-color-yellow { background-color: #fff9c4 !important; }
+        .cond-color-orange { background-color: #ffe0b2 !important; }
+        .cond-color-brown { background-color: #d7ccc8 !important; }
+        .cond-color-grey { background-color: #cfd8dc !important; }
+        .color-indicator { width: 1px; height: 1px; display: inline-block; vertical-align: middle; margin-right: 0.25rem; }
+        .cond-rule-item { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; padding: 0.5rem; background: var(--bg); border-radius: var(--radius); flex-wrap: wrap; }
+        .cond-rule-item select, .cond-rule-item input { flex: 1; min-width: 100px; }
+        .cond-color-swatch { width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--border); flex-shrink: 0; }
+        .color-filter-option { display: flex; align-items: center; gap: 0.5rem; }
+        .color-filter-swatch { width: 16px; height: 16px; border-radius: 3px; border: 1px solid var(--border); display: inline-block; }
         .field-item:last-child { border-bottom: none; }
         .field-item-info { flex: 1; }
         .field-item-name { font-weight: 600; color: var(--primary); }
@@ -1295,6 +1315,24 @@
         </div>
     </div>
 
+    <!-- Conditional Formatting Modal -->
+    <div class="modal-backdrop" id="conditionalFormattingModal" hidden>
+        <div class="modal" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2 data-i18n="conditionalFormatting">Podmíněné formátování</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 1rem; color: var(--text-muted);" data-i18n="conditionalFormattingDesc">Nastavte pravidla pro barevné zvýraznění řádků v tabulce.</p>
+                <div id="conditionalRulesList"></div>
+                <button type="button" class="btn btn-success" id="btnAddConditionalRule" style="margin-top: 1rem;"><span aria-hidden="true">➕</span> <span data-i18n="addRule">Přidat pravidlo</span></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close data-i18n="close">Zavřít</button>
+            </div>
+        </div>
+    </div>
+
     <div class="modal-backdrop" id="structureModal" hidden>
         <div class="modal structure-modal">
             <div class="modal-header">
@@ -1451,7 +1489,7 @@
                 typeNumber: "Číslo", typeDate: "Datum", typeBoolean: "Ano/Ne", typeSelect: "Výběr ze seznamu",
                 typeParent: "Nadřazený záznam", typeChildren: "Podřízené záznamy", typeComposite: "Složený", typeUrl: "URL odkaz", typeJson: "JSON", jsonItems: "položek", jsonProperties: "vlastností", jsonInvalidFormat: "Neplatný formát JSON", jsonEmpty: "prázdné", editTable: "Upravit", editField: "Upravit pole",
                 compositeFields: "Vložit pole:", compositeTemplate: "Šablona složeného pole", createNew: "Vytvořit nový", fieldGroup: "Seskupovat záznamy", groupCollapsed: "sbaleno", groupExpanded: "rozbaleno", addChild: "Přidat podřízený", copyField: "Kopírovat", copiedToClipboard: "Zkopírováno do schránky",
-                collections: "Kolekce", tags: "Tagy", addCollection: "Přidat kolekci", addTag: "Přidat tag", collectionName: "Název kolekce", tagName: "Název tagu", color: "Barva", noCollections: "Zatím nemáte žádné kolekce.", noTags: "Zatím nemáte žádné tagy.", collectionMembers: "záznamů", confirmDeleteCollection: "Smazat tuto kolekci?", confirmDeleteTag: "Smazat tento tag?", addToCollection: "Přidat do kolekce", removeFromCollection: "Odebrat z kolekce", assignTags: "Přiřadit tagy", relatedRecords: "Související záznamy", inCollection: "V kolekci", withTag: "S tagem", allCollections: "Všechny kolekce", allTags: "Všechny tagy", viewCollection: "Zobrazit kolekci", collectionContents: "Obsah kolekce", backToTables: "Zpět na tabulky", recordsInCollection: "Záznamy v kolekci", noRecordsInCollection: "Kolekce neobsahuje žádné záznamy.", fromTable: "z tabulky", manageCollections: "Spravovat kolekce", manageTags: "Spravovat tagy", classification: "Zatřídění", description: "Popis", collectionDescription: "Popis kolekce", selectCollection: "Vyberte kolekci", selectTag: "Vyberte tag", createNewCollection: "Vytvořit novou kolekci", createNewTag: "Vytvořit nový tag", removeFromThisCollection: "Odebrat z této kolekce", removeThisTag: "Odebrat tento tag", collectionDetails: "Podrobnosti kolekce", tagDetails: "Podrobnosti tagu", editCollection: "Upravit kolekci", editTag: "Upravit tag", recordsWithTag: "Záznamy s tagem", quickCreate: "➕ Nový záznam...", structure: "Struktura", textView: "Textový pohled", graphView: "Grafický pohled", showStructure: "Zobrazit strukturu", noDescendants: "Tento záznam nemá žádné podřízené záznamy.", loadMore: "Načíst více...", loadAll: "Načíst všechny", descendants: "potomků", selectedRecords: "vybráno", bulkEditField: "Upravit pole", clearSelection: "Zrušit výběr", selectAll: "Vybrat vše", newValue: "Nová hodnota", apply: "Použít", confirmBulkDelete: "Opravdu smazat {count} záznamů?", addedToCollection: "Přidáno {count} záznamů do kolekce.", addedTag: "Tag přidán k {count} záznamům.", recordFields: "Pole záznamu", bulkEditFields: "Hromadná úprava polí", addAnotherField: "Přidat další pole", openAfterSave: "Otevřít zobrazení", ancestors: "Předci", showStructureFrom: "Zobrazit strukturu od tohoto záznamu", order: "Pořadí", tableName: "Název tabulky", fields: "Pole", records: "Záznamy", manageFields: "Spravovat pole", moveUp: "Posunout nahoru", moveDown: "Posunout dolů", fieldName: "Název pole", type: "Typ", options: "Možnosti", primary: "Primární", filter: "Filtr", group: "Seskupit", duplicate: "Duplikovat", saveAndAddAnother: "Uložit a přidat další", searchResults: "Výsledky hledání", noSearchResults: "Žádné výsledky nebyly nalezeny.", globalSearchPlaceholder: "🔍 Hledat...", refresh: "Obnovit", previewImport: "Zobrazit náhled mapování", columnMapping: "Mapování sloupců", targetField: "Cílové pole", unmapped: "Nenamapováno", column: "Sloupec", sampleData: "Ukázka dat", rows: "řádků", noDataToPreview: "Vložte data pro zobrazení náhledu", allRecords: "Všechny záznamy", saveView: "Uložit pohled", viewName: "Název pohledu", newView: "Nový pohled", updateView: "Aktualizovat pohled", renameView: "Přejmenovat pohled", confirmDeleteView: "Opravdu smazat tento pohled?", lockRecord: "Zamknout záznam", unlockRecord: "Odemknout záznam", recordLocked: "Tento záznam je zamčený a nelze ho upravovat.", savedViews: "Uložené pohledy", notes: "Poznámky", addNote: "Přidat poznámku", editNote: "Upravit poznámku", deleteNote: "Smazat poznámku", noNotes: "Žádné poznámky", noteText: "Text poznámky", noteResolved: "Vyřízeno", noteUnresolved: "Nevyřízeno", markResolved: "Označit jako vyřízené", markUnresolved: "Označit jako nevyřízené", confirmDeleteNote: "Opravdu smazat tuto poznámku?", allNotes: "Všechny poznámky", unresolvedNotes: "Nevyřízené", resolvedNotes: "Vyřízené", noNotesInDatabase: "V databázi nejsou žádné poznámky.", noteFor: "Poznámka k", notesCount: "poznámek", allFeatures: "Všechny funkce", showInSimpleMode: "Zobrazit v základním režimu", keyboardShortcuts: "Klávesové zkratky", shortcutSave: "Uložit databázi", shortcutToggleMode: "Přepnout režim (základní/pokročilý)", shortcutNewRecord: "Nový záznam v aktuální tabulce", shortcutQuickCreate: "Rychlé vytvoření záznamu", shortcutSaveRecord: "Uložit záznam (v modálu)", shortcutCollections: "Přejít do kolekcí", shortcutTags: "Přejít do tagů", shortcutNotes: "Přejít do poznámek", shortcutClassification: "Přejít do zatřídění", shortcutEdit: "Upravit vybraný záznam", shortcutView: "Zobrazit vybraný záznam", shortcutArrows: "Navigace v tabulce", shortcutDescription: "Klávesové zkratky používají modifikátor prohlížeče (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifikátor + klávesa", directShortcuts: "Přímé zkratky (bez modifikátoru)", key: "Klávesa", history: "Historie změn", historyCreate: "Vytvoření", historyEdit: "Úprava", historyBulk: "Hromadná úprava", noHistory: "Zatím nejsou k dispozici žádné záznamy o změnách.", confirmDeleteHistory: "Opravdu chcete smazat tento záznam z historie?", exportMarkdown: "Export do Markdown", exportMarkdownTitle: "Export záznamu do Markdown", copyMarkdown: "Kopírovat do schránky", saveMarkdown: "Uložit jako .md", markdownCopied: "Markdown zkopírován do schránky.", includeHistory: "Zahrnout historii změn", includeNotes: "Zahrnout poznámky", includeClassification: "Zahrnout zatřídění", selectFields: "Vyberte pole k exportu", preview: "Náhled", saveDocx: "Uložit jako .docx", childrenFields: "Podřízené záznamy", sizeAnalysis: "Velikost", calculateSizes: "Spočítat velikosti tabulek", sizeAnalysisDesc: "Analýza počtu znaků v databázi včetně historie změn.", clickToCalculate: "Klikněte na tlačítko pro výpočet velikostí.", recordsIn: "Záznamy v:", sortByName: "Podle názvu", sortBySize: "Podle velikosti", chars: "znaků", calculateRecordSizes: "Spočítat záznamy", totalSize: "Celková velikost", dataSize: "Data", historySize: "Historie", globalHistory: "Globální historie změn", loadHistory: "Načíst historii", globalHistoryDesc: "Přehled všech změn v databázi seskupených podle data.", clickToLoadHistory: "Klikněte na tlačítko pro načtení historie.", changedFields: "Změněná pole", noGlobalHistory: "V databázi zatím nejsou žádné záznamy historie.", importTable: "Importovat tabulku", exportTable: "Exportovat tabulku", tableExported: "Tabulka exportována", tableImported: "Tabulka importována", importTableTitle: "Import tabulky", selectTableFile: "Vyberte soubor .jsondbtable", referencedTables: "Odkazované tabulky", mapToExisting: "Namapovat na existující", createEmpty: "Vytvořit prázdnou", skipField: "Přeskočit pole", importTableConfirm: "Importovat", noReferencedTables: "Tabulka neobsahuje vazby na jiné tabulky.", tableAlreadyExists: "Tabulka s tímto názvem již existuje.", useExistingTable: "Přidat záznamy do existující tabulky", createNewTable: "Vytvořit novou tabulku (s číslem)"
+                collections: "Kolekce", tags: "Tagy", addCollection: "Přidat kolekci", addTag: "Přidat tag", collectionName: "Název kolekce", tagName: "Název tagu", color: "Barva", noCollections: "Zatím nemáte žádné kolekce.", noTags: "Zatím nemáte žádné tagy.", collectionMembers: "záznamů", confirmDeleteCollection: "Smazat tuto kolekci?", confirmDeleteTag: "Smazat tento tag?", addToCollection: "Přidat do kolekce", removeFromCollection: "Odebrat z kolekce", assignTags: "Přiřadit tagy", relatedRecords: "Související záznamy", inCollection: "V kolekci", withTag: "S tagem", allCollections: "Všechny kolekce", allTags: "Všechny tagy", viewCollection: "Zobrazit kolekci", collectionContents: "Obsah kolekce", backToTables: "Zpět na tabulky", recordsInCollection: "Záznamy v kolekci", noRecordsInCollection: "Kolekce neobsahuje žádné záznamy.", fromTable: "z tabulky", manageCollections: "Spravovat kolekce", manageTags: "Spravovat tagy", classification: "Zatřídění", description: "Popis", collectionDescription: "Popis kolekce", selectCollection: "Vyberte kolekci", selectTag: "Vyberte tag", createNewCollection: "Vytvořit novou kolekci", createNewTag: "Vytvořit nový tag", removeFromThisCollection: "Odebrat z této kolekce", removeThisTag: "Odebrat tento tag", collectionDetails: "Podrobnosti kolekce", tagDetails: "Podrobnosti tagu", editCollection: "Upravit kolekci", editTag: "Upravit tag", recordsWithTag: "Záznamy s tagem", quickCreate: "➕ Nový záznam...", structure: "Struktura", textView: "Textový pohled", graphView: "Grafický pohled", showStructure: "Zobrazit strukturu", noDescendants: "Tento záznam nemá žádné podřízené záznamy.", loadMore: "Načíst více...", loadAll: "Načíst všechny", descendants: "potomků", selectedRecords: "vybráno", bulkEditField: "Upravit pole", clearSelection: "Zrušit výběr", selectAll: "Vybrat vše", newValue: "Nová hodnota", apply: "Použít", confirmBulkDelete: "Opravdu smazat {count} záznamů?", addedToCollection: "Přidáno {count} záznamů do kolekce.", addedTag: "Tag přidán k {count} záznamům.", recordFields: "Pole záznamu", bulkEditFields: "Hromadná úprava polí", addAnotherField: "Přidat další pole", openAfterSave: "Otevřít zobrazení", ancestors: "Předci", showStructureFrom: "Zobrazit strukturu od tohoto záznamu", order: "Pořadí", tableName: "Název tabulky", fields: "Pole", records: "Záznamy", manageFields: "Spravovat pole", moveUp: "Posunout nahoru", moveDown: "Posunout dolů", fieldName: "Název pole", type: "Typ", options: "Možnosti", primary: "Primární", filter: "Filtr", group: "Seskupit", duplicate: "Duplikovat", saveAndAddAnother: "Uložit a přidat další", searchResults: "Výsledky hledání", noSearchResults: "Žádné výsledky nebyly nalezeny.", globalSearchPlaceholder: "🔍 Hledat...", refresh: "Obnovit", previewImport: "Zobrazit náhled mapování", columnMapping: "Mapování sloupců", targetField: "Cílové pole", unmapped: "Nenamapováno", column: "Sloupec", sampleData: "Ukázka dat", rows: "řádků", noDataToPreview: "Vložte data pro zobrazení náhledu", allRecords: "Všechny záznamy", saveView: "Uložit pohled", viewName: "Název pohledu", newView: "Nový pohled", updateView: "Aktualizovat pohled", renameView: "Přejmenovat pohled", confirmDeleteView: "Opravdu smazat tento pohled?", lockRecord: "Zamknout záznam", unlockRecord: "Odemknout záznam", recordLocked: "Tento záznam je zamčený a nelze ho upravovat.", savedViews: "Uložené pohledy", notes: "Poznámky", addNote: "Přidat poznámku", editNote: "Upravit poznámku", deleteNote: "Smazat poznámku", noNotes: "Žádné poznámky", noteText: "Text poznámky", noteResolved: "Vyřízeno", noteUnresolved: "Nevyřízeno", markResolved: "Označit jako vyřízené", markUnresolved: "Označit jako nevyřízené", confirmDeleteNote: "Opravdu smazat tuto poznámku?", allNotes: "Všechny poznámky", unresolvedNotes: "Nevyřízené", resolvedNotes: "Vyřízené", noNotesInDatabase: "V databázi nejsou žádné poznámky.", noteFor: "Poznámka k", notesCount: "poznámek", allFeatures: "Všechny funkce", showInSimpleMode: "Zobrazit v základním režimu", keyboardShortcuts: "Klávesové zkratky", shortcutSave: "Uložit databázi", shortcutToggleMode: "Přepnout režim (základní/pokročilý)", shortcutNewRecord: "Nový záznam v aktuální tabulce", shortcutQuickCreate: "Rychlé vytvoření záznamu", shortcutSaveRecord: "Uložit záznam (v modálu)", shortcutCollections: "Přejít do kolekcí", shortcutTags: "Přejít do tagů", shortcutNotes: "Přejít do poznámek", shortcutClassification: "Přejít do zatřídění", shortcutEdit: "Upravit vybraný záznam", shortcutView: "Zobrazit vybraný záznam", shortcutArrows: "Navigace v tabulce", shortcutDescription: "Klávesové zkratky používají modifikátor prohlížeče (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifikátor + klávesa", directShortcuts: "Přímé zkratky (bez modifikátoru)", key: "Klávesa", history: "Historie změn", historyCreate: "Vytvoření", historyEdit: "Úprava", historyBulk: "Hromadná úprava", noHistory: "Zatím nejsou k dispozici žádné záznamy o změnách.", confirmDeleteHistory: "Opravdu chcete smazat tento záznam z historie?", exportMarkdown: "Export do Markdown", exportMarkdownTitle: "Export záznamu do Markdown", copyMarkdown: "Kopírovat do schránky", saveMarkdown: "Uložit jako .md", markdownCopied: "Markdown zkopírován do schránky.", includeHistory: "Zahrnout historii změn", includeNotes: "Zahrnout poznámky", includeClassification: "Zahrnout zatřídění", selectFields: "Vyberte pole k exportu", preview: "Náhled", saveDocx: "Uložit jako .docx", childrenFields: "Podřízené záznamy", sizeAnalysis: "Velikost", calculateSizes: "Spočítat velikosti tabulek", sizeAnalysisDesc: "Analýza počtu znaků v databázi včetně historie změn.", clickToCalculate: "Klikněte na tlačítko pro výpočet velikostí.", recordsIn: "Záznamy v:", sortByName: "Podle názvu", sortBySize: "Podle velikosti", chars: "znaků", calculateRecordSizes: "Spočítat záznamy", totalSize: "Celková velikost", dataSize: "Data", historySize: "Historie", globalHistory: "Globální historie změn", loadHistory: "Načíst historii", globalHistoryDesc: "Přehled všech změn v databázi seskupených podle data.", clickToLoadHistory: "Klikněte na tlačítko pro načtení historie.", changedFields: "Změněná pole", noGlobalHistory: "V databázi zatím nejsou žádné záznamy historie.", importTable: "Importovat tabulku", exportTable: "Exportovat tabulku", tableExported: "Tabulka exportována", tableImported: "Tabulka importována", importTableTitle: "Import tabulky", selectTableFile: "Vyberte soubor .jsondbtable", referencedTables: "Odkazované tabulky", mapToExisting: "Namapovat na existující", createEmpty: "Vytvořit prázdnou", skipField: "Přeskočit pole", importTableConfirm: "Importovat", noReferencedTables: "Tabulka neobsahuje vazby na jiné tabulky.", tableAlreadyExists: "Tabulka s tímto názvem již existuje.", useExistingTable: "Přidat záznamy do existující tabulky", createNewTable: "Vytvořit novou tabulku (s číslem)", conditionalFormatting: "Podmíněné formátování", conditionalFormattingDesc: "Nastavte pravidla pro barevné zvýraznění řádků v tabulce.", manageFormatting: "Spravovat barvy", addRule: "Přidat pravidlo", noRules: "Žádná pravidla podmíněného formátování.", ruleField: "Pole", ruleOperator: "Podmínka", ruleValue: "Hodnota", ruleColor: "Barva", opEquals: "rovná se", opNotEquals: "nerovná se", opContains: "obsahuje", opNotContains: "neobsahuje", opEmpty: "je prázdné", opNotEmpty: "není prázdné", opGreaterThan: "větší než", opLessThan: "menší než", opIsTrue: "je zaškrtnuto", opIsFalse: "není zaškrtnuto", allColors: "Všechny barvy", colorRed: "Červená", colorPink: "Růžová", colorPurple: "Fialová", colorBlue: "Modrá", colorCyan: "Tyrkysová", colorTeal: "Modrozelená", colorGreen: "Zelená", colorLime: "Limetková", colorYellow: "Žlutá", colorOrange: "Oranžová", colorBrown: "Hnědá", colorGray: "Šedá", opIsToday: "je dnes", opIsPast: "je v minulosti", opIsFuture: "je v budoucnosti", opIsPastOrToday: "je dnes nebo v minulosti", opIsFutureOrToday: "je dnes nebo v budoucnosti", opDaysAgo: "starší než X dní", opDaysFromNow: "do X dní", opThisWeek: "tento týden", opThisMonth: "tento měsíc", days: "dní", opNoChildren: "nemá podřízené", opHasChildren: "má podřízené", opChildContains: "podřízený obsahuje", opChildNotContains: "podřízený neobsahuje", opChildEquals: "podřízený je", count: "počet"
             },
             en: {
                 skipToContent: "Skip to content", appName: "Database Editor", dbName: "Database name", newDb: "New", load: "Load", save: "Save",
@@ -1481,7 +1519,7 @@
                 typeNumber: "Number", typeDate: "Date", typeBoolean: "Yes/No", typeSelect: "Select from list",
                 typeParent: "Parent record", typeChildren: "Child records", typeComposite: "Composite", typeUrl: "URL link", typeJson: "JSON", jsonItems: "items", jsonProperties: "properties", jsonInvalidFormat: "Invalid JSON format", jsonEmpty: "empty", editTable: "Edit", editField: "Edit field",
                 compositeFields: "Insert field:", compositeTemplate: "Composite field template", createNew: "Create new", fieldGroup: "Group records", groupCollapsed: "collapsed", groupExpanded: "expanded", addChild: "Add child", copyField: "Copy", copiedToClipboard: "Copied to clipboard",
-                collections: "Collections", tags: "Tags", addCollection: "Add collection", addTag: "Add tag", collectionName: "Collection name", tagName: "Tag name", color: "Color", noCollections: "You have no collections yet.", noTags: "You have no tags yet.", collectionMembers: "records", confirmDeleteCollection: "Delete this collection?", confirmDeleteTag: "Delete this tag?", addToCollection: "Add to collection", removeFromCollection: "Remove from collection", assignTags: "Assign tags", relatedRecords: "Related records", inCollection: "In collection", withTag: "With tag", allCollections: "All collections", allTags: "All tags", viewCollection: "View collection", collectionContents: "Collection contents", backToTables: "Back to tables", recordsInCollection: "Records in collection", noRecordsInCollection: "Collection contains no records.", fromTable: "from table", manageCollections: "Manage collections", manageTags: "Manage tags", classification: "Classification", description: "Description", collectionDescription: "Collection description", selectCollection: "Select collection", selectTag: "Select tag", createNewCollection: "Create new collection", createNewTag: "Create new tag", removeFromThisCollection: "Remove from this collection", removeThisTag: "Remove this tag", collectionDetails: "Collection details", tagDetails: "Tag details", editCollection: "Edit collection", editTag: "Edit tag", recordsWithTag: "Records with tag", quickCreate: "➕ New record...", structure: "Structure", textView: "Text view", graphView: "Graph view", showStructure: "Show structure", noDescendants: "This record has no child records.", loadMore: "Load more...", loadAll: "Load all", descendants: "descendants", selectedRecords: "selected", bulkEditField: "Edit field", clearSelection: "Clear selection", selectAll: "Select all", newValue: "New value", apply: "Apply", confirmBulkDelete: "Delete {count} records?", addedToCollection: "Added {count} records to collection.", addedTag: "Tag added to {count} records.", recordFields: "Record fields", bulkEditFields: "Bulk edit fields", addAnotherField: "Add another field", openAfterSave: "Open after save", ancestors: "Ancestors", showStructureFrom: "Show structure from this record", order: "Order", tableName: "Table name", fields: "Fields", records: "Records", manageFields: "Manage fields", moveUp: "Move up", moveDown: "Move down", fieldName: "Field name", type: "Type", options: "Options", primary: "Primary", filter: "Filter", group: "Group", duplicate: "Duplicate", saveAndAddAnother: "Save and add another", searchResults: "Search results", noSearchResults: "No results found.", globalSearchPlaceholder: "🔍 Search...", refresh: "Refresh", previewImport: "Preview mapping", columnMapping: "Column mapping", targetField: "Target field", unmapped: "Unmapped", column: "Column", sampleData: "Sample data", rows: "rows", noDataToPreview: "Paste data to see preview", allRecords: "All records", saveView: "Save view", viewName: "View name", newView: "New view", updateView: "Update view", renameView: "Rename view", confirmDeleteView: "Delete this view?", lockRecord: "Lock record", unlockRecord: "Unlock record", recordLocked: "This record is locked and cannot be edited.", savedViews: "Saved views", notes: "Notes", addNote: "Add note", editNote: "Edit note", deleteNote: "Delete note", noNotes: "No notes", noteText: "Note text", noteResolved: "Resolved", noteUnresolved: "Unresolved", markResolved: "Mark as resolved", markUnresolved: "Mark as unresolved", confirmDeleteNote: "Delete this note?", allNotes: "All notes", unresolvedNotes: "Unresolved", resolvedNotes: "Resolved", noNotesInDatabase: "No notes in database.", noteFor: "Note for", notesCount: "notes", allFeatures: "All features", showInSimpleMode: "Show in simple mode", keyboardShortcuts: "Keyboard shortcuts", shortcutSave: "Save database", shortcutToggleMode: "Toggle mode (simple/advanced)", shortcutNewRecord: "New record in current table", shortcutQuickCreate: "Quick create record", shortcutSaveRecord: "Save record (in modal)", shortcutCollections: "Go to collections", shortcutTags: "Go to tags", shortcutNotes: "Go to notes", shortcutClassification: "Go to classification", shortcutEdit: "Edit selected record", shortcutView: "View selected record", shortcutArrows: "Navigate in table", shortcutDescription: "Keyboard shortcuts use browser modifier (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifier + key", directShortcuts: "Direct shortcuts (no modifier)", key: "Key", history: "Change history", historyCreate: "Created", historyEdit: "Edited", historyBulk: "Bulk edit", noHistory: "No change history available yet.", confirmDeleteHistory: "Are you sure you want to delete this history entry?", exportMarkdown: "Export to Markdown", exportMarkdownTitle: "Export record to Markdown", copyMarkdown: "Copy to clipboard", saveMarkdown: "Save as .md", markdownCopied: "Markdown copied to clipboard.", includeHistory: "Include change history", includeNotes: "Include notes", includeClassification: "Include classification", selectFields: "Select fields to export", preview: "Preview", saveDocx: "Save as .docx", childrenFields: "Child records", sizeAnalysis: "Size", calculateSizes: "Calculate table sizes", sizeAnalysisDesc: "Analysis of character count in database including change history.", clickToCalculate: "Click the button to calculate sizes.", recordsIn: "Records in:", sortByName: "By name", sortBySize: "By size", chars: "chars", calculateRecordSizes: "Calculate records", totalSize: "Total size", dataSize: "Data", historySize: "History", globalHistory: "Global change history", loadHistory: "Load history", globalHistoryDesc: "Overview of all changes in the database grouped by date.", clickToLoadHistory: "Click the button to load history.", changedFields: "Changed fields", noGlobalHistory: "No history entries in the database yet.", importTable: "Import table", exportTable: "Export table", tableExported: "Table exported", tableImported: "Table imported", importTableTitle: "Import table", selectTableFile: "Select .jsondbtable file", referencedTables: "Referenced tables", mapToExisting: "Map to existing", createEmpty: "Create empty", skipField: "Skip field", importTableConfirm: "Import", noReferencedTables: "Table has no references to other tables.", tableAlreadyExists: "Table with this name already exists.", useExistingTable: "Add records to existing table", createNewTable: "Create new table (with number)"
+                collections: "Collections", tags: "Tags", addCollection: "Add collection", addTag: "Add tag", collectionName: "Collection name", tagName: "Tag name", color: "Color", noCollections: "You have no collections yet.", noTags: "You have no tags yet.", collectionMembers: "records", confirmDeleteCollection: "Delete this collection?", confirmDeleteTag: "Delete this tag?", addToCollection: "Add to collection", removeFromCollection: "Remove from collection", assignTags: "Assign tags", relatedRecords: "Related records", inCollection: "In collection", withTag: "With tag", allCollections: "All collections", allTags: "All tags", viewCollection: "View collection", collectionContents: "Collection contents", backToTables: "Back to tables", recordsInCollection: "Records in collection", noRecordsInCollection: "Collection contains no records.", fromTable: "from table", manageCollections: "Manage collections", manageTags: "Manage tags", classification: "Classification", description: "Description", collectionDescription: "Collection description", selectCollection: "Select collection", selectTag: "Select tag", createNewCollection: "Create new collection", createNewTag: "Create new tag", removeFromThisCollection: "Remove from this collection", removeThisTag: "Remove this tag", collectionDetails: "Collection details", tagDetails: "Tag details", editCollection: "Edit collection", editTag: "Edit tag", recordsWithTag: "Records with tag", quickCreate: "➕ New record...", structure: "Structure", textView: "Text view", graphView: "Graph view", showStructure: "Show structure", noDescendants: "This record has no child records.", loadMore: "Load more...", loadAll: "Load all", descendants: "descendants", selectedRecords: "selected", bulkEditField: "Edit field", clearSelection: "Clear selection", selectAll: "Select all", newValue: "New value", apply: "Apply", confirmBulkDelete: "Delete {count} records?", addedToCollection: "Added {count} records to collection.", addedTag: "Tag added to {count} records.", recordFields: "Record fields", bulkEditFields: "Bulk edit fields", addAnotherField: "Add another field", openAfterSave: "Open after save", ancestors: "Ancestors", showStructureFrom: "Show structure from this record", order: "Order", tableName: "Table name", fields: "Fields", records: "Records", manageFields: "Manage fields", moveUp: "Move up", moveDown: "Move down", fieldName: "Field name", type: "Type", options: "Options", primary: "Primary", filter: "Filter", group: "Group", duplicate: "Duplicate", saveAndAddAnother: "Save and add another", searchResults: "Search results", noSearchResults: "No results found.", globalSearchPlaceholder: "🔍 Search...", refresh: "Refresh", previewImport: "Preview mapping", columnMapping: "Column mapping", targetField: "Target field", unmapped: "Unmapped", column: "Column", sampleData: "Sample data", rows: "rows", noDataToPreview: "Paste data to see preview", allRecords: "All records", saveView: "Save view", viewName: "View name", newView: "New view", updateView: "Update view", renameView: "Rename view", confirmDeleteView: "Delete this view?", lockRecord: "Lock record", unlockRecord: "Unlock record", recordLocked: "This record is locked and cannot be edited.", savedViews: "Saved views", notes: "Notes", addNote: "Add note", editNote: "Edit note", deleteNote: "Delete note", noNotes: "No notes", noteText: "Note text", noteResolved: "Resolved", noteUnresolved: "Unresolved", markResolved: "Mark as resolved", markUnresolved: "Mark as unresolved", confirmDeleteNote: "Delete this note?", allNotes: "All notes", unresolvedNotes: "Unresolved", resolvedNotes: "Resolved", noNotesInDatabase: "No notes in database.", noteFor: "Note for", notesCount: "notes", allFeatures: "All features", showInSimpleMode: "Show in simple mode", keyboardShortcuts: "Keyboard shortcuts", shortcutSave: "Save database", shortcutToggleMode: "Toggle mode (simple/advanced)", shortcutNewRecord: "New record in current table", shortcutQuickCreate: "Quick create record", shortcutSaveRecord: "Save record (in modal)", shortcutCollections: "Go to collections", shortcutTags: "Go to tags", shortcutNotes: "Go to notes", shortcutClassification: "Go to classification", shortcutEdit: "Edit selected record", shortcutView: "View selected record", shortcutArrows: "Navigate in table", shortcutDescription: "Keyboard shortcuts use browser modifier (Alt, Alt+Shift, Ctrl+Option)", accesskeyModifier: "Modifier + key", directShortcuts: "Direct shortcuts (no modifier)", key: "Key", history: "Change history", historyCreate: "Created", historyEdit: "Edited", historyBulk: "Bulk edit", noHistory: "No change history available yet.", confirmDeleteHistory: "Are you sure you want to delete this history entry?", exportMarkdown: "Export to Markdown", exportMarkdownTitle: "Export record to Markdown", copyMarkdown: "Copy to clipboard", saveMarkdown: "Save as .md", markdownCopied: "Markdown copied to clipboard.", includeHistory: "Include change history", includeNotes: "Include notes", includeClassification: "Include classification", selectFields: "Select fields to export", preview: "Preview", saveDocx: "Save as .docx", childrenFields: "Child records", sizeAnalysis: "Size", calculateSizes: "Calculate table sizes", sizeAnalysisDesc: "Analysis of character count in database including change history.", clickToCalculate: "Click the button to calculate sizes.", recordsIn: "Records in:", sortByName: "By name", sortBySize: "By size", chars: "chars", calculateRecordSizes: "Calculate records", totalSize: "Total size", dataSize: "Data", historySize: "History", globalHistory: "Global change history", loadHistory: "Load history", globalHistoryDesc: "Overview of all changes in the database grouped by date.", clickToLoadHistory: "Click the button to load history.", changedFields: "Changed fields", noGlobalHistory: "No history entries in the database yet.", importTable: "Import table", exportTable: "Export table", tableExported: "Table exported", tableImported: "Table imported", importTableTitle: "Import table", selectTableFile: "Select .jsondbtable file", referencedTables: "Referenced tables", mapToExisting: "Map to existing", createEmpty: "Create empty", skipField: "Skip field", importTableConfirm: "Import", noReferencedTables: "Table has no references to other tables.", tableAlreadyExists: "Table with this name already exists.", useExistingTable: "Add records to existing table", createNewTable: "Create new table (with number)", conditionalFormatting: "Conditional formatting", conditionalFormattingDesc: "Set rules for color highlighting of rows in the table.", manageFormatting: "Manage colors", addRule: "Add rule", noRules: "No conditional formatting rules.", ruleField: "Field", ruleOperator: "Condition", ruleValue: "Value", ruleColor: "Color", opEquals: "equals", opNotEquals: "not equals", opContains: "contains", opNotContains: "does not contain", opEmpty: "is empty", opNotEmpty: "is not empty", opGreaterThan: "greater than", opLessThan: "less than", opIsTrue: "is checked", opIsFalse: "is not checked", allColors: "All colors", colorRed: "Red", colorPink: "Pink", colorPurple: "Purple", colorBlue: "Blue", colorCyan: "Cyan", colorTeal: "Teal", colorGreen: "Green", colorLime: "Lime", colorYellow: "Yellow", colorOrange: "Orange", colorBrown: "Brown", colorGray: "Gray", opIsToday: "is today", opIsPast: "is in the past", opIsFuture: "is in the future", opIsPastOrToday: "is today or in the past", opIsFutureOrToday: "is today or in the future", opDaysAgo: "older than X days", opDaysFromNow: "within X days", opThisWeek: "this week", opThisMonth: "this month", days: "days", opNoChildren: "has no children", opHasChildren: "has children", opChildContains: "child contains", opChildNotContains: "child doesn't contain", opChildEquals: "child is", count: "count"
             }
         };
 
@@ -1508,12 +1546,168 @@
         let confirmCallback = null;
         let exportFormat = 'csv';
         let importFormat = 'csv';
+        let colorFilter = {}; // { tableId: colorKey or null }
+        
+        // Pastel colors for conditional formatting
+        const pastelColors = {
+            'pastel-red': { bg: '#ffcdd2', name: 'colorRed' },
+            'pastel-pink': { bg: '#f8bbd0', name: 'colorPink' },
+            'pastel-purple': { bg: '#e1bee7', name: 'colorPurple' },
+            'pastel-blue': { bg: '#bbdefb', name: 'colorBlue' },
+            'pastel-cyan': { bg: '#b2ebf2', name: 'colorCyan' },
+            'pastel-teal': { bg: '#b2dfdb', name: 'colorTeal' },
+            'pastel-green': { bg: '#c8e6c9', name: 'colorGreen' },
+            'pastel-lime': { bg: '#dcedc8', name: 'colorLime' },
+            'pastel-yellow': { bg: '#fff9c4', name: 'colorYellow' },
+            'pastel-orange': { bg: '#ffe0b2', name: 'colorOrange' },
+            'pastel-brown': { bg: '#d7ccc8', name: 'colorBrown' },
+            'pastel-gray': { bg: '#cfd8dc', name: 'colorGray' }
+        };
 
         const generateId = () => 'id_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
         const t = (key, r = {}) => { let s = translations[currentLang]?.[key] || key; for (const [k, v] of Object.entries(r)) s = s.replace(`{${k}}`, v); return s; };
         const escapeHtml = s => s == null ? '' : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         // Safe attribute escape - handles all special chars including backticks and template literal syntax
         const escapeAttr = s => s == null ? '' : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/`/g, '&#96;').replace(/\$/g, '&#36;');
+        
+        // Conditional formatting functions
+        function evaluateCondition(table, record, rule) {
+            const field = table.fields.find(f => f.id === rule.fieldId);
+            if (!field) return false;
+            
+            let value = record.values[rule.fieldId];
+            const ruleValue = rule.value;
+            
+            // For parent field, get the primary field value of the referenced record
+            if (field.type === 'parent' && value) {
+                const targetTable = getTableById(field.targetTableId);
+                if (targetTable) {
+                    const parentRecord = getRecordById(field.targetTableId, value);
+                    if (parentRecord) {
+                        value = getPrimaryFieldValue(targetTable, parentRecord);
+                    } else {
+                        value = '';
+                    }
+                }
+            }
+            
+            // For children field, get all primary field values of child records joined
+            if (field.type === 'children') {
+                const targetTable = getTableById(field.targetTableId);
+                if (targetTable && field.foreignKeyFieldId) {
+                    const childRecords = targetTable.records.filter(r => r.values[field.foreignKeyFieldId] === record.id);
+                    // Join all child names for text comparison
+                    const childNames = childRecords.map(r => getPrimaryFieldValue(targetTable, r)).join(' | ');
+                    value = childNames;
+                    // For empty/notEmpty, check count
+                    if (rule.operator === 'empty') {
+                        return childRecords.length === 0;
+                    } else if (rule.operator === 'notEmpty') {
+                        return childRecords.length > 0;
+                    }
+                    // For other operators, use the joined text (fall through to standard operators below)
+                } else {
+                    value = '';
+                }
+            }
+            
+            // Date-specific operators
+            if (field.type === 'date' && value) {
+                const recordDate = new Date(value);
+                recordDate.setHours(0, 0, 0, 0);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const diffDays = Math.floor((recordDate - today) / (1000 * 60 * 60 * 24));
+                
+                switch (rule.operator) {
+                    case 'isToday':
+                        return diffDays === 0;
+                    case 'isPast':
+                        return diffDays < 0;
+                    case 'isFuture':
+                        return diffDays > 0;
+                    case 'isPastOrToday':
+                        return diffDays <= 0;
+                    case 'isFutureOrToday':
+                        return diffDays >= 0;
+                    case 'daysAgo':
+                        return diffDays <= -parseInt(ruleValue || 0);
+                    case 'daysFromNow':
+                        return diffDays >= 0 && diffDays <= parseInt(ruleValue || 0);
+                    case 'thisWeek':
+                        const startOfWeek = new Date(today);
+                        startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Monday
+                        const endOfWeek = new Date(startOfWeek);
+                        endOfWeek.setDate(startOfWeek.getDate() + 6);
+                        return recordDate >= startOfWeek && recordDate <= endOfWeek;
+                    case 'thisMonth':
+                        return recordDate.getMonth() === today.getMonth() && recordDate.getFullYear() === today.getFullYear();
+                }
+            }
+            
+            switch (rule.operator) {
+                case 'equals':
+                    return String(value || '') === String(ruleValue || '');
+                case 'notEquals':
+                    return String(value || '') !== String(ruleValue || '');
+                case 'contains':
+                    return String(value || '').toLowerCase().includes(String(ruleValue || '').toLowerCase());
+                case 'notContains':
+                    return !String(value || '').toLowerCase().includes(String(ruleValue || '').toLowerCase());
+                case 'empty':
+                    return value == null || value === '';
+                case 'notEmpty':
+                    return value != null && value !== '';
+                case 'greaterThan':
+                    if (field.type === 'date') {
+                        return value && ruleValue && new Date(value) > new Date(ruleValue);
+                    }
+                    return parseFloat(value) > parseFloat(ruleValue);
+                case 'lessThan':
+                    if (field.type === 'date') {
+                        return value && ruleValue && new Date(value) < new Date(ruleValue);
+                    }
+                    return parseFloat(value) < parseFloat(ruleValue);
+                case 'isTrue':
+                    return value === true || value === 'true';
+                case 'isFalse':
+                    return value === false || value === 'false' || value == null;
+                default:
+                    return false;
+            }
+        }
+        
+        function getRecordColor(table, record) {
+            if (!table.conditionalFormatting || table.conditionalFormatting.length === 0) {
+                return null;
+            }
+            
+            for (const rule of table.conditionalFormatting) {
+                if (evaluateCondition(table, record, rule)) {
+                    return rule.color;
+                }
+            }
+            return null;
+        }
+        
+        function getColorName(colorKey) {
+            const color = pastelColors[colorKey];
+            return color ? t(color.name) : '';
+        }
+        
+        function getColorBg(colorKey) {
+            const color = pastelColors[colorKey];
+            return color ? color.bg : '';
+        }
+        
+        function getUsedColors(table) {
+            if (!table.conditionalFormatting) return [];
+            const colors = new Set();
+            table.conditionalFormatting.forEach(rule => {
+                if (rule.color) colors.add(rule.color);
+            });
+            return Array.from(colors);
+        }
         
         // PHP-style date formatting
         const dateLocales = {
@@ -2365,6 +2559,16 @@
                 selectFiltersHtml += `<div class="filter-item"><label>${t('withTag')}</label><select class="tag-filter" data-table="${tableId}"><option value="">${t('allTags')}</option>${sortedTags.map(tag => `<option value="${tag.id}" ${tagFilterVal === tag.id ? 'selected' : ''}>${escapeHtml(tag.name)}</option>`).join('')}</select></div>`;
             }
             
+            // Color filter (conditional formatting)
+            const usedColors = getUsedColors(table);
+            if (usedColors.length > 0) {
+                const colorFilterVal = colorFilter[tableId] || '';
+                selectFiltersHtml += `<div class="filter-item"><label>${t('ruleColor')}</label><select class="color-filter" data-table="${tableId}"><option value="">${t('allColors')}</option>${usedColors.map(colorKey => {
+                    const color = pastelColors[colorKey];
+                    return `<option value="${colorKey}" ${colorFilterVal === colorKey ? 'selected' : ''} style="background: ${color?.bg}">${t(color?.name)}</option>`;
+                }).join('')}</select></div>`;
+            }
+            
             // Combine: search always, select filters only in advanced mode
             const filtersHtml = searchHtml + (advancedMode ? selectFiltersHtml : '');
 
@@ -2388,6 +2592,11 @@
                 // Tag filter
                 if (tagFilter) {
                     if (!r.tags || !r.tags.includes(tagFilter)) return false;
+                }
+                // Color filter
+                if (colorFilter[tableId]) {
+                    const recordColor = getRecordColor(table, r);
+                    if (recordColor !== colorFilter[tableId]) return false;
                 }
                 return true;
             });
@@ -2511,8 +2720,11 @@
                         group.records.forEach(r => {
                             const isSelected = selected.has(r.id);
                             const lockIcon = r.locked ? '<span class="lock-icon" title="' + t('recordLocked') + '">🔒</span> ' : '';
-                            const cells = visibleFields.map(f => `<td>${f.primary ? lockIcon : ''}${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
-                            groupedHtml += `<tr id="${groupId}"><td class="checkbox-col"><input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}"${r.locked ? ' disabled' : ''}>✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}"${r.locked ? ' disabled' : ''}>🗑️</button></td></tr>`;
+                            const rowColor = getRecordColor(table, r);
+                            const rowStyle = rowColor ? ` style="background: ${getColorBg(rowColor)}"` : '';
+                            const colorIndicator = rowColor ? `<span role="img" aria-label="${t('ruleColor')}: ${getColorName(rowColor)}" style="color: ${getColorBg(rowColor)}; text-shadow: 0 0 1px #000;">●</span> ` : '';
+                            const cells = visibleFields.map(f => `<td>${f.primary ? colorIndicator + lockIcon : ''}${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
+                            groupedHtml += `<tr id="${groupId}"${rowStyle}><td class="checkbox-col"><input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}"${r.locked ? ' disabled' : ''}>✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}"${r.locked ? ' disabled' : ''}>🗑️</button></td></tr>`;
                         });
                     }
                     groupedHtml += `</tbody>`;
@@ -2536,8 +2748,11 @@
                 const bodyRows = filtered.map(r => {
                     const isSelected = selected.has(r.id);
                     const lockIcon = r.locked ? '<span class="lock-icon" title="' + t('recordLocked') + '">🔒</span> ' : '';
-                    const cells = visibleFields.map(f => `<td>${f.primary ? lockIcon : ''}${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
-                    return `<tr><td class="checkbox-col"><input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}"${r.locked ? ' disabled' : ''}>✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}"${r.locked ? ' disabled' : ''}>🗑️</button></td></tr>`;
+                    const rowColor = getRecordColor(table, r);
+                    const rowStyle = rowColor ? ` style="background: ${getColorBg(rowColor)}"` : '';
+                    const colorIndicator = rowColor ? `<span role="img" aria-label="${t('ruleColor')}: ${getColorName(rowColor)}" style="color: ${getColorBg(rowColor)}; text-shadow: 0 0 1px #000;">●</span> ` : '';
+                    const cells = visibleFields.map(f => `<td>${f.primary ? colorIndicator + lockIcon : ''}${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
+                    return `<tr${rowStyle}><td class="checkbox-col"><input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}"${r.locked ? ' disabled' : ''}>✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}"${r.locked ? ' disabled' : ''}>🗑️</button></td></tr>`;
                 }).join('');
 
                 tableHtml = `<div class="table-wrapper"><table><thead><tr>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table></div>`;
@@ -2897,6 +3112,7 @@
                     <td><input type="checkbox" class="table-simple-mode-toggle" data-table="${tb.id}" ${showInSimple ? 'checked' : ''} aria-label="${t('showInSimpleMode')}"></td>
                     <td class="col-actions">
                         <button type="button" class="btn btn-sm btn-secondary show-fields-btn" data-table="${tb.id}" title="${t('manageFields')}">📋 ${t('fields')}</button>
+                        <button type="button" class="btn btn-sm btn-secondary cond-format-btn" data-table="${tb.id}" title="${t('conditionalFormatting')}">🎨</button>
                         <button type="button" class="btn btn-sm btn-secondary export-table-btn" data-table="${tb.id}" title="${t('exportTable')}">📤</button>
                         <button type="button" class="btn btn-sm btn-secondary edit-table-btn" data-table="${tb.id}" title="${t('edit')}">✏️</button>
                         <button type="button" class="btn btn-sm btn-danger delete-table-btn" data-table="${tb.id}" title="${t('delete')}">🗑️</button>
@@ -3247,30 +3463,72 @@
             // Collect all history entries with record info
             const allEntries = [];
             
+            // Iterate through all tables and records to find matching history
+            for (const table of database.tables) {
+                for (const record of table.records) {
+                    const key = table.id + '_' + record.id;
+                    const history = database.meta.recordHistory[key];
+                    
+                    if (history && history.length > 0) {
+                        history.forEach(h => {
+                            allEntries.push({
+                                tableId: table.id,
+                                tableName: table.name,
+                                recordId: record.id,
+                                recordName: getPrimaryFieldValue(table, record),
+                                recordExists: true,
+                                timestamp: h.timestamp,
+                                type: h.type,
+                                fields: h.fields,
+                                table: table
+                            });
+                        });
+                    }
+                }
+            }
+            
+            // Also check for orphaned history (deleted records)
             for (const key in database.meta.recordHistory) {
-                const parts = key.split('_');
-                const tableId = parts[0];
-                const recordId = parts.slice(1).join('_'); // Handle IDs with underscores
+                // Check if this key is already processed
+                let found = false;
+                for (const table of database.tables) {
+                    for (const record of table.records) {
+                        if (table.id + '_' + record.id === key) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) break;
+                }
                 
-                const table = getTableById(tableId);
-                const record = table ? getRecordById(tableId, recordId) : null;
-                
-                if (!table) continue; // Skip orphaned history
-                
-                const history = database.meta.recordHistory[key];
-                history.forEach(h => {
-                    allEntries.push({
-                        tableId: tableId,
-                        tableName: table.name,
-                        recordId: recordId,
-                        recordName: record ? getPrimaryFieldValue(table, record) : '(smazaný záznam)',
-                        recordExists: !!record,
-                        timestamp: h.timestamp,
-                        type: h.type,
-                        fields: h.fields,
-                        table: table
-                    });
-                });
+                if (!found) {
+                    // This is orphaned history - try to find table by iterating
+                    let tableId = null;
+                    let recordId = null;
+                    
+                    for (const table of database.tables) {
+                        if (key.startsWith(table.id + '_')) {
+                            tableId = table.id;
+                            recordId = key.substring(table.id.length + 1);
+                            
+                            const history = database.meta.recordHistory[key];
+                            history.forEach(h => {
+                                allEntries.push({
+                                    tableId: tableId,
+                                    tableName: table.name,
+                                    recordId: recordId,
+                                    recordName: '(smazaný záznam)',
+                                    recordExists: false,
+                                    timestamp: h.timestamp,
+                                    type: h.type,
+                                    fields: h.fields,
+                                    table: table
+                                });
+                            });
+                            break;
+                        }
+                    }
+                }
             }
             
             if (allEntries.length === 0) {
@@ -3654,6 +3912,201 @@
                 renderTablesList();
                 alert(t('tableImported') + ': ' + newTable.name);
             }
+        }
+        
+        // Conditional formatting management
+        var conditionalFormattingTableId = null;
+        
+        function openConditionalFormattingModal(tableId) {
+            conditionalFormattingTableId = tableId;
+            renderConditionalRulesList();
+            openModal('conditionalFormattingModal');
+        }
+        
+        function renderConditionalRulesList() {
+            const table = getTableById(conditionalFormattingTableId);
+            if (!table) return;
+            
+            if (!table.conditionalFormatting) table.conditionalFormatting = [];
+            
+            const container = document.getElementById('conditionalRulesList');
+            
+            if (table.conditionalFormatting.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-muted); font-style: italic;">${t('noRules')}</p>`;
+                return;
+            }
+            
+            // Build operators list - basic operators for all field types
+            const basicOperators = [
+                { id: 'equals', label: t('opEquals'), needsValue: true },
+                { id: 'notEquals', label: t('opNotEquals'), needsValue: true },
+                { id: 'contains', label: t('opContains'), needsValue: true },
+                { id: 'notContains', label: t('opNotContains'), needsValue: true },
+                { id: 'empty', label: t('opEmpty'), needsValue: false },
+                { id: 'notEmpty', label: t('opNotEmpty'), needsValue: false },
+                { id: 'greaterThan', label: t('opGreaterThan'), needsValue: true },
+                { id: 'lessThan', label: t('opLessThan'), needsValue: true },
+                { id: 'isTrue', label: t('opIsTrue'), needsValue: false },
+                { id: 'isFalse', label: t('opIsFalse'), needsValue: false }
+            ];
+            
+            // Date-specific operators
+            const dateOperators = [
+                { id: 'isToday', label: t('opIsToday'), needsValue: false },
+                { id: 'isPast', label: t('opIsPast'), needsValue: false },
+                { id: 'isFuture', label: t('opIsFuture'), needsValue: false },
+                { id: 'isPastOrToday', label: t('opIsPastOrToday'), needsValue: false },
+                { id: 'isFutureOrToday', label: t('opIsFutureOrToday'), needsValue: false },
+                { id: 'daysAgo', label: t('opDaysAgo'), needsValue: true, valueType: 'number' },
+                { id: 'daysFromNow', label: t('opDaysFromNow'), needsValue: true, valueType: 'number' },
+                { id: 'thisWeek', label: t('opThisWeek'), needsValue: false },
+                { id: 'thisMonth', label: t('opThisMonth'), needsValue: false }
+            ];
+            
+            // Children-specific operators (text-based on child names)
+            const childrenOperators = [
+                { id: 'contains', label: t('opChildContains'), needsValue: true },
+                { id: 'notContains', label: t('opChildNotContains'), needsValue: true },
+                { id: 'equals', label: t('opChildEquals'), needsValue: true },
+                { id: 'empty', label: t('opNoChildren'), needsValue: false },
+                { id: 'notEmpty', label: t('opHasChildren'), needsValue: false }
+            ];
+            
+            let html = '<div class="cond-rules-list">';
+            
+            table.conditionalFormatting.forEach((rule, idx) => {
+                const field = table.fields.find(f => f.id === rule.fieldId);
+                const isDateField = field && field.type === 'date';
+                const isChildrenField = field && field.type === 'children';
+                const isParentField = field && field.type === 'parent';
+                
+                // Get available operators for this field type
+                let availableOps;
+                if (isChildrenField) {
+                    availableOps = childrenOperators;
+                } else if (isDateField) {
+                    availableOps = [...dateOperators, ...basicOperators];
+                } else {
+                    availableOps = basicOperators;
+                }
+                
+                const currentOp = availableOps.find(op => op.id === rule.operator) || availableOps[0];
+                const needsValue = currentOp.needsValue;
+                const valueType = currentOp.valueType || 'text';
+                
+                // Field type indicator
+                const fieldIcon = isDateField ? ' 📅' : isParentField ? ' 🔗' : isChildrenField ? ' 👶' : '';
+                
+                html += `<div class="cond-rule-item" data-idx="${idx}">
+                    <select class="cond-rule-field" data-idx="${idx}" style="flex: 1;">
+                        ${table.fields.map(f => {
+                            const icon = f.type === 'date' ? ' 📅' : f.type === 'parent' ? ' 🔗' : f.type === 'children' ? ' 👶' : '';
+                            return `<option value="${f.id}" ${f.id === rule.fieldId ? 'selected' : ''}>${escapeHtml(f.name)}${icon}</option>`;
+                        }).join('')}
+                    </select>
+                    <select class="cond-rule-operator" data-idx="${idx}" data-field-type="${field?.type || 'text'}" style="flex: 1;">
+                        ${availableOps.map(op => 
+                            `<option value="${op.id}" ${op.id === rule.operator ? 'selected' : ''} data-needs-value="${op.needsValue}" data-value-type="${op.valueType || 'text'}">${op.label}</option>`
+                        ).join('')}
+                    </select>
+                    <input type="${valueType === 'number' ? 'number' : 'text'}" class="cond-rule-value" data-idx="${idx}" value="${escapeAttr(rule.value || '')}" style="flex: 1;${needsValue ? '' : ' display: none;'}" placeholder="${valueType === 'number' ? t('days') : t('ruleValue')}">
+                    <select class="cond-rule-color" data-idx="${idx}" style="width: 120px;">
+                        ${Object.keys(pastelColors).map(key => {
+                            const color = pastelColors[key];
+                            return `<option value="${key}" ${key === rule.color ? 'selected' : ''} style="background: ${color.bg}">${t(color.name)}</option>`;
+                        }).join('')}
+                    </select>
+                    <button type="button" class="btn btn-sm btn-secondary cond-rule-up" data-idx="${idx}" ${idx === 0 ? 'disabled' : ''} title="${t('moveUp')}">▲</button>
+                    <button type="button" class="btn btn-sm btn-secondary cond-rule-down" data-idx="${idx}" ${idx === table.conditionalFormatting.length - 1 ? 'disabled' : ''} title="${t('moveDown')}">▼</button>
+                    <button type="button" class="btn btn-sm btn-danger cond-rule-delete" data-idx="${idx}" title="${t('delete')}">🗑️</button>
+                </div>`;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        function addConditionalRule() {
+            const table = getTableById(conditionalFormattingTableId);
+            if (!table || table.fields.length === 0) return;
+            
+            if (!table.conditionalFormatting) table.conditionalFormatting = [];
+            
+            const firstField = table.fields.find(f => f.type !== 'children');
+            if (!firstField) return;
+            
+            table.conditionalFormatting.push({
+                id: generateId(),
+                fieldId: firstField.id,
+                operator: 'equals',
+                value: '',
+                color: 'pastel-yellow'
+            });
+            
+            autoSave();
+            renderConditionalRulesList();
+        }
+        
+        function updateConditionalRule(idx, prop, value) {
+            const table = getTableById(conditionalFormattingTableId);
+            if (!table || !table.conditionalFormatting || !table.conditionalFormatting[idx]) return;
+            
+            table.conditionalFormatting[idx][prop] = value;
+            
+            // If field changed, check if we need to reset operator
+            if (prop === 'fieldId') {
+                const newField = table.fields.find(f => f.id === value);
+                const currentOp = table.conditionalFormatting[idx].operator;
+                const dateOps = ['isToday', 'isPast', 'isFuture', 'isPastOrToday', 'isFutureOrToday', 'daysAgo', 'daysFromNow', 'thisWeek', 'thisMonth'];
+                const isDateOp = dateOps.includes(currentOp);
+                
+                if (newField) {
+                    if (newField.type === 'date' && !isDateOp) {
+                        // Switched to date field, set default date operator
+                        table.conditionalFormatting[idx].operator = 'isToday';
+                        table.conditionalFormatting[idx].value = '';
+                    } else if (newField.type === 'children') {
+                        // Switched to children field, set default children operator
+                        table.conditionalFormatting[idx].operator = 'contains';
+                        table.conditionalFormatting[idx].value = '';
+                    } else if (newField.type !== 'date' && isDateOp) {
+                        // Switched from date field, reset to basic operator
+                        table.conditionalFormatting[idx].operator = 'equals';
+                        table.conditionalFormatting[idx].value = '';
+                    }
+                }
+            }
+            
+            autoSave();
+            
+            // Re-render if field or operator changed (to update available operators and show/hide value field)
+            if (prop === 'fieldId' || prop === 'operator') {
+                renderConditionalRulesList();
+            }
+        }
+        
+        function deleteConditionalRule(idx) {
+            const table = getTableById(conditionalFormattingTableId);
+            if (!table || !table.conditionalFormatting) return;
+            
+            table.conditionalFormatting.splice(idx, 1);
+            autoSave();
+            renderConditionalRulesList();
+        }
+        
+        function moveConditionalRule(idx, dir) {
+            const table = getTableById(conditionalFormattingTableId);
+            if (!table || !table.conditionalFormatting) return;
+            
+            const newIdx = idx + dir;
+            if (newIdx < 0 || newIdx >= table.conditionalFormatting.length) return;
+            
+            const temp = table.conditionalFormatting[idx];
+            table.conditionalFormatting[idx] = table.conditionalFormatting[newIdx];
+            table.conditionalFormatting[newIdx] = temp;
+            
+            autoSave();
+            renderConditionalRulesList();
         }
         
         // Views management
@@ -6944,6 +7397,40 @@
                 }
             });
             document.getElementById('btnConfirmImportTable').addEventListener('click', confirmImportTable);
+            
+            // Conditional formatting
+            document.getElementById('btnAddConditionalRule').addEventListener('click', addConditionalRule);
+            document.getElementById('conditionalRulesList').addEventListener('click', function(e) {
+                const btn = e.target.closest('button');
+                if (!btn) return;
+                const idx = parseInt(btn.dataset.idx);
+                if (btn.classList.contains('cond-rule-delete')) {
+                    deleteConditionalRule(idx);
+                } else if (btn.classList.contains('cond-rule-up')) {
+                    moveConditionalRule(idx, -1);
+                } else if (btn.classList.contains('cond-rule-down')) {
+                    moveConditionalRule(idx, 1);
+                }
+            });
+            document.getElementById('conditionalRulesList').addEventListener('change', function(e) {
+                const el = e.target;
+                const idx = parseInt(el.dataset.idx);
+                if (el.classList.contains('cond-rule-field')) {
+                    updateConditionalRule(idx, 'fieldId', el.value);
+                } else if (el.classList.contains('cond-rule-operator')) {
+                    updateConditionalRule(idx, 'operator', el.value);
+                } else if (el.classList.contains('cond-rule-color')) {
+                    updateConditionalRule(idx, 'color', el.value);
+                }
+            });
+            document.getElementById('conditionalRulesList').addEventListener('input', function(e) {
+                const el = e.target;
+                if (el.classList.contains('cond-rule-value')) {
+                    const idx = parseInt(el.dataset.idx);
+                    updateConditionalRule(idx, 'value', el.value);
+                }
+            });
+            
             document.getElementById('btnSaveTable').addEventListener('click', saveTable);
             document.getElementById('btnAddField').addEventListener('click', () => openFieldModal());
             document.getElementById('btnSaveField').addEventListener('click', saveField);
@@ -7341,6 +7828,7 @@
                     if (ni >= 0 && ni < database.tables.length) { [database.tables[i], database.tables[ni]] = [database.tables[ni], database.tables[i]]; renderAll(); }
                 }
                 if (target.classList.contains('show-fields-btn')) showFieldsForTable(target.dataset.table);
+                if (target.classList.contains('cond-format-btn')) openConditionalFormattingModal(target.dataset.table);
                 if (target.classList.contains('export-table-btn')) exportTable(target.dataset.table);
                 if (target.classList.contains('edit-field-btn')) openFieldModal(target.dataset.field);
                 if (target.classList.contains('delete-field-btn')) confirmAction(t('confirmDeleteField'), () => { const table = getTableById(editingFieldTableId); if (table) { table.fields = table.fields.filter(f => f.id !== target.dataset.field); table.records.forEach(r => delete r.values[target.dataset.field]); } renderFieldList(); });
@@ -7696,6 +8184,11 @@
                 // Tag filter
                 if (e.target.classList.contains('tag-filter')) {
                     tagFilter = e.target.value || null;
+                    renderTableContent(e.target.dataset.table);
+                }
+                // Color filter
+                if (e.target.classList.contains('color-filter')) {
+                    colorFilter[e.target.dataset.table] = e.target.value || null;
                     renderTableContent(e.target.dataset.table);
                 }
                 // Assign collection checkbox
