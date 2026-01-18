@@ -2719,12 +2719,12 @@
                     if (!isCollapsed) {
                         group.records.forEach(r => {
                             const isSelected = selected.has(r.id);
-                            const lockIcon = r.locked ? '<span class="lock-icon" title="' + t('recordLocked') + '">🔒</span> ' : '';
+                            const lockIcon = r.locked ? '<span class="lock-icon" title="' + t('recordLocked') + '">🔒</span>' : '';
                             const rowColor = getRecordColor(table, r);
                             const rowStyle = rowColor ? ` style="background: ${getColorBg(rowColor)}"` : '';
-                            const colorIndicator = rowColor ? `<span role="img" aria-label="${t('ruleColor')}: ${getColorName(rowColor)}" style="color: ${getColorBg(rowColor)}; text-shadow: 0 0 1px #000;">●</span> ` : '';
-                            const cells = visibleFields.map(f => `<td>${f.primary ? colorIndicator + lockIcon : ''}${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
-                            groupedHtml += `<tr id="${groupId}"${rowStyle}><td class="checkbox-col"><input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}"${r.locked ? ' disabled' : ''}>✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}"${r.locked ? ' disabled' : ''}>🗑️</button></td></tr>`;
+                            const colorIndicator = rowColor ? `<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="${t('ruleColor')}: ${getColorName(rowColor)}" class="color-indicator">` : '';
+                            const cells = visibleFields.map(f => `<td>${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
+                            groupedHtml += `<tr id="${groupId}"${rowStyle}><td class="checkbox-col">${colorIndicator}${lockIcon}<input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}"${r.locked ? ' disabled' : ''}>✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}"${r.locked ? ' disabled' : ''}>🗑️</button></td></tr>`;
                         });
                     }
                     groupedHtml += `</tbody>`;
@@ -2747,12 +2747,12 @@
 
                 const bodyRows = filtered.map(r => {
                     const isSelected = selected.has(r.id);
-                    const lockIcon = r.locked ? '<span class="lock-icon" title="' + t('recordLocked') + '">🔒</span> ' : '';
+                    const lockIcon = r.locked ? '<span class="lock-icon" title="' + t('recordLocked') + '">🔒</span>' : '';
                     const rowColor = getRecordColor(table, r);
                     const rowStyle = rowColor ? ` style="background: ${getColorBg(rowColor)}"` : '';
-                    const colorIndicator = rowColor ? `<span role="img" aria-label="${t('ruleColor')}: ${getColorName(rowColor)}" style="color: ${getColorBg(rowColor)}; text-shadow: 0 0 1px #000;">●</span> ` : '';
-                    const cells = visibleFields.map(f => `<td>${f.primary ? colorIndicator + lockIcon : ''}${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
-                    return `<tr${rowStyle}><td class="checkbox-col"><input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}"${r.locked ? ' disabled' : ''}>✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}"${r.locked ? ' disabled' : ''}>🗑️</button></td></tr>`;
+                    const colorIndicator = rowColor ? `<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="${t('ruleColor')}: ${getColorName(rowColor)}" class="color-indicator">` : '';
+                    const cells = visibleFields.map(f => `<td>${formatFieldValue(table, f, r.values[f.id], r)}</td>`).join('');
+                    return `<tr${rowStyle}><td class="checkbox-col">${colorIndicator}${lockIcon}<input type="checkbox" class="bulk-checkbox bulk-select-row" data-table="${tableId}" data-record="${r.id}" ${isSelected ? 'checked' : ''}></td>${cells}${renderCollectionsCell(r.id)}${renderTagsCell(r.id)}<td class="actions-cell"><button type="button" class="btn btn-sm btn-secondary btn-icon view-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('view')}">👁️</button><button type="button" class="btn btn-sm btn-secondary btn-icon edit-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('edit')}"${r.locked ? ' disabled' : ''}>✏️</button><button type="button" class="btn btn-sm btn-danger btn-icon delete-record-btn" data-table="${tableId}" data-record="${r.id}" title="${t('delete')}"${r.locked ? ' disabled' : ''}>🗑️</button></td></tr>`;
                 }).join('');
 
                 tableHtml = `<div class="table-wrapper"><table><thead><tr>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table></div>`;
@@ -3552,7 +3552,7 @@
             
             for (const date in groupedByDate) {
                 const entries = groupedByDate[date];
-                const formattedDate = formatDate(date, 'd. m. yyyy');
+                const formattedDate = formatDate(date, 'j. n. Y');
                 
                 html += `<div class="history-date-group" style="margin-bottom: 1.5rem;">
                     <h3 style="margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary);">${formattedDate} <span style="color: var(--text-muted); font-weight: normal; font-size: 0.9em;">(${entries.length} změn)</span></h3>
