@@ -1,0 +1,501 @@
+{
+  "meta": {
+    "name": "Publikační manažer",
+    "columnVisibility": {},
+    "groupStates": {},
+    "collections": [],
+    "tags": [],
+    "views": {
+      "id_mo8qyesyrfocovugw": [],
+      "id_mo8qy59tsdtizksvx": [],
+      "id_mo8qxtgv5tqsgpa76": []
+    },
+    "notes": [],
+    "recordHistory": {
+      "id_mo8qyesyrfocovugw_id_mo8rqt6xhljvdw3kb": [
+        {
+          "id": "id_mo8rqt6xxlhnq66oy",
+          "timestamp": "2026-04-21T15:18:36.105Z",
+          "type": "create",
+          "fields": {
+            "id_mo8qzrrron5l8kao4": "Prohlídka testovací aplikace pro videonávod co to umí",
+            "id_mo8r0u1t4b4r3extk": "Asi by možná bylo fajn ukázat to na nějaké fejkové aplikaci",
+            "id_mo8r236m8kkthvasd": false
+          }
+        }
+      ],
+      "id_mo8qyesyrfocovugw_id_mo8rs3kljljscq4gf": [
+        {
+          "id": "id_mo8rs3klq91uzkwp2",
+          "timestamp": "2026-04-21T15:19:36.213Z",
+          "type": "create",
+          "fields": {
+            "id_mo8qzrrron5l8kao4": "Nějaká vtipná reklama na kanál pro předplatitele se sobem",
+            "id_mo8r0u1t4b4r3extk": "Do reklamy nějak zahrnout soba",
+            "id_mo8r236m8kkthvasd": false
+          }
+        }
+      ],
+      "id_mo8qyesyrfocovugw_id_mo8rumwdk2icjilj8": [
+        {
+          "id": "id_mo8rumwdkx8tw266s",
+          "timestamp": "2026-04-21T15:21:34.573Z",
+          "type": "create",
+          "fields": {
+            "id_mo8qzrrron5l8kao4": "Srovnání jak rychle nabíhá iOS 26 a iOS 27",
+            "id_mo8r0u1t4b4r3extk": "Srovnat do videa rychlost startu systému, stejné telefony a stejná konfigurace aplikací",
+            "id_mo8r236m8kkthvasd": false
+          }
+        }
+      ],
+      "id_mo8qy59tsdtizksvx_id_mo8sda1unlt71ecrb": [
+        {
+          "id": "id_mo8sda1uwnd08u0cv",
+          "timestamp": "2026-04-21T15:36:04.386Z",
+          "type": "create",
+          "fields": {
+            "id_mo8r4a0fdrkghvyi9": "Kanál Plus",
+            "id_mo8r5882edfqalv69": "pro předplatitele",
+            "id_mo8r6bp6aqrgzidk5": "https://youtube.com/c/test-plus",
+            "id_mo8r6zmxjknri0rlg": "Extra videa, bonusy a speciální videokurzy"
+          }
+        }
+      ]
+    },
+    "pinnedRecords": [],
+    "defaultTableSettings": {},
+    "ghPath": "michalradacz/database-editor/ukazka-publikacni-manazer.jsondb"
+  },
+  "tables": [
+    {
+      "id": "id_mo8qxtgv5tqsgpa76",
+      "name": "YT videa",
+      "fields": [
+        {
+          "id": "id_mo8rf0l7grx89w2og",
+          "name": "Ńázev",
+          "type": "text",
+          "options": "",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": false,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8rh04cc1ljrfwxj",
+          "name": "Stav",
+          "type": "select",
+          "options": "Budoucí, Příprava, Vydané, Nevydané",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": false,
+          "filter": true,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8rhvppx0fqxkf8u",
+          "name": "Datum vydání",
+          "type": "date",
+          "options": "",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": false,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8ril363z929x0n4",
+          "name": "URL videa",
+          "type": "url",
+          "options": "",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": false,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8riwtryflk03p9j",
+          "name": "Krátký popis",
+          "type": "text",
+          "options": "",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": false,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8rj6rkeyohvxugs",
+          "name": "Úplný popis",
+          "type": "textarea",
+          "options": "",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": false,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8rk0i5yc6m9jugv",
+          "name": "Úplný název",
+          "type": "composite",
+          "options": "",
+          "compositeTemplate": "{Ńázev} ({Datum vydání})",
+          "dateFormat": "",
+          "primary": true,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8rkutrpismrxist",
+          "name": "Kanál",
+          "type": "parent",
+          "options": "",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": false,
+          "filter": true,
+          "group": false,
+          "targetTableId": "id_mo8qy59tsdtizksvx",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8rp65pnqmrmr7db",
+          "name": "Reklama na video",
+          "type": "composite",
+          "options": "",
+          "compositeTemplate": "{Datum vydání}{Kanál}{Ńázev}{URL videa}{Krátký popis}",
+          "dateFormat": "",
+          "primary": false,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        }
+      ],
+      "records": [],
+      "defaultSortField": "",
+      "defaultSortDir": "asc",
+      "_filteredRecords": []
+    },
+    {
+      "id": "id_mo8qy59tsdtizksvx",
+      "name": "YT kanály",
+      "fields": [
+        {
+          "id": "id_mo8r4a0fdrkghvyi9",
+          "name": "Název kanálu",
+          "type": "text",
+          "options": "",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": true,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8r5882edfqalv69",
+          "name": "Typ",
+          "type": "select",
+          "options": "pro všechny, pro předplatitele, uzavřený",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": false,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8r6bp6aqrgzidk5",
+          "name": "URL kanálu",
+          "type": "url",
+          "options": "",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": false,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8r6zmxjknri0rlg",
+          "name": "Popis kanálu",
+          "type": "text",
+          "options": "",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": false,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8rd4chc4cylxcqh",
+          "name": "Text o kanálu",
+          "type": "composite",
+          "options": "",
+          "compositeTemplate": "Podívejte se na kanál {Název kanálu}. Jde o kanál {Typ} a najdete ho na {URL kanálu} - {Popis kanálu}",
+          "dateFormat": "",
+          "primary": false,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        }
+      ],
+      "records": [
+        {
+          "id": "id_mo8sce4v4ppjaich8",
+          "values": {
+            "id_mo8r4a0fdrkghvyi9": "Hlavní kanál",
+            "id_mo8r5882edfqalv69": "pro všechny",
+            "id_mo8r6bp6aqrgzidk5": "https://youtube.com/c/test-hlavni",
+            "id_mo8r6zmxjknri0rlg": "Tady najdete různé recenze, návody, vychytávky a zajímavosti ze světa techniky"
+          }
+        },
+        {
+          "id": "id_mo8sda1unlt71ecrb",
+          "values": {
+            "id_mo8r4a0fdrkghvyi9": "Kanál Plus",
+            "id_mo8r5882edfqalv69": "pro předplatitele",
+            "id_mo8r6bp6aqrgzidk5": "https://youtube.com/c/test-plus",
+            "id_mo8r6zmxjknri0rlg": "Extra videa, bonusy a speciální videokurzy"
+          }
+        }
+      ],
+      "defaultSortField": "",
+      "defaultSortDir": "asc",
+      "_filteredRecords": [
+        {
+          "id": "id_mo8sce4v4ppjaich8",
+          "values": {
+            "id_mo8r4a0fdrkghvyi9": "Hlavní kanál",
+            "id_mo8r5882edfqalv69": "pro všechny",
+            "id_mo8r6bp6aqrgzidk5": "https://youtube.com/c/test-hlavni",
+            "id_mo8r6zmxjknri0rlg": "Tady najdete různé recenze, návody, vychytávky a zajímavosti ze světa techniky"
+          }
+        },
+        {
+          "id": "id_mo8sda1unlt71ecrb",
+          "values": {
+            "id_mo8r4a0fdrkghvyi9": "Kanál Plus",
+            "id_mo8r5882edfqalv69": "pro předplatitele",
+            "id_mo8r6bp6aqrgzidk5": "https://youtube.com/c/test-plus",
+            "id_mo8r6zmxjknri0rlg": "Extra videa, bonusy a speciální videokurzy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "id_mo8qyesyrfocovugw",
+      "name": "Nápady",
+      "fields": [
+        {
+          "id": "id_mo8qzrrron5l8kao4",
+          "name": "Stručně",
+          "type": "text",
+          "options": "",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": true,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8r0u1t4b4r3extk",
+          "name": "Popis nápadu",
+          "type": "textarea",
+          "options": "",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": false,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8r236m8kkthvasd",
+          "name": "Realizováno?",
+          "type": "boolean",
+          "options": "",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": false,
+          "filter": true,
+          "group": true,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
+          "id": "id_mo8r32ljsbwl2z6mr",
+          "name": "pro video",
+          "type": "parent",
+          "options": "",
+          "compositeTemplate": "",
+          "dateFormat": "",
+          "primary": false,
+          "filter": false,
+          "group": false,
+          "targetTableId": "id_mo8qxtgv5tqsgpa76",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        }
+      ],
+      "records": [
+        {
+          "id": "id_mo8rqt6xhljvdw3kb",
+          "values": {
+            "id_mo8qzrrron5l8kao4": "Prohlídka testovací aplikace pro videonávod co to umí",
+            "id_mo8r0u1t4b4r3extk": "Asi by možná bylo fajn ukázat to na nějaké fejkové aplikaci",
+            "id_mo8r236m8kkthvasd": false,
+            "id_mo8r32ljsbwl2z6mr": ""
+          }
+        },
+        {
+          "id": "id_mo8rs3kljljscq4gf",
+          "values": {
+            "id_mo8qzrrron5l8kao4": "Nějaká vtipná reklama na kanál pro předplatitele se sobem",
+            "id_mo8r0u1t4b4r3extk": "Do reklamy nějak zahrnout soba",
+            "id_mo8r236m8kkthvasd": false,
+            "id_mo8r32ljsbwl2z6mr": ""
+          }
+        },
+        {
+          "id": "id_mo8rumwdk2icjilj8",
+          "values": {
+            "id_mo8qzrrron5l8kao4": "Srovnání jak rychle nabíhá iOS 26 a iOS 27",
+            "id_mo8r0u1t4b4r3extk": "Srovnat do videa rychlost startu systému, stejné telefony a stejná konfigurace aplikací",
+            "id_mo8r236m8kkthvasd": false,
+            "id_mo8r32ljsbwl2z6mr": ""
+          }
+        }
+      ],
+      "defaultSortField": "",
+      "defaultSortDir": "asc",
+      "_filteredRecords": [
+        {
+          "id": "id_mo8rqt6xhljvdw3kb",
+          "values": {
+            "id_mo8qzrrron5l8kao4": "Prohlídka testovací aplikace pro videonávod co to umí",
+            "id_mo8r0u1t4b4r3extk": "Asi by možná bylo fajn ukázat to na nějaké fejkové aplikaci",
+            "id_mo8r236m8kkthvasd": false,
+            "id_mo8r32ljsbwl2z6mr": ""
+          }
+        },
+        {
+          "id": "id_mo8rs3kljljscq4gf",
+          "values": {
+            "id_mo8qzrrron5l8kao4": "Nějaká vtipná reklama na kanál pro předplatitele se sobem",
+            "id_mo8r0u1t4b4r3extk": "Do reklamy nějak zahrnout soba",
+            "id_mo8r236m8kkthvasd": false,
+            "id_mo8r32ljsbwl2z6mr": ""
+          }
+        },
+        {
+          "id": "id_mo8rumwdk2icjilj8",
+          "values": {
+            "id_mo8qzrrron5l8kao4": "Srovnání jak rychle nabíhá iOS 26 a iOS 27",
+            "id_mo8r0u1t4b4r3extk": "Srovnat do videa rychlost startu systému, stejné telefony a stejná konfigurace aplikací",
+            "id_mo8r236m8kkthvasd": false,
+            "id_mo8r32ljsbwl2z6mr": ""
+          }
+        }
+      ]
+    }
+  ]
+}
