@@ -6,7 +6,23 @@
     "collections": [],
     "tags": [],
     "views": {
-      "id_mo8qyesyrfocovugw": [],
+      "id_mo8qyesyrfocovugw": [
+        {
+          "id": "id_mo8to0b1iat3jt79c",
+          "name": "Otevřené nápady",
+          "filters": {
+            "id_mo8r236m8kkthvasd": "false"
+          },
+          "search": "",
+          "sort": {
+            "field": null,
+            "dir": "asc"
+          },
+          "columnVisibility": {},
+          "collectionFilter": null,
+          "tagFilter": null
+        }
+      ],
       "id_mo8qy59tsdtizksvx": [],
       "id_mo8qxtgv5tqsgpa76": []
     },
@@ -60,6 +76,59 @@
             "id_mo8r6zmxjknri0rlg": "Extra videa, bonusy a speciální videokurzy"
           }
         }
+      ],
+      "id_mo8qxtgv5tqsgpa76_id_mo8t3ljf2n9eyz098": [
+        {
+          "id": "id_mo8t3ljf9urbsglpe",
+          "timestamp": "2026-04-21T15:56:32.331Z",
+          "type": "create",
+          "fields": {
+            "id_mo8rf0l7grx89w2og": "Co se tak trochu nepovedlo a zůstalo ve střižně?",
+            "id_mo8rh04cc1ljrfwxj": "Vydané",
+            "id_mo8rhvppx0fqxkf8u": "2026-01-01",
+            "id_mo8ril363z929x0n4": "https://youtu.be/abcdefgh",
+            "id_mo8riwtryflk03p9j": "Při natáčení se sem tam něco zvrtne. Ale nás i Vás to aspoň pobaví.",
+            "id_mo8rkutrpismrxist": "id_mo8sce4v4ppjaich8"
+          }
+        }
+      ],
+      "id_mo8qyesyrfocovugw_id_mo8tmy6nkq5ognjsm": [
+        {
+          "id": "id_mo8tmy6nzytwbl8w4",
+          "timestamp": "2026-04-21T16:11:35.183Z",
+          "type": "create",
+          "fields": {
+            "id_mo8qzrrron5l8kao4": "Mohli bysme vydat nepovedené záběry až po Silvestru?",
+            "id_mo8r236m8kkthvasd": true,
+            "id_mo8r32ljsbwl2z6mr": "id_mo8t3ljf2n9eyz098"
+          }
+        }
+      ],
+      "id_mo8qxtgv5tqsgpa76_id_mo8ttajqar4qa4j7y": [
+        {
+          "id": "id_mo8ttajqjey2tmv55",
+          "timestamp": "2026-04-21T16:16:31.142Z",
+          "type": "create",
+          "fields": {
+            "id_mo8rf0l7grx89w2og": "Leden nejen u nás",
+            "id_mo8rhvppx0fqxkf8u": "2026-01-30",
+            "id_mo8ril363z929x0n4": "https://youtu.be/itsaitwa",
+            "id_mo8riwtryflk03p9j": "Každý měsíc to nejzajímavější shrne Klára.",
+            "id_mo8rkutrpismrxist": "id_mo8sce4v4ppjaich8"
+          }
+        }
+      ],
+      "id_mo8qyesyrfocovugw_id_mo8tus1bu9uvt2sna": [
+        {
+          "id": "id_mo8tus1b85d1olczb",
+          "timestamp": "2026-04-21T16:17:40.463Z",
+          "type": "create",
+          "fields": {
+            "id_mo8qzrrron5l8kao4": "soutěž na únor letos je později",
+            "id_mo8r236m8kkthvasd": true,
+            "id_mo8r32ljsbwl2z6mr": "id_mo8ttajqar4qa4j7y"
+          }
+        }
       ]
     },
     "pinnedRecords": [],
@@ -73,7 +142,7 @@
       "fields": [
         {
           "id": "id_mo8rf0l7grx89w2og",
-          "name": "Ńázev",
+          "name": "Název",
           "type": "text",
           "options": "",
           "compositeTemplate": "",
@@ -178,7 +247,7 @@
           "name": "Úplný název",
           "type": "composite",
           "options": "",
-          "compositeTemplate": "{Ńázev} ({Datum vydání})",
+          "compositeTemplate": "{Název} ({Datum vydání})",
           "dateFormat": "",
           "primary": true,
           "filter": false,
@@ -225,10 +294,72 @@
           "lastValue": 0
         }
       ],
-      "records": [],
+      "records": [
+        {
+          "id": "id_mo8symaos8h67pj20",
+          "values": {
+            "id_mo8rf0l7grx89w2og": "Nový rok 26",
+            "id_mo8rh04cc1ljrfwxj": "Vydané",
+            "id_mo8rhvppx0fqxkf8u": "2026-01-02",
+            "id_mo8ril363z929x0n4": "https://youtu.be/12345678",
+            "id_mo8riwtryflk03p9j": "Těšíte se na rok 2026? My rozhodně ano. A spoustu toho chystáme.",
+            "id_mo8rj6rkeyohvxugs": "",
+            "id_mo8rkutrpismrxist": "id_mo8sce4v4ppjaich8"
+          }
+        },
+        {
+          "id": "id_mo8t3ljf2n9eyz098",
+          "values": {
+            "id_mo8rf0l7grx89w2og": "Co se tak trochu nepovedlo a zůstalo ve střižně?",
+            "id_mo8rh04cc1ljrfwxj": "Vydané",
+            "id_mo8rhvppx0fqxkf8u": "2026-01-01",
+            "id_mo8ril363z929x0n4": "https://youtu.be/abcdefgh",
+            "id_mo8riwtryflk03p9j": "Při natáčení se sem tam něco zvrtne. Ale nás i Vás to aspoň pobaví.",
+            "id_mo8rj6rkeyohvxugs": "",
+            "id_mo8rkutrpismrxist": "id_mo8sce4v4ppjaich8"
+          }
+        },
+        {
+          "id": "id_mo8ttajqar4qa4j7y",
+          "values": {
+            "id_mo8rf0l7grx89w2og": "Leden nejen u nás",
+            "id_mo8rh04cc1ljrfwxj": "",
+            "id_mo8rhvppx0fqxkf8u": "2026-01-30",
+            "id_mo8ril363z929x0n4": "https://youtu.be/itsaitwa",
+            "id_mo8riwtryflk03p9j": "Každý měsíc to nejzajímavější shrne Klára.",
+            "id_mo8rj6rkeyohvxugs": "",
+            "id_mo8rkutrpismrxist": "id_mo8sce4v4ppjaich8"
+          }
+        }
+      ],
       "defaultSortField": "",
       "defaultSortDir": "asc",
-      "_filteredRecords": []
+      "_filteredRecords": [
+        {
+          "id": "id_mo8symaos8h67pj20",
+          "values": {
+            "id_mo8rf0l7grx89w2og": "Nový rok 26",
+            "id_mo8rh04cc1ljrfwxj": "Vydané",
+            "id_mo8rhvppx0fqxkf8u": "2026-01-02",
+            "id_mo8ril363z929x0n4": "https://youtu.be/12345678",
+            "id_mo8riwtryflk03p9j": "Těšíte se na rok 2026? My rozhodně ano. A spoustu toho chystáme.",
+            "id_mo8rj6rkeyohvxugs": "",
+            "id_mo8rkutrpismrxist": "id_mo8sce4v4ppjaich8"
+          }
+        },
+        {
+          "id": "id_mo8t3ljf2n9eyz098",
+          "values": {
+            "id_mo8rf0l7grx89w2og": "Co se tak trochu nepovedlo a zůstalo ve střižně?",
+            "id_mo8rh04cc1ljrfwxj": "Vydané",
+            "id_mo8rhvppx0fqxkf8u": "2026-01-01",
+            "id_mo8ril363z929x0n4": "https://youtu.be/abcdefgh",
+            "id_mo8riwtryflk03p9j": "Při natáčení se sem tam něco zvrtne. Ale nás i Vás to aspoň pobaví.",
+            "id_mo8rj6rkeyohvxugs": "",
+            "id_mo8rkutrpismrxist": "id_mo8sce4v4ppjaich8"
+          }
+        }
+      ]
     },
     {
       "id": "id_mo8qy59tsdtizksvx",
@@ -462,6 +593,33 @@
             "id_mo8r0u1t4b4r3extk": "Srovnat do videa rychlost startu systému, stejné telefony a stejná konfigurace aplikací",
             "id_mo8r236m8kkthvasd": false,
             "id_mo8r32ljsbwl2z6mr": ""
+          }
+        },
+        {
+          "id": "id_mo8tmy6nkq5ognjsm",
+          "values": {
+            "id_mo8qzrrron5l8kao4": "Mohli bysme vydat nepovedené záběry až po Silvestru?",
+            "id_mo8r0u1t4b4r3extk": "",
+            "id_mo8r236m8kkthvasd": true,
+            "id_mo8r32ljsbwl2z6mr": "id_mo8t3ljf2n9eyz098"
+          }
+        },
+        {
+          "id": "id_mo8ttkw28mmcdbtu6",
+          "values": {
+            "id_mo8qzrrron5l8kao4": "Do lednových novinek redesign eshopu",
+            "id_mo8r0u1t4b4r3extk": "",
+            "id_mo8r236m8kkthvasd": true,
+            "id_mo8r32ljsbwl2z6mr": "id_mo8ttajqar4qa4j7y"
+          }
+        },
+        {
+          "id": "id_mo8tus1bu9uvt2sna",
+          "values": {
+            "id_mo8qzrrron5l8kao4": "soutěž na únor letos je později",
+            "id_mo8r0u1t4b4r3extk": "",
+            "id_mo8r236m8kkthvasd": true,
+            "id_mo8r32ljsbwl2z6mr": "id_mo8ttajqar4qa4j7y"
           }
         }
       ],
