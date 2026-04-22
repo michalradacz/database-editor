@@ -192,6 +192,23 @@
           "lastValue": 0
         },
         {
+          "id": "id_mo8rk0i5yc6m9jugv",
+          "name": "Úplný název",
+          "type": "composite",
+          "options": "",
+          "compositeTemplate": "{Název} ({Datum vydání})",
+          "dateFormat": "",
+          "primary": true,
+          "filter": false,
+          "group": false,
+          "targetTableId": "",
+          "parentFieldId": "",
+          "sortField": "",
+          "sortDirection": "asc",
+          "autoIncrement": false,
+          "lastValue": 0
+        },
+        {
           "id": "id_mo8ril363z929x0n4",
           "name": "URL videa",
           "type": "url",
@@ -233,23 +250,6 @@
           "compositeTemplate": "",
           "dateFormat": "",
           "primary": false,
-          "filter": false,
-          "group": false,
-          "targetTableId": "",
-          "parentFieldId": "",
-          "sortField": "",
-          "sortDirection": "asc",
-          "autoIncrement": false,
-          "lastValue": 0
-        },
-        {
-          "id": "id_mo8rk0i5yc6m9jugv",
-          "name": "Úplný název",
-          "type": "composite",
-          "options": "",
-          "compositeTemplate": "{Název} ({Datum vydání})",
-          "dateFormat": "",
-          "primary": true,
           "filter": false,
           "group": false,
           "targetTableId": "",
@@ -355,6 +355,18 @@
             "id_mo8rhvppx0fqxkf8u": "2026-01-01",
             "id_mo8ril363z929x0n4": "https://youtu.be/abcdefgh",
             "id_mo8riwtryflk03p9j": "Při natáčení se sem tam něco zvrtne. Ale nás i Vás to aspoň pobaví.",
+            "id_mo8rj6rkeyohvxugs": "",
+            "id_mo8rkutrpismrxist": "id_mo8sce4v4ppjaich8"
+          }
+        },
+        {
+          "id": "id_mo8ttajqar4qa4j7y",
+          "values": {
+            "id_mo8rf0l7grx89w2og": "Leden nejen u nás",
+            "id_mo8rh04cc1ljrfwxj": "",
+            "id_mo8rhvppx0fqxkf8u": "2026-01-30",
+            "id_mo8ril363z929x0n4": "https://youtu.be/itsaitwa",
+            "id_mo8riwtryflk03p9j": "Každý měsíc to nejzajímavější shrne Klára.",
             "id_mo8rj6rkeyohvxugs": "",
             "id_mo8rkutrpismrxist": "id_mo8sce4v4ppjaich8"
           }
